@@ -1,0 +1,1522 @@
+        :root {
+            --cor-fundo: #9DC5BB;
+            --cor-main: #0e2c10;
+            --cor-texto: #DEE5E5;
+            --cor-detalhes: #17B890;
+            --cor-cards-vagas: #ffff;
+            --cor-texto-escuro: #0e2c10;
+            --cor-aleatoria: #5E807F;
+        }
+
+        body {
+            background-color: var(--cor-fundo) !important;
+            overflow-x: hidden !important;
+            font-family: Georgia, 'Times New Roman', serif !important;
+        }
+
+        .cor-fundo {
+            background-color: var(--cor-fundo) !important;
+        }
+
+        .cor-main {
+            background-color: var(--cor-main) !important;
+        }
+
+        .texto-escuro {
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .link-hover:hover,
+        .link-hover.active {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+        }
+
+        .bg-menu {
+            background-color: #9DC5BB !important;
+        }
+
+
+        .btn-primeiro {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid var(--cor-main) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-primeiro:hover {
+            background-color: var(--cor-texto) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .btn-segundo {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-fundo) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-segundo:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        .btn-terceiro {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-terceiro:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        input::placeholder {
+            color: #949494 !important;
+        }
+
+        input::label {
+            color: #949494 !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .planos-card {
+            background-color: var(--cor-cards-vagas);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .planos-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--cor-aleatoria);
+        }
+
+
+        .planos-input:checked+.planos-card {
+            border-color: var(--cor-main);
+            background-color: var(--cor-texto);
+            box-shadow: 0 0 0 4px rgba(14, 44, 16, 0.15);
+        }
+
+
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .fw-extrabold {
+            font-weight: 800;
+        }
+
+        .min-height-payment {
+            min-height: 255px;
+        }
+
+        .style-obs {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Abas de Opções de Planos */
+        .planos-input:checked+.planos-card {
+            border-color: #198754 !important;
+            background-color: #f2faf5 !important;
+            box-shadow: 0 0.5rem 1rem rgba(25, 135, 84, 0.12) !important;
+        }
+
+        .planos-input:checked+.planos-card::after {
+            content: "✓ Ativo";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #198754;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Abas de Pagamento */
+        .btn-payment-tab {
+            border: none;
+            color: #495057;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-payment-tab:hover {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .btn-check:checked+.btn-payment-tab {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+        }
+
+        /* MENU LATERAL FUNCIONAL*/
+        /* !!!!!!!!!NÃO TIRAR!!!!!!!!! */
+        @media (min-width: 768px) {
+
+            #sidebar {
+                width: 80px;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                white-space: nowrap;
+                z-index: 1040;
+                padding-top: 85px;
+                background-color: #9DC5BB !important;
+                overflow: hidden;
+            }
+
+            #sidebar:hover {
+                width: 260px;
+            }
+
+            .hide-on-collapse {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+
+                transition:
+                    opacity 0.2s ease,
+                    visibility 0s linear 0.3s;
+            }
+
+            #sidebar:hover .hide-on-collapse {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+
+                transition:
+                    opacity 0.3s ease 0.1s,
+                    visibility 0s linear 0s;
+            }
+
+            #main-content,
+            #footer {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+        }
+
+        /* MODIFICAÇÕES */
+
+        .nav-link-button {
+            background-color: transparent !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .nav-link-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: var(--cor-fundo) !important;
+            color: #ffffff !important;
+        }
+
+        .nav-link-button.active {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border-color: var(--cor-fundo) !important;
+            font-weight: 600;
+        }
+
+        .login-card {
+            background-color: var(--cor-fundo);
+            border-radius: 24px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+
+        .link-custom {
+            color: var(--cor-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-custom:hover {
+            text-decoration: underline;
+        }
+
+        /* MODIFICAÇÕES  2 */
+
+        .barra-de-pesquisa-vagas {
+            background-color: #ffffff;
+            border-radius: 50rem;
+            padding: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .barra-de-pesquisa-vagas input,
+        .barra-de-pesquisa-vagas select {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+
+        .btn-filtro {
+    /* Usando a variável de cor dos cards (#ffff) para o botão inativo parecer cinza bem clarinho/branco */
+    background-color: var(--cor-cards-vagas) !important;
+    /* Texto usando a cor escura do seu projeto */
+    color: var(--cor-texto-escuro) !important;
+    border: 1px solid var(--cor-aleatoria) !important;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Quando passar o mouse ou o botão estiver ativo */
+.btn-filtro:hover,
+.btn-filtro.active {
+    /* Vira o verde escuro principal do seu site */
+    background-color: var(--cor-main) !important;
+    border-color: var(--cor-main) !important;
+    /* Texto vira o cinza claro correspondente */
+    color: var(--cor-texto) !important;
+}
+
+        .card-vaga {
+            border-radius: 20px;
+            background-color: #ffffff;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            height: 100%;
+        }
+
+        .card-vaga:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+        }
+
+
+        .badge-vaga {
+            background-color: rgba(157, 197, 187, 0.2);
+            color: var(--cor-texto-escuro);
+            font-weight: 600;
+        }
+
+        .btn-apply {
+            background-color: var(--cor-detalhes);
+            color: white;
+            font-weight: 600;
+            border-radius: 50rem;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 8px 24px;
+        }
+
+        /* MODIFICAÇÃO 3 */
+ 
+
+
+.keyword-chip {
+    display: inline-block;
+}
+
+.keyword-chip input[type="checkbox"] {
+    display: none;
+}
+
+.keyword-chip label {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--cor-texto-escuro);
+    background-color: var(--cor-cards-vagas);
+    border: 2px solid var(--cor-aleatoria); 
+    border-radius: 50rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.keyword-chip label:hover {
+    background-color: rgba(23, 184, 144, 0.08); 
+    border-color: var(--cor-detalhes);
+    color: var(--cor-main);
+}
+
+.keyword-chip input[type="checkbox"]:checked + label {
+    background-color: var(--cor-main);
+    border-color: var(--cor-main);
+    color: var(--cor-texto);
+    font-weight: 600;
+    box-shadow: 0px 4px 8px rgba(14, 44, 16, 0.2); 
+}
+
+.keyword-chip input[type="checkbox"]:focus + label {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(23, 184, 144, 0.35); 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label {
+    opacity: 0.35; 
+    cursor: not-allowed; 
+    border-color: var(--cor-aleatoria); 
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label:hover {
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    border-color: var(--cor-aleatoria);
+}        :root {
+            --cor-fundo: #9DC5BB;
+            --cor-main: #0e2c10;
+            --cor-texto: #DEE5E5;
+            --cor-detalhes: #17B890;
+            --cor-cards-vagas: #ffff;
+            --cor-texto-escuro: #0e2c10;
+            --cor-aleatoria: #5E807F;
+        }
+
+        body {
+            background-color: var(--cor-fundo) !important;
+            overflow-x: hidden !important;
+            font-family: Georgia, 'Times New Roman', serif !important;
+        }
+
+        .cor-fundo {
+            background-color: var(--cor-fundo) !important;
+        }
+
+        .cor-main {
+            background-color: var(--cor-main) !important;
+        }
+
+        .texto-escuro {
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .link-hover:hover,
+        .link-hover.active {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+        }
+
+        .bg-menu {
+            background-color: #9DC5BB !important;
+        }
+
+
+        .btn-primeiro {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid var(--cor-main) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-primeiro:hover {
+            background-color: var(--cor-texto) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .btn-segundo {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-fundo) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-segundo:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        .btn-terceiro {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-terceiro:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        input::placeholder {
+            color: #949494 !important;
+        }
+
+        input::label {
+            color: #949494 !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .planos-card {
+            background-color: var(--cor-cards-vagas);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .planos-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--cor-aleatoria);
+        }
+
+
+        .planos-input:checked+.planos-card {
+            border-color: var(--cor-main);
+            background-color: var(--cor-texto);
+            box-shadow: 0 0 0 4px rgba(14, 44, 16, 0.15);
+        }
+
+
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .fw-extrabold {
+            font-weight: 800;
+        }
+
+        .min-height-payment {
+            min-height: 255px;
+        }
+
+        .style-obs {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Abas de Opções de Planos */
+        .planos-input:checked+.planos-card {
+            border-color: #198754 !important;
+            background-color: #f2faf5 !important;
+            box-shadow: 0 0.5rem 1rem rgba(25, 135, 84, 0.12) !important;
+        }
+
+        .planos-input:checked+.planos-card::after {
+            content: "✓ Ativo";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #198754;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Abas de Pagamento */
+        .btn-payment-tab {
+            border: none;
+            color: #495057;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-payment-tab:hover {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .btn-check:checked+.btn-payment-tab {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+        }
+
+        /* MENU LATERAL FUNCIONAL*/
+        /* !!!!!!!!!NÃO TIRAR!!!!!!!!! */
+        @media (min-width: 768px) {
+
+            #sidebar {
+                width: 80px;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                white-space: nowrap;
+                z-index: 1040;
+                padding-top: 85px;
+                background-color: #9DC5BB !important;
+                overflow: hidden;
+            }
+
+            #sidebar:hover {
+                width: 260px;
+            }
+
+            .hide-on-collapse {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+
+                transition:
+                    opacity 0.2s ease,
+                    visibility 0s linear 0.3s;
+            }
+
+            #sidebar:hover .hide-on-collapse {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+
+                transition:
+                    opacity 0.3s ease 0.1s,
+                    visibility 0s linear 0s;
+            }
+
+            #main-content,
+            #footer {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+        }
+
+        /* MODIFICAÇÕES */
+
+        .nav-link-button {
+            background-color: transparent !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .nav-link-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: var(--cor-fundo) !important;
+            color: #ffffff !important;
+        }
+
+        .nav-link-button.active {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border-color: var(--cor-fundo) !important;
+            font-weight: 600;
+        }
+
+        .login-card {
+            background-color: var(--cor-fundo);
+            border-radius: 24px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+
+        .link-custom {
+            color: var(--cor-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-custom:hover {
+            text-decoration: underline;
+        }
+
+        /* MODIFICAÇÕES  2 */
+
+        .barra-de-pesquisa-vagas {
+            background-color: #ffffff;
+            border-radius: 50rem;
+            padding: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .barra-de-pesquisa-vagas input,
+        .barra-de-pesquisa-vagas select {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+
+        .btn-filtro {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filtro:hover,
+        .btn-filtro.active {
+            background-color: var(--cor-detalhes) !important;
+            border-color: var(--cor-detalhes) !important;
+            color: white !important;
+        }
+
+        .card-vaga {
+            border-radius: 20px;
+            background-color: #ffffff;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            height: 100%;
+        }
+
+        .card-vaga:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+        }
+
+
+        .badge-vaga {
+    /* Usa a sua variável de verde quase preto para o fundo */
+    background-color: var(--cor-main) !important; 
+    /* Usa a sua cor de texto clara para dar contraste */
+    color: var(--cor-texto) !important;
+    font-weight: 600;
+    padding: 6px 12px !important;
+    border-radius: 50rem !important;
+}
+
+        .btn-apply {
+            background-color: var(--cor-detalhes);
+            color: white;
+            font-weight: 600;
+            border-radius: 50rem;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 8px 24px;
+        }
+
+        /* MODIFICAÇÃO 3 */
+ 
+
+
+.keyword-chip {
+    display: inline-block;
+}
+
+.keyword-chip input[type="checkbox"] {
+    display: none;
+}
+
+.keyword-chip label {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--cor-texto-escuro);
+    background-color: var(--cor-cards-vagas);
+    border: 2px solid var(--cor-aleatoria); 
+    border-radius: 50rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.keyword-chip label:hover {
+    background-color: rgba(23, 184, 144, 0.08); 
+    border-color: var(--cor-detalhes);
+    color: var(--cor-main);
+}
+
+.keyword-chip input[type="checkbox"]:checked + label {
+    background-color: var(--cor-main);
+    border-color: var(--cor-main);
+    color: var(--cor-texto);
+    font-weight: 600;
+    box-shadow: 0px 4px 8px rgba(14, 44, 16, 0.2); 
+}
+
+.keyword-chip input[type="checkbox"]:focus + label {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(23, 184, 144, 0.35); 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label {
+    opacity: 0.35; 
+    cursor: not-allowed; 
+    border-color: var(--cor-aleatoria); 
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label:hover {
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    border-color: var(--cor-aleatoria);
+}        :root {
+            --cor-fundo: #9DC5BB;
+            --cor-main: #0e2c10;
+            --cor-texto: #DEE5E5;
+            --cor-detalhes: #17B890;
+            --cor-cards-vagas: #ffff;
+            --cor-texto-escuro: #0e2c10;
+            --cor-aleatoria: #5E807F;
+        }
+
+        body {
+            background-color: var(--cor-fundo) !important;
+            overflow-x: hidden !important;
+            font-family: Georgia, 'Times New Roman', serif !important;
+        }
+
+        .cor-fundo {
+            background-color: var(--cor-fundo) !important;
+        }
+
+        .cor-main {
+            background-color: var(--cor-main) !important;
+        }
+
+        .texto-escuro {
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .link-hover:hover,
+        .link-hover.active {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+        }
+
+        .bg-menu {
+            background-color: #9DC5BB !important;
+        }
+
+
+        .btn-primeiro {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid var(--cor-main) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-primeiro:hover {
+            background-color: var(--cor-texto) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .btn-segundo {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-fundo) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-segundo:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        .btn-terceiro {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-terceiro:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        input::placeholder {
+            color: #949494 !important;
+        }
+
+        input::label {
+            color: #949494 !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .planos-card {
+            background-color: var(--cor-cards-vagas);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .planos-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--cor-aleatoria);
+        }
+
+
+        .planos-input:checked+.planos-card {
+            border-color: var(--cor-main);
+            background-color: var(--cor-texto);
+            box-shadow: 0 0 0 4px rgba(14, 44, 16, 0.15);
+        }
+
+
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .fw-extrabold {
+            font-weight: 800;
+        }
+
+        .min-height-payment {
+            min-height: 255px;
+        }
+
+        .style-obs {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Abas de Opções de Planos */
+        .planos-input:checked+.planos-card {
+            border-color: #198754 !important;
+            background-color: #f2faf5 !important;
+            box-shadow: 0 0.5rem 1rem rgba(25, 135, 84, 0.12) !important;
+        }
+
+        .planos-input:checked+.planos-card::after {
+            content: "✓ Ativo";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #198754;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Abas de Pagamento */
+        .btn-payment-tab {
+            border: none;
+            color: #495057;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-payment-tab:hover {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .btn-check:checked+.btn-payment-tab {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+        }
+
+        /* MENU LATERAL FUNCIONAL*/
+        /* !!!!!!!!!NÃO TIRAR!!!!!!!!! */
+        @media (min-width: 768px) {
+
+            #sidebar {
+                width: 80px;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                white-space: nowrap;
+                z-index: 1040;
+                padding-top: 85px;
+                background-color: #9DC5BB !important;
+                overflow: hidden;
+            }
+
+            #sidebar:hover {
+                width: 260px;
+            }
+
+            .hide-on-collapse {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+
+                transition:
+                    opacity 0.2s ease,
+                    visibility 0s linear 0.3s;
+            }
+
+            #sidebar:hover .hide-on-collapse {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+
+                transition:
+                    opacity 0.3s ease 0.1s,
+                    visibility 0s linear 0s;
+            }
+
+            #main-content,
+            #footer {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+        }
+
+        /* MODIFICAÇÕES */
+
+        .nav-link-button {
+            background-color: transparent !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .nav-link-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: var(--cor-fundo) !important;
+            color: #ffffff !important;
+        }
+
+        .nav-link-button.active {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border-color: var(--cor-fundo) !important;
+            font-weight: 600;
+        }
+
+        .login-card {
+            background-color: var(--cor-fundo);
+            border-radius: 24px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+
+        .link-custom {
+            color: var(--cor-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-custom:hover {
+            text-decoration: underline;
+        }
+
+        /* MODIFICAÇÕES  2 */
+
+        .barra-de-pesquisa-vagas {
+            background-color: #ffffff;
+            border-radius: 50rem;
+            padding: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .barra-de-pesquisa-vagas input,
+        .barra-de-pesquisa-vagas select {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+
+        .btn-filtro {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filtro:hover,
+        .btn-filtro.active {
+            background-color: var(--cor-detalhes) !important;
+            border-color: var(--cor-detalhes) !important;
+            color: white !important;
+        }
+
+        .card-vaga {
+            border-radius: 20px;
+            background-color: #ffffff;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            height: 100%;
+        }
+
+        .card-vaga:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+        }
+
+
+        .badge-vaga {
+            background-color: rgba(157, 197, 187, 0.2);
+            color: var(--cor-texto-escuro);
+            font-weight: 600;
+        }
+
+        .btn-apply {
+            background-color: var(--cor-detalhes);
+            color: white;
+            font-weight: 600;
+            border-radius: 50rem;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 8px 24px;
+        }
+
+        /* MODIFICAÇÃO 3 */
+ 
+
+
+.keyword-chip {
+    display: inline-block;
+}
+
+.keyword-chip input[type="checkbox"] {
+    display: none;
+}
+
+.keyword-chip label {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--cor-texto-escuro);
+    background-color: var(--cor-cards-vagas);
+    border: 2px solid var(--cor-aleatoria); 
+    border-radius: 50rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.keyword-chip label:hover {
+    background-color: rgba(23, 184, 144, 0.08); 
+    border-color: var(--cor-detalhes);
+    color: var(--cor-main);
+}
+
+.keyword-chip input[type="checkbox"]:checked + label {
+    background-color: var(--cor-main);
+    border-color: var(--cor-main);
+    color: var(--cor-texto);
+    font-weight: 600;
+    box-shadow: 0px 4px 8px rgba(14, 44, 16, 0.2); 
+}
+
+.keyword-chip input[type="checkbox"]:focus + label {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(23, 184, 144, 0.35); 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label {
+    opacity: 0.35; 
+    cursor: not-allowed; 
+    border-color: var(--cor-aleatoria); 
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label:hover {
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    border-color: var(--cor-aleatoria);
+}        :root {
+            --cor-fundo: #9DC5BB;
+            --cor-main: #0e2c10;
+            --cor-texto: #DEE5E5;
+            --cor-detalhes: #17B890;
+            --cor-cards-vagas: #ffff;
+            --cor-texto-escuro: #0e2c10;
+            --cor-aleatoria: #5E807F;
+        }
+
+        body {
+            background-color: var(--cor-fundo) !important;
+            overflow-x: hidden !important;
+            font-family: Georgia, 'Times New Roman', serif !important;
+        }
+
+        .cor-fundo {
+            background-color: var(--cor-fundo) !important;
+        }
+
+        .cor-main {
+            background-color: var(--cor-main) !important;
+        }
+
+        .texto-escuro {
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .link-hover:hover,
+        .link-hover.active {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+        }
+
+        .bg-menu {
+            background-color: #9DC5BB !important;
+        }
+
+
+        .btn-primeiro {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid var(--cor-main) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-primeiro:hover {
+            background-color: var(--cor-texto) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-texto-escuro) !important;
+        }
+
+        .btn-segundo {
+            background-color: var(--cor-main) !important;
+            color: var(--cor-fundo) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-segundo:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        .btn-terceiro {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border: 2px solid var(--cor-fundo) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .btn-terceiro:hover {
+            background-color: var(--cor-fundo) !important;
+            border-color: var(--cor-main) !important;
+            color: var(--cor-main) !important;
+        }
+
+        input::placeholder {
+            color: #949494 !important;
+        }
+
+        input::label {
+            color: #949494 !important;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .planos-card {
+            background-color: var(--cor-cards-vagas);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .planos-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--cor-aleatoria);
+        }
+
+
+        .planos-input:checked+.planos-card {
+            border-color: var(--cor-main);
+            background-color: var(--cor-texto);
+            box-shadow: 0 0 0 4px rgba(14, 44, 16, 0.15);
+        }
+
+
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .fw-extrabold {
+            font-weight: 800;
+        }
+
+        .min-height-payment {
+            min-height: 255px;
+        }
+
+        .style-obs {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Abas de Opções de Planos */
+        .planos-input:checked+.planos-card {
+            border-color: #198754 !important;
+            background-color: #f2faf5 !important;
+            box-shadow: 0 0.5rem 1rem rgba(25, 135, 84, 0.12) !important;
+        }
+
+        .planos-input:checked+.planos-card::after {
+            content: "✓ Ativo";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #198754;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Abas de Pagamento */
+        .btn-payment-tab {
+            border: none;
+            color: #495057;
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-payment-tab:hover {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .btn-check:checked+.btn-payment-tab {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+        }
+
+        /* MENU LATERAL FUNCIONAL*/
+        /* !!!!!!!!!NÃO TIRAR!!!!!!!!! */
+        @media (min-width: 768px) {
+
+            #sidebar {
+                width: 80px;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                white-space: nowrap;
+                z-index: 1040;
+                padding-top: 85px;
+                background-color: #9DC5BB !important;
+                overflow: hidden;
+            }
+
+            #sidebar:hover {
+                width: 260px;
+            }
+
+            .hide-on-collapse {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+
+                transition:
+                    opacity 0.2s ease,
+                    visibility 0s linear 0.3s;
+            }
+
+            #sidebar:hover .hide-on-collapse {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+
+                transition:
+                    opacity 0.3s ease 0.1s,
+                    visibility 0s linear 0s;
+            }
+
+            #main-content,
+            #footer {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+        }
+
+        /* MODIFICAÇÕES */
+
+        .nav-link-button {
+            background-color: transparent !important;
+            color: var(--cor-texto) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.25s ease-in-out !important;
+        }
+
+        .nav-link-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: var(--cor-fundo) !important;
+            color: #ffffff !important;
+        }
+
+        .nav-link-button.active {
+            background-color: var(--cor-fundo) !important;
+            color: var(--cor-main) !important;
+            border-color: var(--cor-fundo) !important;
+            font-weight: 600;
+        }
+
+        .login-card {
+            background-color: var(--cor-fundo);
+            border-radius: 24px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+
+        .link-custom {
+            color: var(--cor-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-custom:hover {
+            text-decoration: underline;
+        }
+
+        /* MODIFICAÇÕES  2 */
+
+        .barra-de-pesquisa-vagas {
+            background-color: #ffffff;
+            border-radius: 50rem;
+            padding: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .barra-de-pesquisa-vagas input,
+        .barra-de-pesquisa-vagas select {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+
+        .btn-filtro {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filtro:hover,
+        .btn-filtro.active {
+            background-color: var(--cor-detalhes) !important;
+            border-color: var(--cor-detalhes) !important;
+            color: white !important;
+        }
+
+        .card-vaga {
+            border-radius: 20px;
+            background-color: #ffffff;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            height: 100%;
+        }
+
+        .card-vaga:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+        }
+
+
+        .badge-vaga {
+            background-color: rgba(157, 197, 187, 0.2);
+            color: var(--cor-texto-escuro);
+            font-weight: 600;
+        }
+
+        .btn-apply {
+            background-color: var(--cor-detalhes);
+            color: white;
+            font-weight: 600;
+            border-radius: 50rem;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 8px 24px;
+        }
+
+        /* MODIFICAÇÃO 3 */
+ 
+
+
+.keyword-chip {
+    display: inline-block;
+}
+
+.keyword-chip input[type="checkbox"] {
+    display: none;
+}
+
+.keyword-chip label {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--cor-texto-escuro);
+    background-color: var(--cor-cards-vagas);
+    border: 2px solid var(--cor-aleatoria); 
+    border-radius: 50rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.keyword-chip label:hover {
+    background-color: rgba(23, 184, 144, 0.08); 
+    border-color: var(--cor-detalhes);
+    color: var(--cor-main);
+}
+
+.keyword-chip input[type="checkbox"]:checked + label {
+    background-color: var(--cor-main);
+    border-color: var(--cor-main);
+    color: var(--cor-texto);
+    font-weight: 600;
+    box-shadow: 0px 4px 8px rgba(14, 44, 16, 0.2); 
+}
+
+.keyword-chip input[type="checkbox"]:focus + label {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(23, 184, 144, 0.35); 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label {
+    opacity: 0.35; 
+    cursor: not-allowed; 
+    border-color: var(--cor-aleatoria); 
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+body.limit-reached .keyword-chip input[type="checkbox"]:not(:checked) + label:hover {
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    border-color: var(--cor-aleatoria);
+}
