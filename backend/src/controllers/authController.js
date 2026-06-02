@@ -17,11 +17,11 @@ const salvarPalavrasChave = async (conn, tipo, id, palavras = []) => {
     `DELETE FROM palavras_chave WHERE entidade_tipo = ? AND entidade_id = ?`,
     [tipo, id]
   );
-  const limitadas = palavras.slice(0, 4);
+  const limitadas = palavras.slice(0, 8);
   for (const palavra of limitadas) {
     if (palavra && palavra.trim()) {
       await conn.execute(
-        `INSERT INTO palavras_chave (entidade_tipo, entity_id, palavra) VALUES (?, ?, ?)`,
+        `INSERT INTO palavras_chave (entidade_tipo, entidade_id, palavra) VALUES (?, ?, ?)`,
         [tipo, id, palavra.trim().toLowerCase()]
       );
     }
@@ -78,7 +78,23 @@ const cadastrarEmpresa = async (req, res) => {
       });
 
     const senhaHash = await bcrypt.hash(senha, 10);
-    const arquivo   = req.file ? req.file.filename : null;
+    // DENTRO DO SEU CONTROLLER DE CADASTRO (no backend)
+// O multer gera o array req.files. Garanta que você está pegando as chaves certas:
+
+const foto_perfil_arquivo = req.files['foto_perfil'] ? req.files['foto_perfil'][0] : null;
+const curriculo_arquivo = req.files['curriculo'] ? req.files['curriculo'][0] : null;
+
+// Agora, monta a URL de cada um apontando para a pasta que eles REALMENTE foram (curriculos):
+const url_foto = foto_perfil_arquivo 
+  ? `http://localhost:3001/uploads/curriculos/${foto_perfil_arquivo.filename}` 
+  : null;
+
+const url_curriculo = curriculo_arquivo 
+  ? `http://localhost:3001/uploads/curriculos/${curriculo_arquivo.filename}` 
+  : null;
+
+// Na hora de rodar o INSERT INTO candidatos no MySQL, passe as variáveis certas:
+// ... [nome, email, cpf, url_foto, url_curriculo]
 
     // salva usuario
     const [resUsuario] = await conn.execute(
@@ -174,7 +190,7 @@ const cadastrarCandidato = async (req, res) => {
     await conn.beginTransaction();
 
     const { nome, cpf, email, senha, idade, telefone,
-            cep, rua, numero, bairro, city, estado,
+            cep, rua, numero, bairro, cidade, estado,
             descricao, palavras_chave } = req.body;
 
     if (!nome || !cpf || !email || !senha)
@@ -193,7 +209,10 @@ const cadastrarCandidato = async (req, res) => {
       return res.status(409).json({ erro: 'CPF já cadastrado.' });
 
     const senhaHash = await bcrypt.hash(senha, 10);
-    const arquivo   = req.file ? req.file.filename : null;
+
+    // 🛠️ ALTERAÇÃO: Captura os arquivos múltiplos vindos do upload.fields()
+    const foto = req.files && req.files['foto_perfil'] ? req.files['foto_perfil'][0].filename : null;
+    const arquivo = req.files && req.files['curriculo'] ? req.files['curriculo'][0].filename : null;
 
     const [resUsuario] = await conn.execute(
       `INSERT INTO usuarios (tipo, email, senha_hash) VALUES ('candidato', ?, ?)`,
@@ -201,25 +220,27 @@ const cadastrarCandidato = async (req, res) => {
     );
     const usuarioId = resUsuario.insertId;
 
+    // 🛠️ ALTERAÇÃO: Adicionado o campo 'foto' na Query e na lista de valores do INSERT
     const [resCandidato] = await conn.execute(
       `INSERT INTO candidatos (usuario_id, nome, cpf, email, idade, telefone,
-        cep, rua, numero, bairro, cidade, estado, descricao, arquivo)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        cep, rua, numero, bairro, cidade, estado, descricao, arquivo, foto)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         usuarioId,
         nome,
         cpf,
         email,
-        idade     || null,
-        telefone  || null,
-        cep       || null,
-        rua       || null,
-        numero    || null,
-        bairro    || null,
-        cidade    || null,
-        estado    || null,
-        descricao || null,
-        arquivo   || null
+        idade      || null,
+        telefone   || null,
+        cep        || null,
+        rua        || null,
+        numero     || null,
+        bairro     || null,
+        cidade     || null,
+        estado     || null,
+        descricao  || null,
+        arquivo    || null,
+        foto       || null // 🔥 Nova variável da foto inserida aqui
       ]
     );
     const candidatoId = resCandidato.insertId;
@@ -227,7 +248,10 @@ const cadastrarCandidato = async (req, res) => {
     const pcs = Array.isArray(palavras_chave)
       ? palavras_chave
       : JSON.parse(palavras_chave || '[]');
-    await salvarPalavrasChave(conn, 'candidato', candidatoId, pcs);
+    
+    // 🛠️ ALTERAÇÃO: Limita o array recebido em no máximo 8 palavras-chave antes de salvar
+    const pcsLimitadas = pcs.slice(0, 8);
+    await salvarPalavrasChave(conn, 'candidato', candidatoId, pcsLimitadas);
 
     await conn.commit();
 
@@ -238,9 +262,11 @@ const cadastrarCandidato = async (req, res) => {
       perfil: { 
         id: candidatoId, 
         nome, 
-        email, // 🔥 Adicionado e-mail no cadastro
+        email, 
         tipo: 'candidato',
-        foto: arquivo ? `http://localhost:3001/uploads/curriculos/${arquivo}` : null // 🔥 Foto injetada no cadastro
+        // 🛠️ ALTERAÇÃO: Agora retorna a URL correta da foto e o currículo se existirem
+        foto: foto ? `http://localhost:3001/uploads/curriculos/${foto}` : null,
+        curriculo: arquivo ? `http://localhost:3001/uploads/curriculos/${arquivo}` : null
       }
     });
   } catch (err) {
@@ -299,7 +325,7 @@ const login = async (req, res) => {
         nome: e.nome,
         email: e.email,
         tipo: 'empresa',
-        foto: e.arquivo ? `http://localhost:3001/uploads/logos/${e.arquivo}` : null // 🔥 Caminho completo da foto corporativa
+        foto: e.arquivo ? `http://localhost:3001/uploads/curriculos/${e.arquivo}` : null // 🔥 Caminho completo da foto corporativa
       };
     } else if (usuario.tipo === 'candidato') {
       // 🔥 Adicionado 'email' e 'arquivo' na busca do candidato

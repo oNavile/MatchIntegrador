@@ -4,20 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function Login() {
-  // 1. CONTROLE DE ABA ATIVA DO REACT
   const [abaAtiva, setAbaAtiva] = useState("empresa");
 
-  // 2. ESTADOS SEPARADOS PARA NÃO MISTURAR OS INPUTS
   const [emailEmpresa, setEmailEmpresa] = useState("");
   const [senhaEmpresa, setSenhaEmpresa] = useState("");
 
   const [emailCandidato, setEmailCandidato] = useState("");
   const [senhaCandidato, setSenhaCandidato] = useState("");
 
-  // 3. ESTADO PARA MENSAGENS DE ERRO DA API
   const [erro, setErro] = useState("");
 
-  // 4. FUNÇÃO QUE CONECTA COM O SEU BACKEND (PORTA 3001)
   const enviarLogin = async (identificador, senha, tipoAbaSelecionada) => {
   setErro("");
 
@@ -39,8 +35,7 @@ export default function Login() {
       throw new Error(dados.erro || "E-mail ou senha incorretos.");
     }
 
-    // 🔒 VALIDAÇÃO DE SEGURANÇA: Bloqueia o acesso se a aba estiver errada
-    const tipoUsuarioReal = dados.perfil?.tipo; // Recebe 'candidato', 'empresa' ou 'admin'
+    const tipoUsuarioReal = dados.perfil?.tipo;
 
     if (tipoAbaSelecionada === "empresa" && tipoUsuarioReal === "candidato") {
       throw new Error("Este e-mail pertence a um Candidato. Por favor, use a aba ao lado para entrar.");
@@ -50,22 +45,13 @@ export default function Login() {
       throw new Error("Este e-mail pertence a uma Empresa. Por favor, use a aba ao lado para entrar.");
     }
 
-    // 🟢 Se passou pela validação, o login é autorizado:
     console.log("Login autorizado com sucesso!", dados);
 
-    // Salva as credenciais e o perfil atualizado (com e-mail e foto) no navegador
     localStorage.setItem("token", dados.token);
     localStorage.setItem("perfil", JSON.stringify(dados.perfil));
-    
-    // Se você tiver um estado local para o usuário, atualize aqui
-    if (typeof setUsuarioLogado === "function") {
-      setUsuarioLogado(dados.perfil);
-    }
 
-    // Despara o evento para atualizar o Header imediatamente
     window.dispatchEvent(new Event("storage"));
 
-    // Redireciona o usuário para o Dashboard correto com base no tipo real dele
     if (tipoUsuarioReal === "empresa") {
       window.location.href = "/dashboard/empresa";
     } else if (tipoUsuarioReal === "candidato") {
@@ -76,11 +62,10 @@ export default function Login() {
 
   } catch (err) {
     console.error("Erro detectado no login:", err.message);
-    setErro(err.message); // Exibe o erro vermelho amigável na tela
+    setErro(err.message);
   }
 };
 
-  // 5. INTERCEPTADORES DOS FORMULÁRIOS (preventDefault evita recarregar a página)
   const handleLoginEmpresa = (e) => {
     e.preventDefault();
     enviarLogin(emailEmpresa, senhaEmpresa, "empresa");
@@ -91,7 +76,6 @@ export default function Login() {
     enviarLogin(emailCandidato, senhaCandidato, "candidato");
   };
 
-  // Altera a aba de forma limpa e zera mensagens de erro antigas
   const alternarAba = (aba) => {
     setErro("");
     setAbaAtiva(aba);

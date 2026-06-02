@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 export default function Header() {
   const [usuario, setUsuario] = useState(null);
 
+  // 🛠️ CONSTANTE DA URL DO SEU BACKEND + PASTA DE ARQUIVOS
+  // Como as fotos do candidato vão para a pasta 'curriculos' pelo multer, apontamos para lá:
+
   // Carrega as informações salvas pelo login assim que a página abre
   const carregarUsuario = () => {
     const perfilSalvo = localStorage.getItem("perfil");
@@ -33,15 +36,13 @@ export default function Header() {
     localStorage.removeItem("token");
     localStorage.removeItem("perfil");
     setUsuario(null);
-    
+
     // 2. Fecha a sidebar do Bootstrap removendo o efeito visual de fundo escuro
     const offcanvasElement = document.getElementById("offcanvasProfile");
     if (offcanvasElement) {
-      // Se o Bootstrap global estiver ativo, força o fechamento correto
       const bsOffcanvas = window.bootstrap?.Offcanvas?.getInstance(offcanvasElement);
       bsOffcanvas?.hide();
-      
-      // Garante que o fundo escuro (backdrop) suma mesmo se o Bootstrap travar
+
       const backdrop = document.querySelector('.offcanvas-backdrop');
       if (backdrop) backdrop.remove();
       document.body.style.overflow = 'auto';
@@ -59,7 +60,7 @@ export default function Header() {
         style={{ zIndex: 1050 }}
       >
         <div className="container-fluid d-flex align-items-center justify-content-between px-3 px-md-4">
-          
+
           {/* SEÇÃO DA ESQUERDA: LOGO */}
           <div className="d-flex align-items-center gap-2 flex-fill">
             <button
@@ -76,10 +77,10 @@ export default function Header() {
             >
               Match<span className="text-white">Hire</span>
               <img
-                src="./logo.png"
+                src="/logo.png" // 🔥 FIXO: Aqui é a logo do site, não a foto do usuário!
                 className="ms-2 d-none d-sm-block img-fluid"
                 style={{ height: 40 }}
-                alt=""
+                alt="Logo"
               />
             </a>
           </div>
@@ -93,7 +94,7 @@ export default function Header() {
 
           {/* SEÇÃO DA DIREITA: BOTÕES OU FOTO DE PERFIL */}
           <div className="d-flex align-items-center justify-content-end flex-fill gap-3">
-            
+
             {/* SE NÃO ESTIVER LOGADO -> MOSTRA OS BOTÕES PADRÃO */}
             {!usuario ? (
               <>
@@ -123,8 +124,9 @@ export default function Header() {
                   data-bs-target="#offcanvasProfile"
                   style={{ width: "42px", height: "42px" }}
                 >
+                  {/* 🔥 MODIFICADO: Se tiver foto, monta a URL do backend. Se não, usa o padrão. */}
                   <img
-                    src={usuario.foto || "personagem.png"}
+                    src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
                     className="rounded-circle border border-2 border-dark"
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     alt="Perfil"
@@ -141,10 +143,11 @@ export default function Header() {
               data-bs-target={usuario ? "#offcanvasProfile" : "#sidebarConta"}
             >
               {usuario ? (
+                /* 🔥 MODIFICADO: URL Dinâmica da Foto Mobile */
                 <img
-                  src={usuario.foto || "personagem.png"}
+                  src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
                   className="rounded-circle border border-2 border-dark"
-                  style={{ width: "40px", height: "40px", objectFit: "cover", display: "block" }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   alt="Perfil"
                 />
               ) : (
@@ -156,10 +159,10 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* 🛠️ SIDEBAR / OFF CANVAS DE PERFIL DINÂMICO (Adicionado aqui dentro!) */}
-      <div 
-        className="offcanvas offcanvas-end cor-fundo border-0 shadow" 
-        tabIndex={-1} 
+      {/* 🛠️ SIDEBAR / OFF CANVAS DE PERFIL DINÂMICO */}
+      <div
+        className="offcanvas offcanvas-end cor-fundo border-0 shadow"
+        tabIndex={-1}
         id="offcanvasProfile"
         style={{ color: "#162417" }}
       >
@@ -167,21 +170,21 @@ export default function Header() {
           <h5 className="offcanvas-title fw-bold">Seu Perfil</h5>
           <button type="button" className="btn-close shadow-none" data-bs-dismiss="offcanvas" />
         </div>
-        
+
         <div className="offcanvas-body">
           {usuario ? (
             <>
               <div className="text-center mb-4">
+                {/* 🔥 MODIFICADO: URL Dinâmica da Foto na Sidebar Grande */}
                 <img
-                  src={usuario.foto || "personagem.png"}
-                  className="rounded-circle border border-3 border-white shadow"
-                  style={{ height: 120, width: 120, objectFit: "cover" }}
-                  alt="Foto de perfil"
+                  src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
+                  className="rounded-circle border border-2 border-dark"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  alt="Perfil"
                 />
                 <h4 className="mt-3 mb-0 fw-bold">{usuario.nome}</h4>
-                <span className="badge bg-dark mt-2">ID #{usuario.id || "---"}</span>
               </div>
-              
+
               <div className="d-flex flex-column gap-3 mt-4">
                 <div className="bg-white bg-opacity-25 p-3 rounded-3 shadow-sm">
                   <i className="bi bi-envelope-fill me-2" />{" "}
@@ -189,7 +192,7 @@ export default function Header() {
                   <br />
                   {usuario.email}
                 </div>
-                
+
                 <div className="bg-white bg-opacity-25 p-3 rounded-3 shadow-sm">
                   <i className="bi bi-shield-lock-fill me-2" />{" "}
                   <small className="fw-bold">Tipo de Conta:</small>
@@ -198,15 +201,20 @@ export default function Header() {
                 </div>
 
                 {/* Exibe o botão de currículo apenas se for candidato */}
-                {usuario.tipo === "candidato" && (
-                  <a href="#" className="btn btn-dark w-100 py-2 mt-2 shadow-sm">
+                {usuario.tipo === "candidato" && usuario.curriculo && (
+                  <a
+                    href={usuario.curriculo} // <-- Sem a URL_BASE antes, apenas a variável pura
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-dark w-100 py-2 mt-2 shadow-sm"
+                  >
                     <i className="bi bi-file-earmark-pdf-fill me-2" /> Abrir Meu Currículo
                   </a>
                 )}
 
                 {/* BOTÃO QUE VALIDA O LOGOUT ACIMA */}
-                <button 
-                  onClick={fazerLogout} 
+                <button
+                  onClick={fazerLogout}
                   className="btn btn-danger w-100 py-2 mt-auto shadow-sm fw-medium"
                 >
                   <i className="bi bi-box-arrow-right me-2" /> Sair da Conta

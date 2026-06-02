@@ -58,6 +58,7 @@ CREATE TABLE candidatos (
   descricao   TEXT,
   arquivo     VARCHAR(255),  -- currículo
   criado_em   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  foto VARCHAR(255),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -244,3 +245,5 @@ USE matchhire;
 UPDATE usuarios 
 SET senha_hash = '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
 WHERE email = 'admin@matchhire.com';
+
+ALTER TABLE candidatos ADD COLUMN foto VARCHAR(255) NULL
