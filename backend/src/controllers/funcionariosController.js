@@ -64,6 +64,7 @@ const detalheFuncionario = async (req, res) => {
 };
 
 const admitirFuncionario = async (req, res) => {
+  
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();

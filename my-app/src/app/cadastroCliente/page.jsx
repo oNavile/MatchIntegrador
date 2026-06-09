@@ -103,7 +103,7 @@ export default function CadastroCliente() {
                 idade--;
             }
             formData.append('idade', idade); // Enviando o inteiro esperado pelo backend
-        }
+        } 
 
         // Campos normais textuais
         formData.append('email', emailCandidato);
@@ -119,7 +119,11 @@ export default function CadastroCliente() {
         formData.append('bairro', bairroCandidato);
         formData.append('cidade', cidadeCandidato);
         formData.append('estado', estadoCandidato);
-        formData.append('palavras_chave', JSON.stringify(palavrasChave));
+        
+        // ✨ AJUSTADO: Agora salva como "HTML5 / CSS3, JavaScript, React.js" pronto para o Match!
+        formData.append('tags_perfil', palavrasChave.join(', '));
+
+        // 3. ENVIO DOS ARQUIVOS (Garante que os nomes batem com as chaves do Multer)
 
         // 3. ENVIO DOS ARQUIVOS (Garante que os nomes batem com as chaves do Multer)
         if (fotoPerfilCandidato && fotoPerfilCandidato instanceof File) {
@@ -384,75 +388,88 @@ export default function CadastroCliente() {
                                                     </h5>
                                                     <p className="text-dark">Selecione no máximo 8 opções.</p>
 
-                                                    {/* PACOTE OFFICE E PRODUTIVIDADE */}
-                                                    <div className="mb-4">
-                                                        <h6 className="fw-bold text-secondary mb-2">
-                                                            <i className="bi bi-pc-display me-1" /> Pacote Office e Produtividade
-                                                        </h6>
-                                                        <div className="d-flex flex-wrap gap-2">
-                                                            {[
-                                                                { id: "kw_word", val: "Microsoft Word", label: "Word" },
-                                                                { id: "kw_excel_b", val: "Excel Básico", label: "Excel Básico" },
-                                                                { id: "kw_excel_a", val: "Excel Avançado", label: "Excel Avançado/VBA" },
-                                                                { id: "kw_ppt", val: "PowerPoint", label: "PowerPoint" },
-                                                                { id: "kw_outlook", val: "Outlook / Teams", label: "Outlook / Teams" },
-                                                                { id: "kw_gsuite", val: "Google Workspace", label: "Google Workspace" },
-                                                                { id: "kw_pbi", val: "Power BI", label: "Power BI" },
-                                                                { id: "kw_trello", val: "Trello/Asana", label: "Trello / Asana" },
-                                                                { id: "kw_jira", val: "Jira", label: "Jira" },
-                                                                { id: "kw_notion", val: "Notion", label: "Notion" },
-                                                                { id: "kw_slack", val: "Slack", label: "Slack" }
-                                                            ].map(kw => (
-                                                                <div className="keyword-chip" key={kw.id}>
-                                                                    <input type="checkbox" id={kw.id} value={kw.val} onChange={handleCheckboxChange} checked={palavrasChave.includes(kw.val)} />
-                                                                    <label htmlFor={kw.id}>{kw.label}</label>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* IDIOMAS */}
-                                                    <div className="mb-4">
-                                                        <h6 className="fw-bold text-secondary mb-2">
-                                                            <i className="bi bi-translate me-1" /> Idiomas
-                                                        </h6>
-                                                        <div className="d-flex flex-wrap gap-2">
-                                                            {[
-                                                                { id: "kw_eng_b", val: "Inglês Básico", label: "Inglês Básico" },
-                                                                { id: "kw_eng_i", val: "Inglês Intermediário", label: "Inglês Intermediário" },
-                                                                { id: "kw_eng_f", val: "Inglês Fluente", label: "Inglês Fluente" },
-                                                                { id: "kw_esp_b", val: "Espanhol Básico", label: "Espanhol Básico" },
-                                                                { id: "kw_esp_i", val: "Espanhol Intermediário", label: "Espanhol Intermediário" },
-                                                                { id: "kw_esp_f", val: "Espanhol Fluente", label: "Espanhol Fluente" },
-                                                                { id: "kw_fra", val: "Francês", label: "Francês" },
-                                                                { id: "kw_ale", val: "Alemão", label: "Alemão" },
-                                                                { id: "kw_ita", val: "Italiano", label: "Italiano" },
-                                                                { id: "kw_libras", val: "Libras", label: "Libras" }
-                                                            ].map(kw => (
-                                                                <div className="keyword-chip" key={kw.id}>
-                                                                    <input type="checkbox" id={kw.id} value={kw.val} onChange={handleCheckboxChange} checked={palavrasChave.includes(kw.val)} />
-                                                                    <label htmlFor={kw.id}>{kw.label}</label>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* TECNOLOGIA E PROGRAMAÇÃO */}
+                                                    {/* 💻 TECNOLOGIA E PROGRAMAÇÃO (Subiu para destaque, mais relevante para o Match) */}
                                                     <div className="mb-4">
                                                         <h6 className="fw-bold text-secondary mb-2">
                                                             <i className="bi bi-code-slash me-1" /> Tecnologia e Programação
                                                         </h6>
                                                         <div className="d-flex flex-wrap gap-2">
                                                             {[
-                                                                { id: "kw_html_css", val: "HTML5 / CSS3", label: "HTML5 / CSS3" },
-                                                                { id: "kw_py", val: "Python", label: "Python" },
-                                                                { id: "kw_js", val: "JavaScript", label: "JavaScript / TypeScript" },
-                                                                { id: "kw_java", val: "Java", label: "Java" },
+                                                                { id: "kw_html_css", val: "html", label: "HTML5 / CSS3" },
+                                                                { id: "kw_js", val: "javaScript", label: "JavaScript / TypeScript" },
+                                                                { id: "kw_react", val: "react.js", label: "React.js / Next.js" },
+                                                                { id: "kw_node", val: "node.js", label: "Node.js" },
+                                                                { id: "kw_py", val: "python", label: "Python" },
+                                                                { id: "kw_java", val: "java", label: "Java" },
                                                                 { id: "kw_csharp", val: "C# / .NET", label: "C# / .NET" },
-                                                                { id: "kw_php", val: "PHP", label: "PHP" }
+                                                                { id: "kw_php", val: "php", label: "PHP / Laravel" },
+                                                                { id: "kw_sql", val: "sql", label: "Bancos de Dados (SQL/NoSQL)" },
+                                                                { id: "kw_git", val: "git", label: "Git / GitHub" }
                                                             ].map(kw => (
                                                                 <div className="keyword-chip" key={kw.id}>
-                                                                    <input type="checkbox" id={kw.id} value={kw.val} onChange={handleCheckboxChange} checked={palavrasChave.includes(kw.val)} />
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={kw.id}
+                                                                        value={kw.val}
+                                                                        onChange={handleCheckboxChange}
+                                                                        checked={palavrasChave.includes(kw.val)}
+                                                                    />
+                                                                    <label htmlFor={kw.id}>{kw.label}</label>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* 📊 FERRAMENTAS E PRODUTIVIDADE (Limpado e focado) */}
+                                                    <div className="mb-4">
+                                                        <h6 className="fw-bold text-secondary mb-2">
+                                                            <i className="bi bi-pc-display me-1" /> Ferramentas e Produtividade
+                                                        </h6>
+                                                        <div className="d-flex flex-wrap gap-2">
+                                                            {[
+                                                                { id: "kw_office", val: "pacote office", label: "Microsoft Office (Word/PPT)" },
+                                                                { id: "kw_excel", val: "excel", label: "Excel Avançado / Dashboards" },
+                                                                { id: "kw_gsuite", val: "google workspace", label: "Google Workspace" },
+                                                                { id: "kw_pbi", val: "power bi", label: "Power BI / Analytics" },
+                                                                { id: "kw_agil", val: "metodologias ageis", label: "Gestão Ágil (Jira/Trello)" },
+                                                                { id: "kw_notion", val: "notion", label: "Notion" },
+                                                                { id: "kw_slack", val: "slack", label: "Comunicação (Slack/Teams)" }
+                                                            ].map(kw => (
+                                                                <div className="keyword-chip" key={kw.id}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={kw.id}
+                                                                        value={kw.val}
+                                                                        onChange={handleCheckboxChange}
+                                                                        checked={palavrasChave.includes(kw.val)}
+                                                                    />
+                                                                    <label htmlFor={kw.id}>{kw.label}</label>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* 🗣️ IDIOMAS (Simplificado para o que as vagas realmente pedem) */}
+                                                    <div className="mb-4">
+                                                        <h6 className="fw-bold text-secondary mb-2">
+                                                            <i className="bi bi-translate me-1" /> Idiomas
+                                                        </h6>
+                                                        <div className="d-flex flex-wrap gap-2">
+                                                            {[
+                                                                { id: "kw_eng_i", val: "inglês intermediário", label: "Inglês Intermediário" },
+                                                                { id: "kw_eng_f", val: "inglês fluente", label: "Inglês Fluente / Avançado" },
+                                                                { id: "kw_esp_i", val: "espanhol intermediário", label: "Espanhol Intermediário" },
+                                                                { id: "kw_esp_f", val: "espanhol fluente", label: "Espanhol Fluente" },
+                                                                { id: "kw_libras", val: "libras", label: "Libras" }
+                                                            ].map(kw => (
+                                                                <div className="keyword-chip" key={kw.id}>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={kw.id}
+                                                                        value={kw.val}
+                                                                        onChange={handleCheckboxChange}
+                                                                        checked={palavrasChave.includes(kw.val)}
+                                                                    />
                                                                     <label htmlFor={kw.id}>{kw.label}</label>
                                                                 </div>
                                                             ))}

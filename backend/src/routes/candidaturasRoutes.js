@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { autenticar, soCandidato } = require('../middlewares/auth');
-const vagasCtrl = require('../controllers/vagasController');
+const candidaturasController = require('../controllers/candidaturasController');
+const { autenticar } = require('../middlewares/auth');
 
-router.post('/', autenticar, soCandidato, vagasCtrl.candidatar);
+// POST /api/candidaturas
+router.post(
+  '/',
+  autenticar,
+  candidaturasController.criarCandidatura
+);
 
 module.exports = router;

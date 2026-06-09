@@ -189,7 +189,7 @@ export default function Login() {
                               Lembrar de mim
                             </label>
                           </div>
-                          <a href="/recuperar-senha" className="link-custom">
+                          <a href="./recuperarSenha" className="link-custom">
                             Esqueceu a senha?
                           </a>
                         </div>
@@ -264,7 +264,7 @@ export default function Login() {
                               Lembrar de mim
                             </label>
                           </div>
-                          <a href="/recuperar-senha" className="link-custom">
+                          <a href="./recuperarSenha" className="link-custom">
                             Esqueceu a senha?
                           </a>
                         </div>
@@ -286,46 +286,6 @@ export default function Login() {
 
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SIDEBAR / OFF CANVAS PERFIL (Mantido intacto conforme seu código) */}
-        <div className="offcanvas offcanvas-end cor-fundo border-0 shadow" tabIndex={-1} id="offcanvasProfile">
-          <div className="offcanvas-header shadow-sm border-0">
-            <h5 className="offcanvas-title fw-bold">Seu Perfil</h5>
-            <button type="button" className="btn-close shadow-none" data-bs-dismiss="offcanvas" />
-          </div>
-          <div className="offcanvas-body">
-            <div className="text-center mb-4">
-              <img
-                src="personagem.png"
-                className="rounded-circle border border-3 border-white shadow"
-                style={{ height: 120 }}
-                alt=""
-              />
-              <h4 className="mt-3 mb-0">Sarah Oliveira</h4>
-              <span className="badge bg-dark mt-2">ID #12343</span>
-            </div>
-            <div className="d-flex flex-column gap-3 mt-4">
-              <div className="bg-white bg-opacity-25 p-3 rounded-3">
-                <i className="bi bi-envelope-fill me-2" />{" "}
-                <small className="fw-bold">Email:</small>
-                <br />
-                sara@gmail.com
-              </div>
-              <div className="bg-white bg-opacity-25 p-3 rounded-3">
-                <i className="bi bi-calendar-check-fill me-2" />{" "}
-                <small className="fw-bold">Nascimento:</small>
-                <br />
-                17/09/2008
-              </div>
-              <a href="#" className="btn btn-dark w-100 py-2 mt-2 shadow-sm">
-                <i className="bi bi-file-earmark-pdf-fill me-2" /> Abrir Currículo
-              </a>
-              <button className="btn btn-outline-danger w-100 btn-sm mt-auto">
-                Sair da Conta
-              </button>
             </div>
           </div>
         </div>

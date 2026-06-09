@@ -12,22 +12,6 @@ const gerarToken = (usuario) =>
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 
-const salvarPalavrasChave = async (conn, tipo, id, palavras = []) => {
-  await conn.execute(
-    `DELETE FROM palavras_chave WHERE entidade_tipo = ? AND entidade_id = ?`,
-    [tipo, id]
-  );
-  const limitadas = palavras.slice(0, 8);
-  for (const palavra of limitadas) {
-    if (palavra && palavra.trim()) {
-      await conn.execute(
-        `INSERT INTO palavras_chave (entidade_tipo, entidade_id, palavra) VALUES (?, ?, ?)`,
-        [tipo, id, palavra.trim().toLowerCase()]
-      );
-    }
-  }
-};
-
 // ── Cadastro de Empresa ──────────────────────────────────────
 const cadastrarEmpresa = async (req, res) => {
   const conn = await db.getConnection();
@@ -46,8 +30,7 @@ const cadastrarEmpresa = async (req, res) => {
       numero,
       bairro,
       cidade,
-      estado,
-      palavras_chave
+      estado
     } = req.body;
 
     if (!nome || !email || !cnpj || !senha)
@@ -78,28 +61,13 @@ const cadastrarEmpresa = async (req, res) => {
       });
 
     const senhaHash = await bcrypt.hash(senha, 10);
-    // DENTRO DO SEU CONTROLLER DE CADASTRO (no backend)
-// O multer gera o array req.files. Garanta que você está pegando as chaves certas:
 
-const foto_perfil_arquivo = req.files['foto_perfil'] ? req.files['foto_perfil'][0] : null;
-const curriculo_arquivo = req.files['curriculo'] ? req.files['curriculo'][0] : null;
-
-// Agora, monta a URL de cada um apontando para a pasta que eles REALMENTE foram (curriculos):
-const url_foto = foto_perfil_arquivo 
-  ? `http://localhost:3001/uploads/curriculos/${foto_perfil_arquivo.filename}` 
-  : null;
-
-const url_curriculo = curriculo_arquivo 
-  ? `http://localhost:3001/uploads/curriculos/${curriculo_arquivo.filename}` 
-  : null;
-
-// Na hora de rodar o INSERT INTO candidatos no MySQL, passe as variáveis certas:
-// ... [nome, email, cpf, url_foto, url_curriculo]
+    // Captura logo da empresa se houver via Multer (geralmente mapeado como 'arquivo' ou 'logo')
+    const logo_arquivo = req.files && req.files['logo'] ? req.files['logo'][0].filename : null;
 
     // salva usuario
     const [resUsuario] = await conn.execute(
-      `INSERT INTO usuarios (tipo, email, senha_hash)
-       VALUES ('empresa', ?, ?)`,
+      `INSERT INTO usuarios (tipo, email, senha_hash) VALUES ('empresa', ?, ?)`,
       [email, senhaHash]
     );
 
@@ -108,57 +76,23 @@ const url_curriculo = curriculo_arquivo
     // salva empresa
     const [resEmpresa] = await conn.execute(
       `INSERT INTO empresas (
-        usuario_id,
-        nome,
-        email,
-        cnpj,
-        descricao,
-        telefone,
-        cep,
-        rua,
-        numero,
-        bairro,
-        cidade,
-        estado,
-        arquivo
+        usuario_id, nome, email, cnpj, descricao, telefone, 
+        cep, rua, numero, bairro, cidade, estado, arquivo
       )
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        usuarioId,
-        nome,
-        email,
-        cnpj,
-        descricao || null,
-        telefone  || null,
-        cep       || null,
-        rua       || null,
-        numero    || null,
-        bairro    || null,
-        cidade    || null,
-        estado    || null,
-        arquivo   || null
+        usuarioId, nome, email, cnpj,
+        descricao || null, telefone  || null, cep || null, rua || null,
+        numero || null, bairro || null, cidade || null, estado || null,
+        logo_arquivo || null
       ]
     );
 
     const empresaId = resEmpresa.insertId;
 
-    const pcs = Array.isArray(palavras_chave)
-      ? palavras_chave
-      : JSON.parse(palavras_chave || '[]');
-
-    await salvarPalavrasChave(
-      conn,
-      'empresa',
-      empresaId,
-      pcs
-    );
-
     await conn.commit();
 
-    const token = gerarToken({
-      id: usuarioId,
-      tipo: 'empresa'
-    });
+    const token = gerarToken({ id: usuarioId, tipo: 'empresa' });
 
     res.status(201).json({
       mensagem: 'Empresa cadastrada com sucesso!',
@@ -168,16 +102,14 @@ const url_curriculo = curriculo_arquivo
         nome,
         email,
         tipo: 'empresa',
-        foto: arquivo ? `http://localhost:3001/uploads/logos/${arquivo}` : null // 🔥 Foto injetada no cadastro
+        foto: logo_arquivo ? `http://localhost:3001/uploads/logos/${logo_arquivo}` : null
       }
     });
 
   } catch (err) {
     await conn.rollback();
     console.error(err);
-    res.status(500).json({
-      erro: 'Erro interno ao cadastrar empresa.'
-    });
+    res.status(500).json({ erro: 'Erro interno ao cadastrar empresa.' });
   } finally {
     conn.release();
   }
@@ -189,9 +121,10 @@ const cadastrarCandidato = async (req, res) => {
   try {
     await conn.beginTransaction();
 
+    // 🛠️ CORREÇÃO: Lendo 'tags_perfil' que vem do .join(', ') do seu Frontend
     const { nome, cpf, email, senha, idade, telefone,
             cep, rua, numero, bairro, cidade, estado,
-            descricao, palavras_chave } = req.body;
+            descricao, tags_perfil } = req.body;
 
     if (!nome || !cpf || !email || !senha)
       return res.status(400).json({ erro: 'Nome, CPF, e-mail e senha são obrigatórios.' });
@@ -210,7 +143,7 @@ const cadastrarCandidato = async (req, res) => {
 
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    // 🛠️ ALTERAÇÃO: Captura os arquivos múltiplos vindos do upload.fields()
+    // Captura os arquivos múltiplos vindos do upload.fields()
     const foto = req.files && req.files['foto_perfil'] ? req.files['foto_perfil'][0].filename : null;
     const arquivo = req.files && req.files['curriculo'] ? req.files['curriculo'][0].filename : null;
 
@@ -220,16 +153,13 @@ const cadastrarCandidato = async (req, res) => {
     );
     const usuarioId = resUsuario.insertId;
 
-    // 🛠️ ALTERAÇÃO: Adicionado o campo 'foto' na Query e na lista de valores do INSERT
+    // 🛠️ CORREÇÃO: Adicionado a coluna 'tags_perfil' diretamente na tabela candidatos para alimentar o algoritmo de Match
     const [resCandidato] = await conn.execute(
       `INSERT INTO candidatos (usuario_id, nome, cpf, email, idade, telefone,
-        cep, rua, numero, bairro, cidade, estado, descricao, arquivo, foto)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        cep, rua, numero, bairro, cidade, estado, descricao, arquivo, foto, tags_perfil)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        usuarioId,
-        nome,
-        cpf,
-        email,
+        usuarioId, nome, cpf, email,
         idade      || null,
         telefone   || null,
         cep        || null,
@@ -239,19 +169,12 @@ const cadastrarCandidato = async (req, res) => {
         cidade     || null,
         estado     || null,
         descricao  || null,
-        arquivo    || null,
-        foto       || null // 🔥 Nova variável da foto inserida aqui
+        arquivo    || null, // Currículo PDF
+        foto       || null, // Foto de perfil
+        tags_perfil|| null  // string salva como "React.js, Node.js, Git"
       ]
     );
     const candidatoId = resCandidato.insertId;
-
-    const pcs = Array.isArray(palavras_chave)
-      ? palavras_chave
-      : JSON.parse(palavras_chave || '[]');
-    
-    // 🛠️ ALTERAÇÃO: Limita o array recebido em no máximo 8 palavras-chave antes de salvar
-    const pcsLimitadas = pcs.slice(0, 8);
-    await salvarPalavrasChave(conn, 'candidato', candidatoId, pcsLimitadas);
 
     await conn.commit();
 
@@ -264,7 +187,6 @@ const cadastrarCandidato = async (req, res) => {
         nome, 
         email, 
         tipo: 'candidato',
-        // 🛠️ ALTERAÇÃO: Agora retorna a URL correta da foto e o currículo se existirem
         foto: foto ? `http://localhost:3001/uploads/curriculos/${foto}` : null,
         curriculo: arquivo ? `http://localhost:3001/uploads/curriculos/${arquivo}` : null
       }
@@ -315,7 +237,6 @@ const login = async (req, res) => {
     let perfil;
 
     if (usuario.tipo === 'empresa') {
-      // 🔥 Adicionado 'arquivo' na busca de empresas
       const [[e]] = await db.execute(
         `SELECT id, nome, email, arquivo FROM empresas WHERE usuario_id = ?`,
         [usuario.id]
@@ -325,37 +246,34 @@ const login = async (req, res) => {
         nome: e.nome,
         email: e.email,
         tipo: 'empresa',
-        foto: e.arquivo ? `http://localhost:3001/uploads/curriculos/${e.arquivo}` : null // 🔥 Caminho completo da foto corporativa
+        foto: e.arquivo ? `http://localhost:3001/uploads/logos/${e.arquivo}` : null
       };
     } else if (usuario.tipo === 'candidato') {
-      // 🔥 Adicionado 'email' e 'arquivo' na busca do candidato
+      // 🛠️ CORREÇÃO: Buscando tanto a coluna 'foto' quanto a 'arquivo' (currículo) separadamente
       const [[c]] = await db.execute(
-        `SELECT id, nome, email, arquivo FROM candidatos WHERE usuario_id = ?`,
+        `SELECT id, nome, email, foto, arquivo FROM candidatos WHERE usuario_id = ?`,
         [usuario.id]
       );
       perfil = { 
         id: c.id,
         nome: c.nome,
-        email: c.email, // 🔥 Agora o e-mail vai para o front!
+        email: c.email, 
         tipo: 'candidato',
-        foto: c.arquivo ? `http://localhost:3001/uploads/curriculos/${c.arquivo}` : null // 🔥 Caminho completo da foto de perfil
+        foto: c.foto ? `http://localhost:3001/uploads/curriculos/${c.foto}` : null,
+        curriculo: c.arquivo ? `http://localhost:3001/uploads/curriculos/${c.arquivo}` : null
       };
     } else {
-      // Busca na tabela admins usando um bloco try/catch interno para não derrubar o servidor
       let a = null;
       try {
         const [rows] = await db.execute(
           `SELECT id, nome FROM admins WHERE usuario_id = ?`,
           [usuario.id]
         );
-        if (rows && rows.length > 0) {
-          a = rows[0];
-        }
+        if (rows && rows.length > 0) a = rows[0];
       } catch (e) {
         console.error("Aviso: Falha ao buscar na tabela admins", e.message);
       }
       
-      // Se não achou a linha na tabela 'admins', ele cria um perfil padrão usando os dados de 'usuarios'
       perfil = { 
         id: a ? a.id : usuario.id,
         nome: a ? a.nome : "Administrador Principal",
@@ -365,10 +283,7 @@ const login = async (req, res) => {
       };
     }
 
-    const token = gerarToken({
-      id: usuario.id,
-      tipo: usuario.tipo
-    });
+    const token = gerarToken({ id: usuario.id, tipo: usuario.tipo });
 
     res.json({
       mensagem: 'Login realizado com sucesso!',
@@ -378,9 +293,7 @@ const login = async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      erro: 'Erro interno ao realizar login.'
-    });
+    res.status(500).json({ erro: 'Erro interno ao realizar login.' });
   }
 };
 

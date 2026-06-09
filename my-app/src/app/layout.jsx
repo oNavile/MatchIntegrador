@@ -5,6 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import Script from "next/script";
+import Aside from './components/aside';
 
 
 const geistSans = Geist({
@@ -27,64 +28,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <Header />
-        <aside
-  id="sidebar"
-  className="offcanvas-md offcanvas-start bg-menu shadow position-fixed top-0 start-0 h-100 border-0"
-  tabIndex={-1}
->
-  <div className="offcanvas-header d-md-none border-bottom border-dark border-opacity-10 mt-2">
-    <h5 className="offcanvas-title texto-escuro fw-bold fs-3">Menu</h5>
-    <button
-      type="button"
-      className="btn-close shadow-none"
-      data-bs-dismiss="offcanvas"
-      data-bs-target="#sidebar"
-    />
-  </div>
-  <div className="offcanvas-body d-flex flex-column p-0 h-100 overflow-x-hidden">
-    <div className="px-3 mt-4 mb-2 hide-on-collapse">
-      <div className="input-group input-group-sm">
-        <span
-          className="input-group-text bg-transparent border-end-0 text-muted"
-          style={{ borderColor: "#162417" }}
-        >
-          <i className="bi bi-search" />
-        </span>
-        <input
-          type="text"
-          className="form-control bg-transparent border-start-0 ps-0 shadow-none "
-          style={{ borderColor: "#162417" }}
-          placeholder="Buscar..."
-        />
-      </div>
-    </div>
-    <div className="px-4 mt-3 mb-2 text-uppercase fw-bold text-muted small hide-on-collapse">
-      Menu Principal
-    </div>
-    <nav className="nav flex-column gap-1 p-2 flex-grow-1">
-      <a
-        href="/"
-        className="nav-link d-flex align-items-center texto-escuro fw-medium rounded py-2 link-hover"
-      >
-        <div className="text-center" style={{ minWidth: 40 }}>
-          <i className="bi bi-house-fill fs-5" />
-        </div>
-        <span className="hide-on-collapse ms-2">Home</span>
-      </a>
-      <a
-        href="/vagas"
-        className="nav-link d-flex align-items-center justify-content-between texto-escuro fw-medium rounded py-2 link-hover"
-      >
-        <div className="d-flex align-items-center">
-          <div className="text-center" style={{ minWidth: 40 }}>
-            <i className="bi bi-person-badge fs-5" />
-          </div>
-          <span className="hide-on-collapse ms-2">Vagas</span>
-        </div>
-      </a>
-    </nav>
-  </div>
-</aside>
+        <Aside />
         {children}
         <Footer />
         <Script

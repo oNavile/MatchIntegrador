@@ -246,4 +246,8 @@ UPDATE usuarios
 SET senha_hash = '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
 WHERE email = 'admin@matchhire.com';
 
-ALTER TABLE candidatos ADD COLUMN foto VARCHAR(255) NULL
+-- Adiciona a coluna de tags na tabela de candidatos (se já não existir)
+ALTER TABLE candidatos ADD COLUMN tags_perfil TEXT;
+
+-- Adiciona a coluna de tags na tabela de vagas (se já não existir)
+ALTER TABLE vagas ADD COLUMN tags_vaga TEXT;

@@ -7,6 +7,7 @@ const listarVagas = async (req, res) => {
   try {
     const { empresa_id, status = 'aberta', busca } = req.query;
 
+    // 1. Incluímos v.* que já traz a coluna tags_vaga da tabela de vagas
     let sql = `
       SELECT v.*, e.nome AS empresa_nome, e.arquivo AS empresa_logo,
              c.nome AS cargo_nome, s.nome AS setor_nome
@@ -24,13 +25,20 @@ const listarVagas = async (req, res) => {
 
     const [vagas] = await db.execute(sql, params);
 
-    // Adiciona palavras-chave de cada vaga
+    // 2. Agora APENAS formatamos a string que JÁ VEM na tabela vagas em um Array
     for (const vaga of vagas) {
-      const [pcs] = await db.execute(
-        `SELECT palavra FROM palavras_chave WHERE entidade_tipo = 'vaga' AND entidade_id = ?`,
-        [vaga.id]
-      );
-      vaga.palavras_chave = pcs.map(p => p.palavra);
+      let tagsArray = [];
+      
+      // Se a coluna tags_vaga contiver texto (ex: "React, Node, JavaScript")
+      if (typeof vaga.tags_vaga === 'string' && vaga.tags_vaga.trim() !== "") {
+        tagsArray = vaga.tags_vaga.split(',').map(tag => tag.trim());
+      } else if (Array.isArray(vaga.tags_vaga)) {
+        tagsArray = vaga.tags_vaga;
+      }
+
+      // Injeta nos dois campos para garantir compatibilidade com o que o Frontend pedir
+      vaga.tags_vaga = tagsArray;
+      vaga.palavras_chave = tagsArray; 
     }
 
     res.json(vagas);
@@ -70,6 +78,7 @@ const detalheVaga = async (req, res) => {
 };
 
 // ── Criar vaga (empresa/admin) ───────────────────────────────
+// ── Criar vaga (empresa/admin) - SUBSTITUA ESTA FUNÇÃO NO CONTROLLER
 const criarVaga = async (req, res) => {
   const conn = await db.getConnection();
   try {
@@ -89,35 +98,51 @@ const criarVaga = async (req, res) => {
       if (!e) return res.status(403).json({ erro: 'Empresa não encontrada.' });
       empresaId = e.id;
     } else {
-      // admin pode passar empresa_id no body
       empresaId = req.body.empresa_id;
       if (!empresaId) return res.status(400).json({ erro: 'empresa_id é obrigatório para admin.' });
     }
 
-    const [res_] = await conn.execute(
-      `INSERT INTO vagas (empresa_id, cargo_id, setor_id, titulo, descricao,
-        requisitos, local, tipo, salario)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [empresaId, cargo_id || null, setor_id || null, titulo, descricao,
-       requisitos, local, tipo || 'presencial', salario || null]
-    );
-    const vagaId = res_.insertId;
-
-    const pcs = Array.isArray(palavras_chave) ? palavras_chave : JSON.parse(palavras_chave || '[]');
-    for (const palavra of pcs.slice(0, 4)) {
-      if (palavra && palavra.trim()) {
-        await conn.execute(
-          `INSERT INTO palavras_chave (entidade_tipo, entidade_id, palavra) VALUES ('vaga', ?, ?)`,
-          [vagaId, palavra.trim().toLowerCase()]
-        );
+    // Tratamos o campo para garantir que vire uma string separada por vírgula
+    let pcs = [];
+    if (Array.isArray(palavras_chave)) {
+      pcs = palavras_chave;
+    } else if (typeof palavras_chave === 'string') {
+      try {
+        pcs = JSON.parse(palavras_chave);
+      } catch (e) {
+        pcs = palavras_chave.split(',').map(p => p.trim());
       }
     }
+
+    // Junta o array em formato de texto para a coluna TEXT do MySQL (Ex: "JavaScript, React.js")
+    // 1. Transforma o array em String separada por vírgulas (Ex: "JavaScript, React.js")
+const tagsVagaTexto = pcs.filter(p => p && p.trim()).join(', ');
+
+// 2. CORREÇÃO: Enviando 'tagsVagaTexto' no último parâmetro do INSERT
+const [res_] = await conn.execute(
+  `INSERT INTO vagas (empresa_id, cargo_id, setor_id, titulo, descricao,
+    requisitos, local, tipo, salario, tags_vaga)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  [
+    empresaId, 
+    cargo_id || null, 
+    setor_id || null, 
+    titulo, 
+    descricao,
+    requisitos, 
+    local, 
+    tipo || 'presencial', 
+    salario || null,
+    tagsVagaTexto // <─── MUDADO DE 'tags_vaga' PARA 'tagsVagaTexto'
+  ]
+);
+    const vagaId = res_.insertId;
 
     await conn.commit();
     res.status(201).json({ mensagem: 'Vaga criada com sucesso!', vaga_id: vagaId });
   } catch (err) {
     await conn.rollback();
-    console.error(err);
+    console.error("Erro completo ao criar vaga:", err);
     res.status(500).json({ erro: 'Erro ao criar vaga.' });
   } finally {
     conn.release();
@@ -197,4 +222,54 @@ const rankingCandidatos = async (req, res) => {
   }
 };
 
-module.exports = { listarVagas, detalheVaga, criarVaga, atualizarVaga, candidatar, rankingCandidatos };
+// ── Admin: listar todas as vagas ─────────────────────────────
+const listarTodasVagas = async (req, res) => {
+  try {
+    const [vagas] = await db.execute(`
+      SELECT
+        v.id,
+        v.titulo,
+        v.tipo,
+        v.status,
+        v.salario,
+        v.criado_em,
+        e.nome AS empresa_nome
+      FROM vagas v
+      INNER JOIN empresas e
+        ON e.id = v.empresa_id
+      ORDER BY v.id DESC
+    `);
+
+    res.json(vagas);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      erro: "Erro ao listar vagas"
+    });
+  }
+};
+
+// ── Admin: excluir vaga ──────────────────────────────────────
+const excluirVaga = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await db.execute(
+      "DELETE FROM vagas WHERE id = ?",
+      [id]
+    );
+
+    res.json({
+      mensagem: "Vaga removida com sucesso"
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      erro: "Erro ao excluir vaga"
+    });
+  }
+};
+
+module.exports = { listarVagas, detalheVaga, criarVaga, atualizarVaga, candidatar, rankingCandidatos, listarTodasVagas, excluirVaga };
