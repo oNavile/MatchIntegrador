@@ -341,13 +341,9 @@ export default function CadastroVagaEmpresa() {
 
                   {/* Botão Concluir Cadastro */}
                   <div className="text-end border-top pt-4">
-                    <button
-                      type="submit"
-                      style={{ marginTop: '15px', padding: '10px 20px', cursor: 'pointer' }}
-                      className="btn btn-dark btn-lg px-5 rounded-pill shadow-sm fw-bold"
-                    >
-                      Concluir Cadastro
-                    </button>
+                    <button type="submit" className="btn btn-primeiro w-100 rounded-pill py-3 fw-bold shadow transition-all d-flex align-items-center justify-content-center gap-2">
+                                     Criar vaga
+                                  </button>
                   </div>
                 </form>
               </div>

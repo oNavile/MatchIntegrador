@@ -251,3 +251,17 @@ ALTER TABLE candidatos ADD COLUMN tags_perfil TEXT;
 
 -- Adiciona a coluna de tags na tabela de vagas (se já não existir)
 ALTER TABLE vagas ADD COLUMN tags_vaga TEXT;
+
+CREATE TABLE IF NOT EXISTS favoritos (
+  id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  candidato_id INT UNSIGNED NOT NULL,
+  vaga_id      INT UNSIGNED NOT NULL,
+  criado_em    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  
+  -- Garante que o mesmo candidato não favorite a mesma vaga mais de uma vez
+  UNIQUE KEY uq_favorito (candidato_id, vaga_id),
+  
+  -- Chaves estrangeiras com exclusão em cascata
+  FOREIGN KEY (candidato_id) REFERENCES candidatos(id) ON DELETE CASCADE,
+  FOREIGN KEY (vaga_id)      REFERENCES vagas(id)      ON DELETE CASCADE
+) ENGINE=InnoDB;

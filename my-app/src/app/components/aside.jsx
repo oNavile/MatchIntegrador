@@ -57,6 +57,7 @@ export default function aside() {
         { label: "Minhas Vagas", href: "../vagasEmpresa", icon: "bi-briefcase-fill" },
         { label: "Candidatos", href: "../empresaCandidatos", icon: "bi-people-fill" },
         { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
+        { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
       ]
     },
     // ADMIN / ADMINISTRADOR

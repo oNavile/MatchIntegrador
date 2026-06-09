@@ -22,7 +22,7 @@ export default function Vagas() {
 
   // ── REQUISIÇÃO PARA O SEU BACKEND (PORTA 3001) ───────────────
   useEffect(() => {
-    async function carregarVagas() {
+    async function carregarDadosIniciais() {
       try {
         setLoading(true);
         setErro(null);
@@ -33,19 +33,33 @@ export default function Vagas() {
           headers['Authorization'] = `Bearer ${token}`;
         }
 
-        // Altere a linha do fetch na sua page.jsx para ficar assim:
-        const response = await fetch('http://localhost:3001/api/vagas', {
+        // 1. Carrega a lista de vagas
+        const responseVagas = await fetch('http://localhost:3001/api/vagas', {
           method: 'GET',
           headers: headers,
-          cache: 'no-store' // <--- ADICIONE ESTA LINHA AQUI
+          cache: 'no-store'
         });
 
-        if (!response.ok) {
+        if (!responseVagas.ok) {
           throw new Error('Não foi possível obter a lista de vagas do servidor.');
         }
 
-        const dados = await response.json();
-        setVagas(dados);
+        const dadosVagas = await responseVagas.json();
+        setVagas(dadosVagas);
+
+        // 2. SE o usuário estiver logado, já busca os favoritos dele no banco
+        if (token) {
+          const responseFavs = await fetch('http://localhost:3001/api/favoritos', {
+            method: 'GET',
+            headers: headers
+          });
+          
+          if (responseFavs.ok) {
+            const dadosFavs = await responseFavs.json();
+            setFavoritos(dadosFavs); // Define o array de IDs vindos do banco
+          }
+        }
+
       } catch (err) {
         console.error(err);
         setErro(err.message || "Erro de conexão com o servidor.");
@@ -53,7 +67,7 @@ export default function Vagas() {
         setLoading(false);
       }
     }
-    carregarVagas();
+    carregarDadosIniciais();
   }, []);
 
   // ── LÓGICA DE POST DE CANDIDATURA ────────────────────────────
@@ -92,12 +106,40 @@ export default function Vagas() {
     }
   };
 
-  // ── ALTERNAR FAVORITOS ───────────────────────────────────────
-  const alternarFavorito = (id) => {
-    if (favoritos.includes(id)) {
-      setFavoritos(favoritos.filter(favId => favId !== id));
-    } else {
-      setFavoritos([...favoritos, id]);
+  // ── ALTERNAR FAVORITOS COM O BACKEND ─────────────────────────
+  const alternarFavorito = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('Você precisa estar logado para favoritar uma vaga.');
+        return;
+      }
+
+      // Envia a requisição para o banco de dados
+      const response = await fetch('http://localhost:3001/api/favoritos/toggle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Passa o token para o back saber quem você é
+        },
+        body: JSON.stringify({ vaga_id: id })
+      });
+
+      const dados = await response.json();
+
+      if (!response.ok) {
+        throw new Error(dados.erro || 'Erro ao atualizar favorito.');
+      }
+
+      // Se o back-end respondeu que deu certo, atualizamos a tela na hora:
+      if (dados.acao === 'adicionado') {
+        setFavoritos([...favoritos, id]);
+      } else if (dados.acao === 'removido') {
+        setFavoritos(favoritos.filter(favId => favId !== id));
+      }
+    } catch (err) {
+      console.error("Erro ao alternar favorito:", err);
     }
   };
 
@@ -181,16 +223,6 @@ export default function Vagas() {
                   ))}
                 </div>
 
-                {/* ABA DE FILTROS SENIORIDADE */}
-                <div className="d-flex gap-2 flex-wrap mb-5 align-items-center">
-                  <span className="text-white-50 me-2 small fw-medium">Nível de senioridade:</span>
-                  {["todos", "junior", "pleno", "senior"].map((sen) => (
-                    <button key={sen} className={`btn btn-filtro rounded-pill px-3 py-1 btn-sm ${senioridadeFiltro === sen ? 'active' : ''}`} onClick={() => setSenioridadeFiltro(sen)}>
-                      {sen === "todos" ? "Todas" : sen === "junior" ? "Júnior" : sen === "senior" ? "Sênior" : "Pleno"}
-                    </button>
-                  ))}
-                </div>
-
                 {/* CABEÇALHO DA LISTAGEM */}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <div className="d-flex align-items-center gap-3">
@@ -211,7 +243,6 @@ export default function Vagas() {
                   {!loading && vagasFiltradas.length === 0 && <p className="text-center text-white-50">Nenhuma vaga encontrada.</p>}
 
                   {!loading && vagasFiltradas.map((vaga) => {
-                    // Pega o array diretamente da resposta limpa do backend
                     const tags = Array.isArray(vaga.tags_vaga) ? vaga.tags_vaga : [];
 
                     return (
@@ -242,7 +273,6 @@ export default function Vagas() {
                               </span>
                             </div>
 
-                            {/* EXIBIÇÃO DIRETA DAS TAGS SEM ACIDENTES */}
                             <div className="d-flex flex-wrap gap-1 mb-3">
                               {tags.length > 0 ? (
                                 tags.map((tech, idx) => (
@@ -294,7 +324,6 @@ export default function Vagas() {
               </div>
               <div className="modal-body p-4" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
 
-                {/* MATCH SCORE REAL APÓS CANDIDATURA */}
                 {candidaturaStatus.matchScore !== null && (
                   <div className="p-3 mb-4 rounded-3 text-center shadow-sm text-white" style={{ backgroundImage: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)" }}>
                     <h5 className="fw-bold mb-1"><i className="bi bi-heart-pulse-fill me-2" />Seu Match Real com esta Vaga:</h5>
@@ -309,7 +338,6 @@ export default function Vagas() {
                     <p className="fw-bold text-success mb-0 fs-5">{vagaSelecionada.salario ? `R$ ${vagaSelecionada.salario}` : "Salário A combinar"}</p>
                   </div>
 
-                  {/* TAGS NO MODAL */}
                   <div className="d-flex flex-wrap gap-1">
                     {(Array.isArray(vagaSelecionada.tags_vaga) ? vagaSelecionada.tags_vaga : []).map((tech, idx) => (
                       <span key={idx} className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-2 fw-bold px-2 py-1">

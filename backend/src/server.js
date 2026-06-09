@@ -13,6 +13,7 @@ const entrevistasRoutes = require('./routes/entrevistasRoutes');
 const funcionariosRoutes = require('./routes/funcionariosRoutes');
 const rhRoutes = require('./routes/rhRoutes');
 const candidaturasRoutes = require('./routes/candidaturasRoutes');
+const favoritoRoutes = require('./routes/favoritoRoutes');
 
 const planosRoutes = require('./routes/planosRoutes');
 const assinaturasRoutes = require('./routes/assinaturasRoutes');
@@ -45,6 +46,7 @@ app.use('/api/entrevistas', entrevistasRoutes);
 app.use('/api/funcionarios', funcionariosRoutes);
 app.use('/api/rh', rhRoutes);
 app.use('/api/candidaturas', candidaturasRoutes);
+app.use('/api/favoritos', favoritoRoutes);
 
 app.use('/api/planos', planosRoutes);
 app.use('/api/assinaturas', assinaturasRoutes);

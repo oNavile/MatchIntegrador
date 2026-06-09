@@ -112,6 +112,11 @@ const admitirFuncionario = async (req, res) => {
 
 
 const desligarFuncionario = async (req, res) => {
+
+  console.log("CHEGOU NA FUNÇÃO DESLIGAR");
+  console.log("ID:", req.params.id);
+  console.log("BODY:", req.body);
+  
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();

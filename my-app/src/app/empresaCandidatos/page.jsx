@@ -35,6 +35,42 @@ export default function CandidatosEmpresa() {
         }
     }
 
+    const demitirFuncionario = async (id) => {
+    if (!window.confirm("Deseja realmente desligar este funcionário?")) {
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(
+            `http://localhost:3001/api/funcionarios/${id}/desligar`,
+            {
+                method: "PUT", // ou DELETE dependendo da rota
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    motivo_saida: "Desligado pelo sistema"
+                })
+            }
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("Funcionário desligado com sucesso!");
+            carregarFuncionarios();
+        } else {
+            alert(data.erro);
+        }
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
     return (
         <main
             id="main-content"
@@ -118,13 +154,22 @@ export default function CandidatosEmpresa() {
                                                 <div className="fw-semibold">
                                                     {cand.data_admissao
                                                         ? new Date(
-                                                              cand.data_admissao
-                                                          ).toLocaleDateString(
-                                                              "pt-BR"
-                                                          )
+                                                            cand.data_admissao
+                                                        ).toLocaleDateString(
+                                                            "pt-BR"
+                                                        )
                                                         : "-"}
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="mt-3">
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => demitirFuncionario(cand.id)}
+                                            >
+                                                <i className="bi bi-person-dash-fill me-2"></i>
+                                                Desligar
+                                            </button>
                                         </div>
 
                                     </div>
