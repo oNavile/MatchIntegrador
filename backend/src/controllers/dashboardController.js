@@ -53,7 +53,7 @@ async function getDashboardEmpresa(req, res) {
         );
 
         const [funcionarios] = await db.query(
-            "SELECT COUNT(*) AS total FROM funcionarios WHERE empresa_id = ?",
+            "SELECT COUNT(*) AS total FROM funcionarios WHERE empresa_id = ? AND status = 'ativo'",
             [empresaId]
         );
 

@@ -51,9 +51,9 @@ export default function aside() {
         { label: "Dashboard", href: "../dashboard/empresa", icon: "bi-speedometer2" },
         { label: "Criar Vaga", href: "../cadastrarVaga", icon: "bi-plus-circle-fill" },
         { label: "Minhas Vagas", href: "../vagasEmpresa", icon: "bi-briefcase-fill" },
-        { label: "Candidatos", href: "../empresaCandidatos", icon: "bi-people-fill" },
-        { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
+        { label: "Funcionários", href: "../empresaCandidatos", icon: "bi-people-fill" },
         { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
+        { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
       ]
     },
     // ADMIN / ADMINISTRADOR
