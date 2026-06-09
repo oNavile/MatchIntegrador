@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 
-// BASE DE CONHECIMENTO LOCAL (PRÉ-PROGRAMADA)
 const KnowledgeBase = {
     saudacao: {
         keywords: [
@@ -166,7 +165,6 @@ export default function MatchHireBot() {
     const [isTyping, setIsTyping] = useState(false);
     const chatRef = useRef(null);
 
-    // Scroll para o fim da tela sempre que a lista de mensagens ou o "digitando" for atualizado
     const scrollToBottom = () => {
         if (chatRef.current) {
             chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
@@ -177,7 +175,6 @@ export default function MatchHireBot() {
         scrollToBottom();
     }, [messages, isTyping]);
 
-    // Mensagem de boas-vindas ao carregar o componente
     useEffect(() => {
         const timer = setTimeout(() => {
             setMessages([
@@ -220,11 +217,9 @@ export default function MatchHireBot() {
         setIsTyping(true);
         setInputValue("");
 
-        // Adiciona a mensagem do usuário
         const userMsg = { id: Date.now(), text, isBot: false, isHTML: false, time: getCurrentTime() };
         setMessages(prev => [...prev, userMsg]);
 
-        // Simula tempo de digitação do Bot
         setTimeout(() => {
             const botReply = getBotResponse(text);
             const botMsg = { id: Date.now() + 1, text: botReply, isBot: true, isHTML: true, time: getCurrentTime() };
@@ -236,7 +231,6 @@ export default function MatchHireBot() {
 
     return (
         <main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4">
-            {/* Bloco de estilos para a animação do indicador de digitação */}
             <style>
                 {`
                 @keyframes blink { 

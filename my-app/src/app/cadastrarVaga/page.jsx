@@ -3,13 +3,10 @@
 import { useEffect, useState } from 'react';
 
 export default function CadastroVagaEmpresa() {
-  // Estado para armazenar as palavras-chave selecionadas
   const [palavrasChave, setPalavrasChave] = useState([]);
 
-  // Verifica se o limite de 8 tags já foi atingido
   const limiteAtingido = palavrasChave.length >= 8;
 
-  // Função para lidar com a seleção das tags (limite de 8)
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
 
@@ -29,18 +26,15 @@ export default function CadastroVagaEmpresa() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. Rastreio inicial no navegador
     console.log("1. Clicou no botão! O estado das palavrasChave tem:", palavrasChave);
 
     const formData = new FormData(e.target);
     const dadosVaga = Object.fromEntries(formData.entries());
 
-    // Formatação do Salário
     if (dadosVaga.salario) {
       dadosVaga.salario = dadosVaga.salario.replace(/\./g, '').replace(',', '.');
     }
 
-    // Injetamos o estado das palavras-chave como um ARRAY REAL dentro do objeto
     dadosVaga.palavras_chave = palavrasChave;
 
     try {
@@ -64,7 +58,7 @@ export default function CadastroVagaEmpresa() {
       if (response.ok) {
         alert('Vaga publicada com sucesso!');
         e.target.reset();
-        setPalavrasChave([]); // Limpa as tags marcadas visualmente
+        setPalavrasChave([]);
       } else {
         alert('Erro retornado pela API: ' + (data.erro || JSON.stringify(data)));
       }
@@ -74,7 +68,6 @@ export default function CadastroVagaEmpresa() {
     }
   };
 
-  // Efeito para Máscara de Salário
   useEffect(() => {
     const inputSalario = document.getElementById('salario');
 

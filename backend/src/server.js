@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// ROTAS ANTIGAS
 const authRoutes = require('./routes/authRoutes');
 const vagasRoutes = require('./routes/vagasRoutes');
 const perfilRoutes = require('./routes/perfilRoutes');
@@ -14,15 +13,10 @@ const funcionariosRoutes = require('./routes/funcionariosRoutes');
 const rhRoutes = require('./routes/rhRoutes');
 const candidaturasRoutes = require('./routes/candidaturasRoutes');
 const favoritoRoutes = require('./routes/favoritoRoutes');
-
 const planosRoutes = require('./routes/planosRoutes');
 const assinaturasRoutes = require('./routes/assinaturasRoutes');
 const pagamentosRoutes = require('./routes/pagamentosRoutes');
-
 const adminRoutes = require("./routes/adminRoutes");
-
-// 🔥 NOVA ROTA: Importando o sistema de Match
-// (Garante que você criou o arquivo 'matchRoutes.js' dentro da sua pasta 'routes')
 const matchRoutes = require('./routes/matchRoutes');
 
 const { errorHandler, rotaNaoEncontrada } = require('./middlewares/errorHandler');
@@ -36,7 +30,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MIDDLEWARES DE ROTAS API
 app.use('/api/auth', authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use('/api/vagas', vagasRoutes);
@@ -47,13 +40,9 @@ app.use('/api/funcionarios', funcionariosRoutes);
 app.use('/api/rh', rhRoutes);
 app.use('/api/candidaturas', candidaturasRoutes);
 app.use('/api/favoritos', favoritoRoutes);
-
 app.use('/api/planos', planosRoutes);
 app.use('/api/assinaturas', assinaturasRoutes);
 app.use('/api/pagamentos', pagamentosRoutes);
-
-// 🔥 ATIVANDO A ROTA DE MATCH
-// Agora o Express conhece o caminho '/api/matches'
 app.use('/api', matchRoutes);
 
 app.get('/teste', (_req, res) => {

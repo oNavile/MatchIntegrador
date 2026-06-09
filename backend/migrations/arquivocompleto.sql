@@ -36,7 +36,7 @@ CREATE TABLE empresas (
   bairro      VARCHAR(100),
   cidade      VARCHAR(100),
   estado      char(2),
-  arquivo     VARCHAR(255),  -- logo ou documento
+  arquivo     VARCHAR(255),
   criado_em   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -56,7 +56,7 @@ CREATE TABLE candidatos (
   cidade      VARCHAR(100),
   estado      char(2),
   descricao   TEXT,
-  arquivo     VARCHAR(255),  -- currículo
+  arquivo     VARCHAR(255),
   criado_em   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   foto VARCHAR(255),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
@@ -130,7 +130,7 @@ CREATE TABLE candidaturas (
   id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   vaga_id       INT UNSIGNED NOT NULL,
   candidato_id  INT UNSIGNED NOT NULL,
-  score_match   TINYINT UNSIGNED NOT NULL DEFAULT 0,  -- 0 a 100
+  score_match   TINYINT UNSIGNED NOT NULL DEFAULT 0,
   status        ENUM('pendente','em_analise','aprovado','reprovado','contratado') NOT NULL DEFAULT 'pendente',
   criado_em     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_candidatura (vaga_id, candidato_id),
@@ -162,7 +162,7 @@ CREATE TABLE contratos (
   data_inicio    DATE NOT NULL,
   data_fim       DATE,
   status         ENUM('ativo','encerrado') NOT NULL DEFAULT 'ativo',
-  arquivo        VARCHAR(255),  -- documento do contrato
+  arquivo        VARCHAR(255),
   observacoes    TEXT,
   criado_em      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (empresa_id)     REFERENCES empresas(id)     ON DELETE CASCADE,
@@ -246,10 +246,8 @@ UPDATE usuarios
 SET senha_hash = '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
 WHERE email = 'admin@matchhire.com';
 
--- Adiciona a coluna de tags na tabela de candidatos (se já não existir)
 ALTER TABLE candidatos ADD COLUMN tags_perfil TEXT;
 
--- Adiciona a coluna de tags na tabela de vagas (se já não existir)
 ALTER TABLE vagas ADD COLUMN tags_vaga TEXT;
 
 CREATE TABLE IF NOT EXISTS favoritos (
@@ -258,10 +256,25 @@ CREATE TABLE IF NOT EXISTS favoritos (
   vaga_id      INT UNSIGNED NOT NULL,
   criado_em    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   
-  -- Garante que o mesmo candidato não favorite a mesma vaga mais de uma vez
   UNIQUE KEY uq_favorito (candidato_id, vaga_id),
   
-  -- Chaves estrangeiras com exclusão em cascata
   FOREIGN KEY (candidato_id) REFERENCES candidatos(id) ON DELETE CASCADE,
   FOREIGN KEY (vaga_id)      REFERENCES vagas(id)      ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+CREATE TABLE vagas_recusadas (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    vaga_id INT UNSIGNED NOT NULL,
+    candidato_id INT UNSIGNED NOT NULL,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY uq_recusa (vaga_id, candidato_id),
+
+    FOREIGN KEY (vaga_id)
+        REFERENCES vagas(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (candidato_id)
+        REFERENCES candidatos(id)
+        ON DELETE CASCADE
+);

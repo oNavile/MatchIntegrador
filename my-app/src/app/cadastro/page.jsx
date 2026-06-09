@@ -3,16 +3,14 @@
 import { useEffect, useState } from 'react';
 
 export default function CadastroEmpresa() {
-  // Estado para armazenar os planos vindos do banco de dados
   const [planos, setPlanos] = useState([]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Impede a página de recarregar
+    e.preventDefault();
 
     const formData = new FormData(e.target);
 
     try {
-      // ⚠️ ATENÇÃO: Troque a porta 3333 para a porta real onde seu servidor Node.js/Express está rodando!
       const response = await fetch('http://localhost:3001/api/auth/cadastro/empresa', {
         method: 'POST',
         body: formData,
@@ -24,7 +22,6 @@ export default function CadastroEmpresa() {
         alert('Cadastro realizado com sucesso!');
         window.location.href = '/login'; 
       } else {
-        // Isso vai transformar o objeto de erro do seu backend em texto na tela
         alert('Erro do Servidor: ' + JSON.stringify(data));
       }
     } catch (error) {
@@ -53,9 +50,7 @@ export default function CadastroEmpresa() {
     }, 2500);
   }
 
-  // 1. Efeito para buscar os Planos na API assim que a página carregar
   useEffect(() => {
-    // IMPORTANTE: Ajuste '/api/planos' para a rota exata do seu backend caso seja diferente
     fetch('http://localhost:3001/api/planos')
       .then((res) => res.json())
       .then((data) => {
@@ -66,9 +61,8 @@ export default function CadastroEmpresa() {
       .catch((err) => console.error("Erro ao buscar planos:", err));
   }, []);
 
-  // 2. Efeito para o Resumo do Plano (Roda APENAS após os planos carregarem)
   useEffect(() => {
-    if (planos.length === 0) return; // Aguarda os planos existirem na tela
+    if (planos.length === 0) return;
 
     const inputsPlanos = document.querySelectorAll('input[name="planos_id"]');
     const labelPlanName = document.getElementById('summary-plan-name');
@@ -77,7 +71,7 @@ export default function CadastroEmpresa() {
 
     function recalcularResumo(valorPlano, nomePlano) {
       labelPlanName.innerText = nomePlano;
-      const valorString = String(valorPlano); // Garante que seja string para usar o replace
+      const valorString = String(valorPlano);
       labelPlanPrice.innerText = `R$ ${valorString.replace('.', ',')}`;
       labelTotalPrice.innerText = `R$ ${valorString.replace('.', ',')}`;
     }
@@ -85,17 +79,14 @@ export default function CadastroEmpresa() {
     inputsPlanos.forEach((radio) => {
       radio.addEventListener('change', function () {
         if (this.checked) {
-          // Puxa o preço do data-preco em vez do value (já que o value agora é o ID pro Banco)
           recalcularResumo(this.getAttribute('data-preco'), this.getAttribute('data-nome'));
         }
       });
     });
 
-    // Seta o primeiro plano como padrão no resumo visualmente
     recalcularResumo(planos[0].preco_mensal, planos[0].nome);
   }, [planos]);
 
-  // 3. Efeito original para Máscaras, Métodos de Pagamento e Timer
   useEffect(() => {
     const radioMetodos = document.querySelectorAll('input[name="metodo_pagamento"]');
 

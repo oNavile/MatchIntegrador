@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function EditarPerfil() {
-  // --- ESTADOS ---
   const [loading, setLoading] = useState(true);
   const [imagePreview, setImagePreview] = useState(null);
   const [tags, setTags] = useState([]);

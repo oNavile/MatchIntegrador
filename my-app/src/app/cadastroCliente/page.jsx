@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 export default function CadastroCliente() {
     const router = useRouter();
 
-    // Dados Pessoais
     const [emailCandidato, setEmailCandidato] = useState("");
     const [senhaCandidato, setSenhaCandidato] = useState("");
     const [nomeCandidato, setNomeCandidato] = useState("");
@@ -16,16 +15,12 @@ export default function CadastroCliente() {
     const [fotoPerfilCandidato, setFotoPerfilCandidato] = useState(null);
     const [curriculoCandidato, setCurriculoCandidato] = useState(null);
     const [descricaoCandidato, setDescricaoCandidato] = useState("");
-
-    // Endereço
     const [cepCandidato, setCepCandidato] = useState("");
     const [ruaCandidato, setRuaCandidato] = useState("");
     const [numeroCandidato, setNumeroCandidato] = useState("");
     const [bairroCandidato, setBairroCandidato] = useState("");
     const [cidadeCandidato, setCidadeCandidato] = useState("");
     const [estadoCandidato, setEstadoCandidato] = useState("");
-
-    // Palavras-chave
     const [palavrasChave, setPalavrasChave] = useState([]);
     const limiteMaximoKeywords = 8;
 
@@ -50,9 +45,6 @@ export default function CadastroCliente() {
             .replace(/(\d{5})(\d)/, '$1-$2');
     };
 
-    // --- REATIVIDADE DO CORPO (BODY) ---
-    // Monitora a lista de palavras-chave e atualiza a classe do body automaticamente,
-    // inclusive na inicialização (caso já venha preenchida do banco)
     useEffect(() => {
         if (palavrasChave.length >= limiteMaximoKeywords) {
             document.body.classList.add('limit-reached');
@@ -60,18 +52,15 @@ export default function CadastroCliente() {
             document.body.classList.remove('limit-reached');
         }
 
-        // Limpeza opcional ao desmontar o componente
         return () => {
             document.body.classList.remove('limit-reached');
         };
     }, [palavrasChave]);
 
-    // --- GERENCIAMENTO DE PALAVRAS CHAVE ---
     const handleCheckboxChange = (e) => {
         const valor = e.target.value;
 
         if (e.target.checked) {
-            // Se tentar marcar além do limite, barra e avisa
             if (palavrasChave.length >= limiteMaximoKeywords) {
                 e.target.checked = false;
                 alert(`Você já escolheu o limite máximo de ${limiteMaximoKeywords} opções.`);
@@ -83,8 +72,6 @@ export default function CadastroCliente() {
         }
     };
 
-    // --- ENVIO DO FORMULÁRIO ---
-    // --- ENVIO DO FORMULÁRIO (CORRIGIDO) ---
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -92,8 +79,6 @@ export default function CadastroCliente() {
 
         const formData = new FormData();
 
-        // 1. CORREÇÃO DA IDADE: O backend espera um número inteiro chamado 'idade'.
-        // Calculamos a idade com base na data de nascimento capturada no seu input.
         if (dataNascimentoCandidato) {
             const hoje = new Date();
             const nascimento = new Date(dataNascimentoCandidato);
@@ -102,10 +87,9 @@ export default function CadastroCliente() {
             if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
                 idade--;
             }
-            formData.append('idade', idade); // Enviando o inteiro esperado pelo backend
+            formData.append('idade', idade);
         }
 
-        // Campos normais textuais
         formData.append('email', emailCandidato);
         formData.append('senha', senhaCandidato);
         formData.append('nome', nomeCandidato);
@@ -119,13 +103,8 @@ export default function CadastroCliente() {
         formData.append('bairro', bairroCandidato);
         formData.append('cidade', cidadeCandidato);
         formData.append('estado', estadoCandidato);
-
-        // ✨ AJUSTADO: Agora salva como "HTML5 / CSS3, JavaScript, React.js" pronto para o Match!
         formData.append('tags_perfil', palavrasChave.join(', '));
 
-        // 3. ENVIO DOS ARQUIVOS (Garante que os nomes batem com as chaves do Multer)
-
-        // 3. ENVIO DOS ARQUIVOS (Garante que os nomes batem com as chaves do Multer)
         if (fotoPerfilCandidato && fotoPerfilCandidato instanceof File) {
             formData.append('foto_perfil', fotoPerfilCandidato);
         } else {
@@ -139,9 +118,9 @@ export default function CadastroCliente() {
         }
 
         try {
-            const response = await fetch('http://localhost:3001/api/auth/cadastro/candidato', { // Ajuste sua URL
+            const response = await fetch('http://localhost:3001/api/auth/cadastro/candidato', {
                 method: 'POST',
-                body: formData, // Sem Content-Type header aqui! O browser define o boundary automaticamente.
+                body: formData,
             });
 
             if (response.ok) {
@@ -220,8 +199,8 @@ export default function CadastroCliente() {
                                                                 type="password"
                                                                 placeholder="Digite sua senha"
                                                                 className="form-control form-control-custom bg-white"
-                                                                value={senhaCandidato} // <-- Tem que ser a mesma variável do formData
-                                                                onChange={(e) => setSenhaCandidato(e.target.value)} // <-- Tem que atualizar o estado certo
+                                                                value={senhaCandidato}
+                                                                onChange={(e) => setSenhaCandidato(e.target.value)}
                                                             />
                                                         </div>
                                                     </div>

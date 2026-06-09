@@ -1,4 +1,3 @@
-// src/controllers/rhController.js
 const db = require('../config/database');
 
 const getEmpresaId = async (usuario) => {
@@ -6,8 +5,6 @@ const getEmpresaId = async (usuario) => {
   const [[e]] = await db.execute(`SELECT id FROM empresas WHERE usuario_id = ?`, [usuario.id]);
   return e ? e.id : null;
 };
-
-// ── SETORES ──────────────────────────────────────────────────
 
 const listarSetores = async (req, res) => {
   try {
@@ -74,8 +71,6 @@ const deletarSetor = async (req, res) => {
     res.status(500).json({ erro: 'Erro ao remover setor.' });
   }
 };
-
-// ── CARGOS ───────────────────────────────────────────────────
 
 const listarCargos = async (req, res) => {
   try {

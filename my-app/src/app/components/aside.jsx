@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 export default function aside() {
   const [usuario, setUsuario] = useState(null);
 
-  // 1. Carrega as informações do perfil salvas pelo login
   const carregarUsuario = () => {
     const perfilSalvo = localStorage.getItem("perfil");
     if (perfilSalvo) {
@@ -22,14 +21,11 @@ export default function aside() {
   useEffect(() => {
     carregarUsuario();
 
-    // Fica de olho caso o storage mude (atualiza a sidebar se logar/deslogar)
     window.addEventListener("storage", carregarUsuario);
     return () => window.removeEventListener("storage", carregarUsuario);
   }, []);
 
-  // 2. Mapeamento dos menus baseado no 'usuario.tipo' vindo do seu Banco de Dados
   const menuConfig = {
-    // VISITANTE / SEM CADASTRO (Se não houver usuário logado)
     guest: {
       title: "Menu Principal",
       links: [
@@ -72,7 +68,6 @@ export default function aside() {
     }
   };
 
-  // Descobre qual menu renderizar (se não tiver logado, pega o 'guest')
   const tipoUsuario = usuario?.tipo ? usuario.tipo.toLowerCase() : "guest";
   const currentMenu = menuConfig[tipoUsuario] || menuConfig.guest;
 

@@ -1,11 +1,9 @@
-// src/config/multer.js
 const multer = require('multer');
 const path   = require('path');
 const fs     = require('fs');
 
 const pastaUpload = path.resolve(__dirname, '../../uploads');
 
-// Garante que as pastas existem
 ['curriculos', 'logos'].forEach(sub => {
   const dir = path.join(pastaUpload, sub);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -13,7 +11,6 @@ const pastaUpload = path.resolve(__dirname, '../../uploads');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Rota define qual pasta usar via req.uploadFolder
     const pasta = req.uploadFolder || 'curriculos';
     cb(null, path.join(pastaUpload, pasta));
   },

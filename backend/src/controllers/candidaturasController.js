@@ -1,4 +1,3 @@
-// src/controllers/candidaturasController.js
 const db = require('../config/database');
 
 exports.criarCandidatura = async (req, res) => {
@@ -6,7 +5,6 @@ exports.criarCandidatura = async (req, res) => {
     const usuarioId = req.usuario.id;
     const { vaga_id } = req.body;
 
-    // pegar candidato logado
     const [candidato] = await db.execute(
       `SELECT id FROM candidatos WHERE usuario_id = ?`,
       [usuarioId]
@@ -20,7 +18,6 @@ exports.criarCandidatura = async (req, res) => {
 
     const candidatoId = candidato[0].id;
 
-    // evitar duplicidade
     const [existente] = await db.execute(
       `SELECT id FROM candidaturas WHERE vaga_id = ? AND candidato_id = ?`,
       [vaga_id, candidatoId]
@@ -32,7 +29,6 @@ exports.criarCandidatura = async (req, res) => {
       });
     }
 
-    // inserir candidatura
     await db.execute(
       `INSERT INTO candidaturas (vaga_id, candidato_id, score_match, status)
        VALUES (?, ?, 0, 'pendente')`,

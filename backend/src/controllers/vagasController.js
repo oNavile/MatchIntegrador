@@ -1,13 +1,10 @@
-// src/controllers/vagasController.js
 const db           = require('../config/database');
 const matchService = require('../services/matchService');
 
-// ── Listar vagas abertas ─────────────────────────────────────
 const listarVagas = async (req, res) => {
   try {
     const { empresa_id, status = 'aberta', busca } = req.query;
 
-    // 1. Incluímos v.* que já traz a coluna tags_vaga da tabela de vagas
     let sql = `
       SELECT v.*, e.nome AS empresa_nome, e.arquivo AS empresa_logo,
              c.nome AS cargo_nome, s.nome AS setor_nome
@@ -25,18 +22,15 @@ const listarVagas = async (req, res) => {
 
     const [vagas] = await db.execute(sql, params);
 
-    // 2. Agora APENAS formatamos a string que JÁ VEM na tabela vagas em um Array
     for (const vaga of vagas) {
       let tagsArray = [];
-      
-      // Se a coluna tags_vaga contiver texto (ex: "React, Node, JavaScript")
+
       if (typeof vaga.tags_vaga === 'string' && vaga.tags_vaga.trim() !== "") {
         tagsArray = vaga.tags_vaga.split(',').map(tag => tag.trim());
       } else if (Array.isArray(vaga.tags_vaga)) {
         tagsArray = vaga.tags_vaga;
       }
 
-      // Injeta nos dois campos para garantir compatibilidade com o que o Frontend pedir
       vaga.tags_vaga = tagsArray;
       vaga.palavras_chave = tagsArray; 
     }
@@ -48,7 +42,6 @@ const listarVagas = async (req, res) => {
   }
 };
 
-// ── Detalhe de uma vaga ──────────────────────────────────────
 const detalheVaga = async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,8 +70,6 @@ const detalheVaga = async (req, res) => {
   }
 };
 
-// ── Criar vaga (empresa/admin) ───────────────────────────────
-// ── Criar vaga (empresa/admin) - SUBSTITUA ESTA FUNÇÃO NO CONTROLLER
 const criarVaga = async (req, res) => {
   const conn = await db.getConnection();
   try {
@@ -89,7 +80,6 @@ const criarVaga = async (req, res) => {
 
     if (!titulo) return res.status(400).json({ erro: 'Título é obrigatório.' });
 
-    // Descobre empresa_id a partir do usuário logado
     let empresaId;
     if (req.usuario.tipo === 'empresa') {
       const [[e]] = await conn.execute(
@@ -102,7 +92,6 @@ const criarVaga = async (req, res) => {
       if (!empresaId) return res.status(400).json({ erro: 'empresa_id é obrigatório para admin.' });
     }
 
-    // Tratamos o campo para garantir que vire uma string separada por vírgula
     let pcs = [];
     if (Array.isArray(palavras_chave)) {
       pcs = palavras_chave;
@@ -114,11 +103,8 @@ const criarVaga = async (req, res) => {
       }
     }
 
-    // Junta o array em formato de texto para a coluna TEXT do MySQL (Ex: "JavaScript, React.js")
-    // 1. Transforma o array em String separada por vírgulas (Ex: "JavaScript, React.js")
 const tagsVagaTexto = pcs.filter(p => p && p.trim()).join(', ');
 
-// 2. CORREÇÃO: Enviando 'tagsVagaTexto' no último parâmetro do INSERT
 const [res_] = await conn.execute(
   `INSERT INTO vagas (empresa_id, cargo_id, setor_id, titulo, descricao,
     requisitos, local, tipo, salario, tags_vaga)
@@ -133,7 +119,7 @@ const [res_] = await conn.execute(
     local, 
     tipo || 'presencial', 
     salario || null,
-    tagsVagaTexto // <─── MUDADO DE 'tags_vaga' PARA 'tagsVagaTexto'
+    tagsVagaTexto
   ]
 );
     const vagaId = res_.insertId;
@@ -149,7 +135,6 @@ const [res_] = await conn.execute(
   }
 };
 
-// ── Atualizar status da vaga ─────────────────────────────────
 const atualizarVaga = async (req, res) => {
   try {
     const { id } = req.params;
@@ -174,7 +159,6 @@ const atualizarVaga = async (req, res) => {
   }
 };
 
-// ── Candidatar-se a uma vaga ─────────────────────────────────
 const candidatar = async (req, res) => {
   try {
     const { vaga_id } = req.body;
@@ -184,14 +168,12 @@ const candidatar = async (req, res) => {
     );
     if (!candidato) return res.status(403).json({ erro: 'Perfil de candidato não encontrado.' });
 
-    // Verifica se já se candidatou
     const [[jaExiste]] = await db.execute(
       `SELECT id FROM candidaturas WHERE vaga_id = ? AND candidato_id = ?`,
       [vaga_id, candidato.id]
     );
     if (jaExiste) return res.status(409).json({ erro: 'Você já se candidatou a esta vaga.' });
 
-    // Calcula score de match
     const score = await matchService.calcularMatch(candidato.id, vaga_id);
 
     const [result] = await db.execute(
@@ -210,7 +192,6 @@ const candidatar = async (req, res) => {
   }
 };
 
-// ── Ranking de candidatos por vaga ───────────────────────────
 const rankingCandidatos = async (req, res) => {
   try {
     const { vaga_id } = req.params;
@@ -222,7 +203,6 @@ const rankingCandidatos = async (req, res) => {
   }
 };
 
-// ── Admin: listar todas as vagas ─────────────────────────────
 const listarTodasVagas = async (req, res) => {
   try {
     const [vagas] = await db.execute(`
@@ -250,7 +230,6 @@ const listarTodasVagas = async (req, res) => {
   }
 };
 
-// ── Admin: excluir vaga ──────────────────────────────────────
 const excluirVaga = async (req, res) => {
   try {
     const { id } = req.params;

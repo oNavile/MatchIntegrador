@@ -89,14 +89,14 @@ export default function DashboardEmpresa() {
                                 </a>
 
                                 <a
-                                    href="/criarVaga"
+                                    href="/cadastrarVaga"
                                     className="btn btn-segundo btn-lg px-4 fw-semibold"
                                 >
                                     Criar Vaga
                                 </a>
 
                                 <a
-                                    href="/funcionarios"
+                                    href="/empresaCandidatos"
                                     className="btn btn-segundo btn-lg px-4 fw-semibold"
                                 >
                                     Funcionários

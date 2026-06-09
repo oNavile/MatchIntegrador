@@ -1,7 +1,5 @@
-// src/controllers/perfilController.js
 const db = require('../config/database');
 
-// ── Ver perfil próprio ───────────────────────────────────────
 const meuPerfil = async (req, res) => {
   try {
     const { id, tipo } = req.usuario;
@@ -47,7 +45,6 @@ const meuPerfil = async (req, res) => {
   }
 };
 
-// ── Editar perfil próprio ────────────────────────────────────
 const editarPerfil = async (req, res) => {
   const conn = await db.getConnection();
   try {
@@ -78,7 +75,6 @@ const editarPerfil = async (req, res) => {
 
       if (!e) return res.status(404).json({ erro: 'Empresa não encontrada.' });
 
-      // Valida e-mail duplicado para empresa
       if (email) {
         const [[emailExiste]] = await conn.execute(
           `SELECT id FROM usuarios WHERE email = ? AND id <> ?`,
@@ -131,7 +127,6 @@ const editarPerfil = async (req, res) => {
   ]
 );
 
-      // Salva até 8 competências/palavras-chave da empresa
       if (palavras_chave) {
         const pcs = Array.isArray(palavras_chave) ? palavras_chave : JSON.parse(palavras_chave);
 
@@ -140,7 +135,7 @@ const editarPerfil = async (req, res) => {
           [e.id]
         );
 
-        for (const p of pcs.slice(0, 8)) { // Mudado de 4 para 8
+        for (const p of pcs.slice(0, 8)) {
           if (p && p.trim()) {
             await conn.execute(
               `INSERT INTO palavras_chave (entidade_tipo, entidade_id, palavra) VALUES ('empresa', ?, ?)`,
@@ -151,10 +146,9 @@ const editarPerfil = async (req, res) => {
       }
 
     } else if (tipo === 'candidato') {
-      // Capturando os dados enviados pelo seu form reativo do React
       const {
         nome,
-        email,        // Adicionado para sincronizar com o input do front
+        email,
         idade,
         telefone,
         cep,
@@ -174,7 +168,6 @@ const editarPerfil = async (req, res) => {
 
       if (!c) return res.status(404).json({ erro: 'Candidato não encontrado.' });
 
-      // NOVO: Valida e atualiza o e-mail global do usuário candidato
       if (email) {
         const [[emailExiste]] = await conn.execute(
           `SELECT id FROM usuarios WHERE email = ? AND id <> ?`,
@@ -191,7 +184,6 @@ const editarPerfil = async (req, res) => {
         );
       }
 
-      // Executa a atualização com tratamento de nulos/antigos
       await conn.execute(
         `UPDATE candidatos SET
           nome       = COALESCE(?, nome),
@@ -224,7 +216,6 @@ const editarPerfil = async (req, res) => {
         ]
       );
 
-      // Salva até 8 competências do candidato (Sincronizado com os 8 do React)
       if (palavras_chave) {
         const pcs = Array.isArray(palavras_chave) ? palavras_chave : JSON.parse(palavras_chave);
 
@@ -233,7 +224,7 @@ const editarPerfil = async (req, res) => {
           [c.id]
         );
 
-        for (const p of pcs.slice(0, 8)) { // Mudado de 4 para 8 para bater com o front
+        for (const p of pcs.slice(0, 8)) {
           if (p && p.trim()) {
             await conn.execute(
               `INSERT INTO palavras_chave (entidade_tipo, entidade_id, palavra) VALUES ('candidato', ?, ?)`,
@@ -262,7 +253,6 @@ const editarPerfil = async (req, res) => {
   }
 };
 
-// ── Ver perfil de candidato (empresa/admin) ──────────────────
 const verCandidato = async (req, res) => {
   try {
     const { id } = req.params;

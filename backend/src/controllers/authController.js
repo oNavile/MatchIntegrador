@@ -1,9 +1,6 @@
-// src/controllers/authController.js
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 const db     = require('../config/database');
-
-// ── Helpers ──────────────────────────────────────────────────
 
 const gerarToken = (usuario) =>
   jwt.sign(
@@ -12,7 +9,6 @@ const gerarToken = (usuario) =>
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 
-// ── Cadastro de Empresa ──────────────────────────────────────
 const cadastrarEmpresa = async (req, res) => {
   const conn = await db.getConnection();
   try {
@@ -38,7 +34,7 @@ const cadastrarEmpresa = async (req, res) => {
         erro: 'Nome, e-mail, CNPJ e senha são obrigatórios.'
       });
 
-    // verifica email
+    
     const [[emailExiste]] = await conn.execute(
       `SELECT id FROM usuarios WHERE email = ?`,
       [email]
@@ -49,7 +45,7 @@ const cadastrarEmpresa = async (req, res) => {
         erro: 'E-mail já cadastrado.'
       });
 
-    // verifica cnpj
+    
     const [[existe]] = await conn.execute(
       `SELECT id FROM empresas WHERE cnpj = ?`,
       [cnpj]
@@ -62,10 +58,8 @@ const cadastrarEmpresa = async (req, res) => {
 
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    // Captura logo da empresa se houver via Multer (geralmente mapeado como 'arquivo' ou 'logo')
     const logo_arquivo = req.files && req.files['logo'] ? req.files['logo'][0].filename : null;
 
-    // salva usuario
     const [resUsuario] = await conn.execute(
       `INSERT INTO usuarios (tipo, email, senha_hash) VALUES ('empresa', ?, ?)`,
       [email, senhaHash]
@@ -73,7 +67,6 @@ const cadastrarEmpresa = async (req, res) => {
 
     const usuarioId = resUsuario.insertId;
 
-    // salva empresa
     const [resEmpresa] = await conn.execute(
       `INSERT INTO empresas (
         usuario_id, nome, email, cnpj, descricao, telefone, 
@@ -115,13 +108,11 @@ const cadastrarEmpresa = async (req, res) => {
   }
 };
 
-// ── Cadastro de Candidato ────────────────────────────────────
 const cadastrarCandidato = async (req, res) => {
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();
 
-    // 🛠️ CORREÇÃO: Lendo 'tags_perfil' que vem do .join(', ') do seu Frontend
     const { nome, cpf, email, senha, idade, telefone,
             cep, rua, numero, bairro, cidade, estado,
             descricao, tags_perfil } = req.body;
@@ -143,7 +134,6 @@ const cadastrarCandidato = async (req, res) => {
 
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    // Captura os arquivos múltiplos vindos do upload.fields()
     const foto = req.files && req.files['foto_perfil'] ? req.files['foto_perfil'][0].filename : null;
     const arquivo = req.files && req.files['curriculo'] ? req.files['curriculo'][0].filename : null;
 
@@ -153,7 +143,6 @@ const cadastrarCandidato = async (req, res) => {
     );
     const usuarioId = resUsuario.insertId;
 
-    // 🛠️ CORREÇÃO: Adicionado a coluna 'tags_perfil' diretamente na tabela candidatos para alimentar o algoritmo de Match
     const [resCandidato] = await conn.execute(
       `INSERT INTO candidatos (usuario_id, nome, cpf, email, idade, telefone,
         cep, rua, numero, bairro, cidade, estado, descricao, arquivo, foto, tags_perfil)
@@ -169,9 +158,9 @@ const cadastrarCandidato = async (req, res) => {
         cidade     || null,
         estado     || null,
         descricao  || null,
-        arquivo    || null, // Currículo PDF
-        foto       || null, // Foto de perfil
-        tags_perfil|| null  // string salva como "React.js, Node.js, Git"
+        arquivo    || null,
+        foto       || null,
+        tags_perfil|| null
       ]
     );
     const candidatoId = resCandidato.insertId;
@@ -200,7 +189,6 @@ const cadastrarCandidato = async (req, res) => {
   }
 };
 
-// ── Login ────────────────────────────────────────────────────
 const login = async (req, res) => {
   try {
     const { identificador, senha } = req.body;
@@ -249,7 +237,6 @@ const login = async (req, res) => {
         foto: e.arquivo ? `http://localhost:3001/uploads/logos/${e.arquivo}` : null
       };
     } else if (usuario.tipo === 'candidato') {
-      // 🛠️ CORREÇÃO: Buscando tanto a coluna 'foto' quanto a 'arquivo' (currículo) separadamente
       const [[c]] = await db.execute(
         `SELECT id, nome, email, foto, arquivo FROM candidatos WHERE usuario_id = ?`,
         [usuario.id]

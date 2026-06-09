@@ -5,10 +5,6 @@ import { useState, useEffect } from "react";
 export default function Header() {
   const [usuario, setUsuario] = useState(null);
 
-  // 🛠️ CONSTANTE DA URL DO SEU BACKEND + PASTA DE ARQUIVOS
-  // Como as fotos do candidato vão para a pasta 'curriculos' pelo multer, apontamos para lá:
-
-  // Carrega as informações salvas pelo login assim que a página abre
   const carregarUsuario = () => {
     const perfilSalvo = localStorage.getItem("perfil");
     if (perfilSalvo) {
@@ -24,20 +20,15 @@ export default function Header() {
 
   useEffect(() => {
     carregarUsuario();
-
-    // Fica de olho caso o storage mude (atualiza o header se logar/deslogar)
     window.addEventListener("storage", carregarUsuario);
     return () => window.removeEventListener("storage", carregarUsuario);
   }, []);
 
-  // 🔥 FUNÇÃO DE LOGOUT ATUALIZADA
   const fazerLogout = () => {
-    // 1. Limpa os dados do navegador
     localStorage.removeItem("token");
     localStorage.removeItem("perfil");
     setUsuario(null);
 
-    // 2. Fecha a sidebar do Bootstrap removendo o efeito visual de fundo escuro
     const offcanvasElement = document.getElementById("offcanvasProfile");
     if (offcanvasElement) {
       const bsOffcanvas = window.bootstrap?.Offcanvas?.getInstance(offcanvasElement);
@@ -49,7 +40,6 @@ export default function Header() {
       document.body.style.paddingRight = '0px';
     }
 
-    // 3. Redireciona de forma absoluta para a página Home
     window.location.href = "/login";
   };
 
@@ -77,7 +67,7 @@ export default function Header() {
             >
               Match<span className="text-white">Hire</span>
               <img
-                src="/logo.png" // 🔥 FIXO: Aqui é a logo do site, não a foto do usuário!
+                src="/logo.png"
                 className="ms-2 d-none d-sm-block img-fluid"
                 style={{ height: 40 }}
                 alt="Logo"
@@ -112,7 +102,6 @@ export default function Header() {
                 </a>
               </>
             ) : (
-              /* SE ESTIVER LOGADO -> EXIBE A FOTO E O NOME (DESKTOP) */
               <div className="d-none d-sm-flex align-items-center gap-2">
                 <span className="texto-escuro small fw-medium">
                   Olá, <strong className="text-white">{usuario.nome?.split(" ")[0]}</strong>!
@@ -203,7 +192,7 @@ export default function Header() {
                 {/* Exibe o botão de currículo apenas se for candidato */}
                 {usuario.tipo === "candidato" && usuario.curriculo && (
                   <a
-                    href={usuario.curriculo} // <-- Sem a URL_BASE antes, apenas a variável pura
+                    href={usuario.curriculo}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-dark w-100 py-2 mt-2 shadow-sm"

@@ -10,7 +10,7 @@ const autenticar = (req, res, next) => {
 
     req.usuario = payload;
 
-    req.user = payload; // se quiser compatibilidade
+    req.user = payload;
     next();
   } catch (err) {
     console.log("ERRO JWT:", err.message);
@@ -25,7 +25,6 @@ const autorizar = (...tipos) => (req, res, next) => {
   next();
 };
 
-// Atalhos prontos para uso nas rotas
 const soAdmin = autorizar('admin');
 const soEmpresa = autorizar('empresa');
 const soCandidato = autorizar('candidato');

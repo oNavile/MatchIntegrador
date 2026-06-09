@@ -1,6 +1,5 @@
 const db = require("../config/database");
 
-// LISTAR TODOS
 const listarUsuarios = async (req, res) => {
     try {
 
@@ -25,7 +24,6 @@ const listarUsuarios = async (req, res) => {
     }
 };
 
-// BUSCAR UM
 const buscarUsuario = async (req, res) => {
     try {
 
@@ -58,7 +56,6 @@ const buscarUsuario = async (req, res) => {
     }
 };
 
-// EDITAR
 const editarUsuario = async (req, res) => {
     try {
 
@@ -93,7 +90,6 @@ const editarUsuario = async (req, res) => {
     }
 };
 
-// EXCLUIR
 const excluirUsuario = async (req, res) => {
     try {
 

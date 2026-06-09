@@ -1,6 +1,5 @@
 const db = require("../config/database");
 
-// FUNÇÃO PRECISA EXISTIR ANTES DE EXPORTAR
 async function getDashboardCandidato(req, res) {
     try {
         const candidatoId = req.usuario.id;
@@ -35,7 +34,6 @@ async function getDashboardEmpresa(req, res) {
     try {
         const usuarioId = req.usuario.id;
 
-        // Busca a empresa vinculada ao usuário logado
         const [empresaRows] = await db.query(
             "SELECT id, nome FROM empresas WHERE usuario_id = ?",
             [usuarioId]
@@ -49,19 +47,16 @@ async function getDashboardEmpresa(req, res) {
 
         const empresaId = empresaRows[0].id;
 
-        // Total de vagas
         const [vagas] = await db.query(
             "SELECT COUNT(*) AS total FROM vagas WHERE empresa_id = ?",
             [empresaId]
         );
 
-        // Total de funcionários
         const [funcionarios] = await db.query(
             "SELECT COUNT(*) AS total FROM funcionarios WHERE empresa_id = ?",
             [empresaId]
         );
 
-        // Total de candidaturas recebidas
         const [candidaturas] = await db.query(
             `SELECT COUNT(*) AS total
              FROM candidaturas c
@@ -70,7 +65,6 @@ async function getDashboardEmpresa(req, res) {
             [empresaId]
         );
 
-        // Última vaga criada
         const [ultimaVaga] = await db.query(
             `SELECT id, titulo, status
              FROM vagas
@@ -218,7 +212,6 @@ async function getRelatorios(req, res) {
     }
 }
 
-// EXPORTAÇÃO CORRETA
 module.exports = {
     getDashboardCandidato, getDashboardEmpresa, getDashboardAdmin, getRelatorios
 };

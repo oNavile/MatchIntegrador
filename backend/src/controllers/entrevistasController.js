@@ -1,7 +1,5 @@
-// src/controllers/entrevistasController.js
 const db = require('../config/database');
 
-// ── Agendar entrevista ───────────────────────────────────────
 const agendarEntrevista = async (req, res) => {
   try {
     const { candidatura_id, candidato_id, data_hora, tipo, link_ou_local, observacoes } = req.body;
@@ -33,7 +31,6 @@ const agendarEntrevista = async (req, res) => {
   }
 };
 
-// ── Listar entrevistas ───────────────────────────────────────
 const listarEntrevistas = async (req, res) => {
   try {
     let sql, params;
@@ -73,7 +70,6 @@ const listarEntrevistas = async (req, res) => {
   }
 };
 
-// ── Atualizar status da entrevista ───────────────────────────
 const atualizarEntrevista = async (req, res) => {
   try {
     const { id } = req.params;

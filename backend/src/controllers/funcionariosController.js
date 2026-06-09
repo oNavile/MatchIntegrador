@@ -1,9 +1,8 @@
-// src/controllers/funcionariosController.js
 const db = require('../config/database');
 
 
 const getEmpresaId = async (usuario) => {
-  if (usuario.tipo === 'admin') return null; // admin usa query param
+  if (usuario.tipo === 'admin') return null;
   const [[e]] = await db.execute(
     `SELECT id FROM empresas WHERE usuario_id = ?`, [usuario.id]
   );
@@ -77,7 +76,6 @@ const admitirFuncionario = async (req, res) => {
     if (!candidato_id || !data_admissao)
       return res.status(400).json({ erro: 'candidato_id e data_admissao são obrigatórios.' });
 
-    // Verifica se candidato já é funcionário ativo desta empresa
     const [[jaAtivo]] = await conn.execute(
       `SELECT id FROM funcionarios WHERE empresa_id = ? AND candidato_id = ? AND status = 'ativo'`,
       [empresaId, candidato_id]
@@ -92,7 +90,6 @@ const admitirFuncionario = async (req, res) => {
     );
     const funcionarioId = resFuncionario.insertId;
 
-    // Cria contrato
     await conn.execute(
       `INSERT INTO contratos (empresa_id, candidato_id, funcionario_id, data_inicio)
        VALUES (?, ?, ?, ?)`,
@@ -116,7 +113,7 @@ const desligarFuncionario = async (req, res) => {
   console.log("CHEGOU NA FUNÇÃO DESLIGAR");
   console.log("ID:", req.params.id);
   console.log("BODY:", req.body);
-  
+
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();
@@ -132,7 +129,6 @@ const desligarFuncionario = async (req, res) => {
       [dataDemissao, motivo_saida || null, id]
     );
 
-    // Encerra contrato
     await conn.execute(
       `UPDATE contratos SET status = 'encerrado', data_fim = ?
        WHERE funcionario_id = ? AND status = 'ativo'`,
@@ -174,7 +170,6 @@ const rankingFuncionarios = async (req, res) => {
     let empresaId = await getEmpresaId(req.usuario);
     if (req.usuario.tipo === 'admin') empresaId = req.query.empresa_id;
 
-    // Ranking baseado em score de match da candidatura original
     const [ranking] = await db.execute(
       `SELECT f.id, cand.nome, c.nome AS cargo, s.nome AS setor,
               f.data_admissao,
