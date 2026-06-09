@@ -103,7 +103,7 @@ export default function CadastroCliente() {
                 idade--;
             }
             formData.append('idade', idade); // Enviando o inteiro esperado pelo backend
-        } 
+        }
 
         // Campos normais textuais
         formData.append('email', emailCandidato);
@@ -119,7 +119,7 @@ export default function CadastroCliente() {
         formData.append('bairro', bairroCandidato);
         formData.append('cidade', cidadeCandidato);
         formData.append('estado', estadoCandidato);
-        
+
         // ✨ AJUSTADO: Agora salva como "HTML5 / CSS3, JavaScript, React.js" pronto para o Match!
         formData.append('tags_perfil', palavrasChave.join(', '));
 
@@ -475,8 +475,11 @@ export default function CadastroCliente() {
                                                             ))}
                                                         </div>
                                                     </div>
-                                                    <button type="submit" style={{ marginTop: '15px', padding: '10px 20px', cursor: 'pointer' }}>
-                                                        Concluir Cadastro
+                                                    <button
+                                                        type="submit"
+                                                        className="btn btn-primeiro w-100 rounded-pill py-3 fw-bold shadow transition-all d-flex align-items-center justify-content-center gap-2"
+                                                    >
+                                                        <i className="bi bi-shield-check fs-5" /> Finalizar E Ativar Conta
                                                     </button>
                                                 </form>
                                             </div>
