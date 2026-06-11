@@ -48,7 +48,7 @@ export default function aside() {
     empresa: {
       title: "Painel Empresa",
       links: [
-        { label: "Dashboard", href: "../dashboard/empresa", icon: "bi-speedometer2" },
+        { label: "Home", href: "../dashboard/empresa", icon: "bi-speedometer2" },
         { label: "Criar Vaga", href: "../cadastrarVaga", icon: "bi-plus-circle-fill" },
         { label: "Minhas Vagas", href: "../vagasEmpresa", icon: "bi-briefcase-fill" },
         { label: "Funcionários", href: "../empresaCandidatos", icon: "bi-people-fill" },

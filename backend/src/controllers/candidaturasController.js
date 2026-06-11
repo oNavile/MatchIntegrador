@@ -1,7 +1,11 @@
-const db = require('../config/database');
+const db = require("../config/database");
+const matchService = require('../services/matchService');
 
 exports.criarCandidatura = async (req, res) => {
   try {
+
+    console.log("ENTROU NO CRIAR CANDIDATURA");
+
     const usuarioId = req.usuario.id;
     const { vaga_id } = req.body;
 
@@ -29,14 +33,34 @@ exports.criarCandidatura = async (req, res) => {
       });
     }
 
-    await db.execute(
-      `INSERT INTO candidaturas (vaga_id, candidato_id, score_match, status)
-       VALUES (?, ?, 0, 'pendente')`,
-      [vaga_id, candidatoId]
+    // calcular o match
+    const score = await matchService.calcularMatch(
+        candidatoId,
+        vaga_id
     );
 
+    console.log("SCORE:", score);
+
+    const [result] = await db.execute(
+  `INSERT INTO candidaturas (vaga_id, candidato_id, score_match, status)
+   VALUES (?, ?, ?, 'pendente')`,
+  [vaga_id, candidatoId, score]
+);
+
+console.log("ID da candidatura:", result.insertId);
+
+const [[teste]] = await db.execute(
+  `SELECT score_match
+   FROM candidaturas
+   WHERE id = ?`,
+  [result.insertId]
+);
+
+console.log("SALVO NO BANCO:", teste.score_match);
+
     return res.status(201).json({
-      mensagem: 'Candidatura realizada com sucesso'
+      mensagem: 'Candidatura realizada com sucesso',
+      score_match: score
     });
 
   } catch (error) {

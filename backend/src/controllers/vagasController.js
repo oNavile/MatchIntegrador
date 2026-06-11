@@ -251,4 +251,29 @@ const excluirVaga = async (req, res) => {
   }
 };
 
-module.exports = { listarVagas, detalheVaga, criarVaga, atualizarVaga, candidatar, rankingCandidatos, listarTodasVagas, excluirVaga };
+const rejeitarCandidato = async (req, res) => {
+  try {
+
+    const { vaga_id, candidato_id } = req.body;
+
+    await db.execute(
+      `INSERT IGNORE INTO candidatos_rejeitados
+       (vaga_id, candidato_id)
+       VALUES (?, ?)`,
+      [vaga_id, candidato_id]
+    );
+
+    res.json({
+      mensagem: "Candidato rejeitado com sucesso"
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      erro: "Erro ao rejeitar candidato"
+    });
+  }
+};
+
+module.exports = { listarVagas, detalheVaga, criarVaga, atualizarVaga, candidatar, rankingCandidatos, listarTodasVagas, excluirVaga, rejeitarCandidato };

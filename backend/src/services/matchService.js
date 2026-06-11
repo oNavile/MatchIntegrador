@@ -2,48 +2,75 @@ const db = require('../config/database');
 
 const calcularMatch = async (candidatoId, vagaId) => {
 
-  const [pcCandidato] = await db.execute(
-    `SELECT LOWER(palavra) AS palavra
-     FROM palavras_chave
-     WHERE entidade_tipo = 'candidato' AND entidade_id = ?`,
+  const [[candidato]] = await db.execute(
+    `SELECT tags_perfil
+     FROM candidatos
+     WHERE id = ?`,
     [candidatoId]
   );
 
-  
-  const [pcVaga] = await db.execute(
-    `SELECT LOWER(palavra) AS palavra
-     FROM palavras_chave
-     WHERE entidade_tipo = 'vaga' AND entidade_id = ?`,
+  const [[vaga]] = await db.execute(
+    `SELECT tags_vaga
+     FROM vagas
+     WHERE id = ?`,
     [vagaId]
   );
 
-  if (!pcVaga.length) return 0;
+  if (!candidato?.tags_perfil || !vaga?.tags_vaga) {
+    return 0;
+  }
 
-  const palavrasCandidato = new Set(pcCandidato.map(r => r.palavra));
-  const palavrasVaga      = pcVaga.map(r => r.palavra);
+  const normalizar = (tag) =>
+    tag
+      .toLowerCase()
+      .trim()
+      .replace('.js', '')
+      .replace('.', '')
+      .replace(/\s+/g, ' ');
 
-  const coincidencias = palavrasVaga.filter(p => palavrasCandidato.has(p)).length;
-  const score         = Math.round((coincidencias / palavrasVaga.length) * 100);
+  const tagsCandidato = candidato.tags_perfil
+    .split(',')
+    .map(normalizar)
+    .filter(Boolean);
 
-  return score;
+  const tagsVaga = vaga.tags_vaga
+    .split(',')
+    .map(normalizar)
+    .filter(Boolean);
+
+  const coincidencias = tagsVaga.filter(tag =>
+    tagsCandidato.includes(tag)
+  );
+
+  return Math.round(
+    (coincidencias.length / tagsVaga.length) * 100
+  );
 };
 
 
 const rankingCandidatosPorVaga = async (vagaId) => {
   const [candidaturas] = await db.execute(
-    `SELECT c.id AS candidatura_id,
-            cand.id AS candidato_id,
-            cand.nome,
-            cand.email,
-            cand.arquivo AS curriculo,
-            c.score_match,
-            c.status
+    `SELECT
+        c.id AS candidatura_id,
+        cand.id AS candidato_id,
+        cand.nome AS candidato_nome,
+        cand.email AS candidato_email,
+        cand.arquivo AS curriculo,
+        c.score_match,
+        c.status
      FROM candidaturas c
-     JOIN candidatos cand ON cand.id = c.candidato_id
+     JOIN candidatos cand
+        ON cand.id = c.candidato_id
      WHERE c.vaga_id = ?
-     ORDER BY c.score_match DESC`,
-    [vagaId]
+AND cand.id NOT IN (
+    SELECT candidato_id
+    FROM candidatos_rejeitados
+    WHERE vaga_id = ?
+)
+ORDER BY c.score_match DESC`,
+    [vagaId, vagaId]
   );
+
   return candidaturas;
 };
 

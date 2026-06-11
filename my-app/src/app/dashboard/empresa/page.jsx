@@ -105,75 +105,82 @@ export default function DashboardEmpresa() {
                         </div>
 
                         {/* Cards Estatísticos */}
-                        <div className="col-xl-5">
-                            <div className="row g-3">
+<div className="col-xl-5">
+    <div className="row g-4"> {/* Aumentei o gap de g-3 para g-4 para mais respiro */}
+        
+        {/* Card: Nome da Empresa */}
+        <div className="col-12">
+            <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
+                <div className="card-body p-4 d-flex align-items-center gap-3">
+                    <div className="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center" style={{ width: '60px', height: '60px' }}>
+                        <i className="bi bi-building fs-3 text-white" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <p className="text-white-50 text-uppercase fw-semibold mb-1" style={{ fontSize: '0.75rem', letterSpacing: '1px' }}>
+                            Empresa Atual
+                        </p>
+                        <h3 className="fw-bold mb-0 text-truncate">
+                            {data?.empresa || "Minha Empresa"}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                <div className="col-12">
-                                    <div className="card border-0 shadow-lg h-100">
-                                        <div className="card-body text-dark">
-                                            <h6 className="text-muted">
-                                                Nome da minha Empresa:
-                                            </h6>
-
-                                            <h3 className="fw-bold">
-                                                {data?.empresa ||
-                                                    "Minha Empresa"}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-briefcase-fill fs-1 text-success"></i>
-
-                                            <h2 className="fw-bold mt-2">
-                                                {data?.totalVagas || 0}
-                                            </h2>
-
-                                            <p className="text-muted mb-0">
-                                                Vagas
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-people-fill fs-1 text-primary"></i>
-
-                                            <h2 className="fw-bold mt-2">
-                                                {data?.totalCandidaturas || 0}
-                                            </h2>
-
-                                            <p className="text-muted mb-0">
-                                                Candidatos
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-person-check-fill fs-1 text-warning"></i>
-
-                                            <h2 className="fw-bold mt-2">
-                                                {data?.totalFuncionarios || 0}
-                                            </h2>
-
-                                            <p className="text-muted mb-0">
-                                                Funcionários Ativos
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+        {/* Card: Vagas */}
+        <div className="col-6">
+            <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
+                <div className="card-body p-4 d-flex flex-column justify-content-between">
+                    <div className="d-flex justify-content-between align-items-start mb-4">
+                        <p className="text-white-50 fw-semibold mb-0">Vagas Ativas</p>
+                        <div className="bg-success bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center p-2">
+                            <i className="bi bi-briefcase-fill fs-5 text-success" aria-hidden="true"></i>
                         </div>
                     </div>
+                    <h2 className="fw-bold mb-0 display-6">
+                        {data?.totalVagas || 0}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        {/* Card: Candidatos */}
+        <div className="col-6">
+            <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
+                <div className="card-body p-4 d-flex flex-column justify-content-between">
+                    <div className="d-flex justify-content-between align-items-start mb-4">
+                        <p className="text-white-50 fw-semibold mb-0">Candidatos</p>
+                        <div className="bg-primary bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center p-2">
+                            <i className="bi bi-people-fill fs-5 text-info" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <h2 className="fw-bold mb-0 display-6">
+                        {data?.totalCandidaturas || 0}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        {/* Card: Funcionários */}
+        <div className="col-12">
+            <div className="card border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
+                <div className="card-body p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <p className="text-white-50 fw-semibold mb-1">Funcionários Ativos</p>
+                        <h2 className="fw-bold mb-0">
+                            {data?.totalFuncionarios || 0}
+                        </h2>
+                    </div>
+                    <div className="bg-warning bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center" style={{ width: '64px', height: '64px' }}>
+                        <i className="bi bi-person-check-fill fs-2 text-warning" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
 
                     {/* SOBRE */}
                     <section className="py-5">

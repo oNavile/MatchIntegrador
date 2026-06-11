@@ -278,3 +278,12 @@ CREATE TABLE vagas_recusadas (
         REFERENCES candidatos(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE candidatos_rejeitados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vaga_id INT NOT NULL,
+    candidato_id INT NOT NULL,
+    data_rejeicao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY unico_rejeitado (vaga_id, candidato_id)
+);

@@ -59,6 +59,37 @@ export default function GerenciamentoVagasEmpresa() {
         carregarVagasEmpresa();
     }, []);
 
+    const rejeitarCandidato = async (candidatoId) => {
+        try {
+
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(
+                "http://localhost:3001/api/vagas/rejeitar-candidato",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        vaga_id: vagaParaCandidatos.id,
+                        candidato_id: candidatoId
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Erro ao rejeitar candidato");
+            }
+
+            abrirCandidatos(vagaParaCandidatos);
+
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
     // ── RANKING INTEGRADO POR INTELIGÊNCIA DE MATCH ──────────────
     const abrirCandidatos = async (vaga) => {
         setVagaParaCandidatos(vaga);
@@ -121,7 +152,7 @@ export default function GerenciamentoVagasEmpresa() {
                 );
             }
 
-            alert('🎉 Funcionário admitido com sucesso!');
+            alert('Funcionário admitido com sucesso!');
 
             setVagaParaCandidatos(null);
 
@@ -339,19 +370,30 @@ export default function GerenciamentoVagasEmpresa() {
 
                                 {/* CARDS DOS CANDIDATOS FILTRADOS POR MATCH */}
                                 {!loadingCandidatos && candidatos.map((cand, idx) => {
-                                    const pct = cand.score_match || cand.score || 0;
+
+                                    console.log(cand);
+
+                                    const pct = Number(cand.score_match);
 
                                     // Definição de cores conforme o nível do match
                                     let badgeCor = "bg-danger";
-                                    if (pct >= 75) badgeCor = "bg-success";
-                                    else if (pct >= 50) badgeCor = "bg-warning text-dark";
+
+                                    if (pct >= 75) {
+                                        badgeCor = "bg-success";
+                                    }
+                                    else if (pct >= 50) {
+                                        badgeCor = "bg-warning text-dark";
+                                    }
 
                                     return (
                                         <div key={cand.id || idx} className="p-3 mb-3 rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center bg-white border border-light shadow-sm gap-3">
                                             <div>
                                                 <div className="d-flex align-items-center gap-2 mb-1">
                                                     <h5 className="fw-bold mb-0 text-dark">{cand.candidato_nome || "Profissional Cadastrado"}</h5>
-                                                    <span className={`badge ${badgeCor} rounded-pill px-2 py-1 small fw-bold`} style={{ fontSize: '0.72rem' }}>
+                                                    <span
+                                                        className={`badge ${badgeCor} rounded-pill px-2 py-1 small fw-bold`}
+                                                        style={{ fontSize: '0.72rem' }}
+                                                    >
                                                         {pct}% Match
                                                     </span>
                                                 </div>
@@ -366,6 +408,16 @@ export default function GerenciamentoVagasEmpresa() {
                                                     onClick={() => handleAdmitirFuncionario(cand.candidato_id || cand.id)}
                                                 >
                                                     <i className="bi bi-person-check-fill" /> Formalizar Admissão
+                                                </button>
+                                            </div>
+
+                                            <div>
+                                                <button
+                                                    className="btn btn-danger rounded-pill fw-bold"
+                                                    onClick={() => rejeitarCandidato(cand.candidato_id)}
+                                                >
+                                                    <i className="bi bi-x-circle-fill"></i>
+                                                    Rejeitar
                                                 </button>
                                             </div>
                                         </div>

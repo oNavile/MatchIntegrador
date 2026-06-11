@@ -34,50 +34,6 @@ export default function MatchCandidatoPage() {
                 setMatches(dados);
             } catch (erro) {
                 console.error(erro);
-
-                // Dados de teste
-                setMatches([
-                    {
-                        id: 1,
-                        empresa: "TechNova",
-                        vaga: "Dev Sênior React",
-                        percentual: 98,
-                        icone: "bi-building",
-                        habilidades: [
-                            "React.js",
-                            "Node.js",
-                            "100% Remoto",
-                            "Inglês Avançado",
-                            "Salário alinhado",
-                        ],
-                    },
-                    {
-                        id: 2,
-                        empresa: "CloudOps LTDA",
-                        vaga: "Engenheiro AWS",
-                        percentual: 92,
-                        icone: "bi-cloud-arrow-up",
-                        habilidades: [
-                            "AWS",
-                            "Docker",
-                            "Kubernetes",
-                            "Terraform",
-                        ],
-                    },
-                    {
-                        id: 3,
-                        empresa: "DataSmart",
-                        vaga: "Cientista de Dados",
-                        percentual: 87,
-                        icone: "bi-bar-chart-fill",
-                        habilidades: [
-                            "Python",
-                            "Machine Learning",
-                            "SQL",
-                            "Power BI",
-                        ],
-                    },
-                ]);
             } finally {
                 setLoading(false);
             }
