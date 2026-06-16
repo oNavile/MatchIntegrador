@@ -60,10 +60,13 @@ exports.buscarCurso = async (req, res) => {
 exports.comprarCurso = async (req, res) => {
   try {
 
-    if (req.usuario.tipo !== 'candidato') {
+    if (
+      req.usuario.tipo !== "candidato" &&
+      req.usuario.tipo !== "empresa"
+    ) {
       return res.status(403).json({
         sucesso: false,
-        mensagem: 'Apenas candidatos podem comprar cursos'
+        mensagem: "Perfil sem permissão para comprar cursos"
       });
     }
 
@@ -79,65 +82,91 @@ exports.comprarCurso = async (req, res) => {
     if (!curso) {
       return res.status(404).json({
         sucesso: false,
-        mensagem: 'Curso não encontrado'
+        mensagem: "Curso não encontrado"
       });
     }
 
-    const [[candidato]] = await db.query(
-      `
-      SELECT id
-      FROM candidatos
-      WHERE usuario_id = ?
-      `,
-      [req.usuario.id]
-    );
+    let compradorId;
+    let campoBanco;
 
-    if (!candidato) {
-      return res.status(404).json({
-        sucesso: false,
-        mensagem: 'Candidato não encontrado'
-      });
+    if (req.usuario.tipo === "candidato") {
+
+      const [[candidato]] = await db.query(
+        `
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      compradorId = candidato.id;
+      campoBanco = "candidato_id";
+
+    } else {
+
+      const [[empresa]] = await db.query(
+        `
+        SELECT id
+        FROM empresas
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!empresa) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Empresa não encontrada"
+        });
+      }
+
+      compradorId = empresa.id;
+      campoBanco = "empresa_id";
     }
 
     const [[compraExistente]] = await db.query(
       `
-      SELECT id
-      FROM compras_cursos
-      WHERE candidato_id = ?
-        AND curso_id = ?
-        AND status = 'aprovado'
-      `,
-      [candidato.id, curso.id]
+SELECT id
+FROM compras_cursos
+WHERE ${campoBanco} = ?
+AND curso_id = ?
+AND status = 'aprovado'
+`,
+      [
+        compradorId,
+        curso.id
+      ]
     );
 
     if (compraExistente) {
       return res.status(400).json({
         sucesso: false,
-        mensagem: 'Curso já adquirido'
+        mensagem: "Curso já adquirido"
       });
     }
 
     await db.query(
       `
-      INSERT INTO compras_cursos
-      (
-        candidato_id,
-        curso_id,
-        tipo,
-        valor_pago,
-        status
-      )
-      VALUES
-      (
-        ?,
-        ?,
-        'curso',
-        ?,
-        'aprovado'
-      )
-      `,
+INSERT INTO compras_cursos
+(
+  ${campoBanco},
+  curso_id,
+  tipo,
+  valor_pago,
+  status
+)
+VALUES
+(
+  ?,
+  ?,
+  'curso',
+  ?,
+  'aprovado'
+)
+`,
       [
-        candidato.id,
+        compradorId,
         curso.id,
         curso.valor
       ]
@@ -145,7 +174,7 @@ exports.comprarCurso = async (req, res) => {
 
     res.json({
       sucesso: true,
-      mensagem: 'Curso adquirido com sucesso'
+      mensagem: "Curso adquirido com sucesso"
     });
 
   } catch (error) {
@@ -153,7 +182,7 @@ exports.comprarCurso = async (req, res) => {
 
     res.status(500).json({
       sucesso: false,
-      mensagem: 'Erro ao comprar curso'
+      mensagem: "Erro ao comprar curso"
     });
   }
 };
@@ -161,44 +190,77 @@ exports.comprarCurso = async (req, res) => {
 exports.comprarPlano = async (req, res) => {
   try {
 
-    if (req.usuario.tipo !== 'candidato') {
+    if (
+      req.usuario.tipo !== "candidato" &&
+      req.usuario.tipo !== "empresa"
+    ) {
       return res.status(403).json({
         sucesso: false,
-        mensagem: 'Apenas candidatos podem adquirir planos'
+        mensagem: "Perfil sem permissão para adquirir planos"
       });
     }
 
-    const [[candidato]] = await db.query(
-      `
-      SELECT id
-      FROM candidatos
-      WHERE usuario_id = ?
-      `,
-      [req.usuario.id]
-    );
+    let compradorId;
+    let campoBanco;
 
-    if (!candidato) {
-      return res.status(404).json({
-        sucesso: false,
-        mensagem: 'Candidato não encontrado'
-      });
+    if (req.usuario.tipo === "candidato") {
+
+      const [[candidato]] = await db.query(
+        `
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!candidato) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Candidato não encontrado"
+        });
+      }
+
+      compradorId = candidato.id;
+      campoBanco = "candidato_id";
+
+    } else {
+
+      const [[empresa]] = await db.query(
+        `
+        SELECT id
+        FROM empresas
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!empresa) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Empresa não encontrada"
+        });
+      }
+
+      compradorId = empresa.id;
+      campoBanco = "empresa_id";
     }
 
     const [[planoExistente]] = await db.query(
       `
       SELECT id
       FROM compras_cursos
-      WHERE candidato_id = ?
-        AND tipo = 'plano_completo'
-        AND status = 'aprovado'
+      WHERE ${campoBanco} = ?
+      AND tipo = 'plano_completo'
+      AND status = 'aprovado'
       `,
-      [candidato.id]
+      [compradorId]
     );
 
     if (planoExistente) {
       return res.status(400).json({
         sucesso: false,
-        mensagem: 'Plano já adquirido'
+        mensagem: "Plano já adquirido"
       });
     }
 
@@ -206,7 +268,7 @@ exports.comprarPlano = async (req, res) => {
       `
       INSERT INTO compras_cursos
       (
-        candidato_id,
+        ${campoBanco},
         tipo,
         valor_pago,
         status
@@ -219,12 +281,12 @@ exports.comprarPlano = async (req, res) => {
         'aprovado'
       )
       `,
-      [candidato.id]
+      [compradorId]
     );
 
     res.json({
       sucesso: true,
-      mensagem: 'Plano completo adquirido'
+      mensagem: "Plano completo adquirido"
     });
 
   } catch (error) {
@@ -232,7 +294,7 @@ exports.comprarPlano = async (req, res) => {
 
     res.status(500).json({
       sucesso: false,
-      mensagem: 'Erro ao adquirir plano'
+      mensagem: "Erro ao adquirir plano"
     });
   }
 };
@@ -268,19 +330,55 @@ exports.listarVideos = async (req, res) => {
 exports.concluirVideo = async (req, res) => {
   try {
 
-    const [[candidato]] = await db.query(
-      `
-      SELECT id
-      FROM candidatos
-      WHERE usuario_id = ?
-      `,
-      [req.usuario.id]
-    );
+    let compradorId;
+    let tipoComprador;
 
-    if (!candidato) {
-      return res.status(404).json({
+    if (req.usuario.tipo === "candidato") {
+
+      const [[candidato]] = await db.query(
+        `
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!candidato) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Candidato não encontrado"
+        });
+      }
+
+      compradorId = candidato.id;
+      tipoComprador = "candidato";
+
+    } else if (req.usuario.tipo === "empresa") {
+
+      const [[empresa]] = await db.query(
+        `
+        SELECT id
+        FROM empresas
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!empresa) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Empresa não encontrada"
+        });
+      }
+
+      compradorId = empresa.id;
+      tipoComprador = "empresa";
+
+    } else {
+      return res.status(403).json({
         sucesso: false,
-        mensagem: 'Candidato não encontrado'
+        mensagem: "Perfil sem permissão"
       });
     }
 
@@ -288,7 +386,8 @@ exports.concluirVideo = async (req, res) => {
       `
       INSERT IGNORE INTO progresso_cursos
       (
-        candidato_id,
+        comprador_id,
+        tipo_comprador,
         curso_id,
         video_id,
         concluido
@@ -298,11 +397,13 @@ exports.concluirVideo = async (req, res) => {
         ?,
         ?,
         ?,
+        ?,
         1
       )
       `,
       [
-        candidato.id,
+        compradorId,
+        tipoComprador,
         req.params.id,
         req.params.videoId
       ]
@@ -312,11 +413,13 @@ exports.concluirVideo = async (req, res) => {
       `
       SELECT COUNT(*) AS total
       FROM progresso_cursos
-      WHERE candidato_id = ?
-        AND curso_id = ?
+      WHERE comprador_id = ?
+      AND tipo_comprador = ?
+      AND curso_id = ?
       `,
       [
-        candidato.id,
+        compradorId,
+        tipoComprador,
         req.params.id
       ]
     );
@@ -334,12 +437,12 @@ exports.concluirVideo = async (req, res) => {
       videos.total === 0
         ? 0
         : Math.round(
-            (assistidos.total / videos.total) * 100
-          );
+          (assistidos.total / videos.total) * 100
+        );
 
     res.json({
       sucesso: true,
-      mensagem: 'Vídeo concluído',
+      mensagem: "Vídeo concluído",
       assistidos: assistidos.total,
       totalVideos: videos.total,
       progresso
@@ -350,7 +453,7 @@ exports.concluirVideo = async (req, res) => {
 
     res.status(500).json({
       sucesso: false,
-      mensagem: 'Erro ao concluir vídeo'
+      mensagem: "Erro ao concluir vídeo"
     });
   }
 };
@@ -358,31 +461,55 @@ exports.concluirVideo = async (req, res) => {
 exports.progresso = async (req, res) => {
   try {
 
-    if (
-      req.usuario.tipo === 'empresa' ||
-      req.usuario.tipo === 'admin'
-    ) {
-      return res.json({
-        sucesso: true,
-        assistidos: 4,
-        totalVideos: 4,
-        progresso: 100
-      });
-    }
+    let compradorId;
+    let tipoComprador;
 
-    const [[candidato]] = await db.query(
-      `
-      SELECT id
-      FROM candidatos
-      WHERE usuario_id = ?
-      `,
-      [req.usuario.id]
-    );
+    if (req.usuario.tipo === "candidato") {
 
-    if (!candidato) {
-      return res.status(404).json({
+      const [[candidato]] = await db.query(
+        `
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!candidato) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Candidato não encontrado"
+        });
+      }
+
+      compradorId = candidato.id;
+      tipoComprador = "candidato";
+
+    } else if (req.usuario.tipo === "empresa") {
+
+      const [[empresa]] = await db.query(
+        `
+        SELECT id
+        FROM empresas
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!empresa) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Empresa não encontrada"
+        });
+      }
+
+      compradorId = empresa.id;
+      tipoComprador = "empresa";
+
+    } else {
+      return res.status(403).json({
         sucesso: false,
-        mensagem: 'Candidato não encontrado'
+        mensagem: "Perfil sem permissão"
       });
     }
 
@@ -390,11 +517,13 @@ exports.progresso = async (req, res) => {
       `
       SELECT COUNT(*) AS total
       FROM progresso_cursos
-      WHERE candidato_id = ?
-        AND curso_id = ?
+      WHERE comprador_id = ?
+      AND tipo_comprador = ?
+      AND curso_id = ?
       `,
       [
-        candidato.id,
+        compradorId,
+        tipoComprador,
         req.params.id
       ]
     );
@@ -412,8 +541,8 @@ exports.progresso = async (req, res) => {
       videos.total === 0
         ? 0
         : Math.round(
-            (assistidos.total / videos.total) * 100
-          );
+          (assistidos.total / videos.total) * 100
+        );
 
     res.json({
       sucesso: true,
@@ -427,7 +556,7 @@ exports.progresso = async (req, res) => {
 
     res.status(500).json({
       sucesso: false,
-      mensagem: 'Erro ao consultar progresso'
+      mensagem: "Erro ao consultar progresso"
     });
   }
 };
@@ -435,30 +564,68 @@ exports.progresso = async (req, res) => {
 exports.meusCursos = async (req, res) => {
   try {
 
-    const [[candidato]] = await db.query(
-      `
-      SELECT id
-      FROM candidatos
-      WHERE usuario_id = ?
-      `,
-      [req.usuario.id]
-    );
+    let compradorId;
+    let campoBanco;
 
-    if (!candidato) {
-      return res.status(404).json({
+    if (req.usuario.tipo === "candidato") {
+
+      const [[candidato]] = await db.query(
+        `
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!candidato) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Candidato não encontrado"
+        });
+      }
+
+      compradorId = candidato.id;
+      campoBanco = "candidato_id";
+
+    } else if (req.usuario.tipo === "empresa") {
+
+      const [[empresa]] = await db.query(
+        `
+        SELECT id
+        FROM empresas
+        WHERE usuario_id = ?
+        `,
+        [req.usuario.id]
+      );
+
+      if (!empresa) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Empresa não encontrada"
+        });
+      }
+
+      compradorId = empresa.id;
+      campoBanco = "empresa_id";
+
+    } else {
+
+      return res.status(403).json({
         sucesso: false,
-        mensagem: 'Candidato não encontrado'
+        mensagem: "Perfil sem permissão"
       });
+
     }
 
     const [cursos] = await db.query(
       `
       SELECT curso_id
       FROM compras_cursos
-      WHERE candidato_id = ?
-        AND status = 'aprovado'
+      WHERE ${campoBanco} = ?
+      AND status = 'aprovado'
       `,
-      [candidato.id]
+      [compradorId]
     );
 
     res.json({
@@ -471,7 +638,83 @@ exports.meusCursos = async (req, res) => {
 
     res.status(500).json({
       sucesso: false,
-      mensagem: 'Erro ao buscar cursos do candidato'
+      mensagem: "Erro ao buscar cursos"
+    });
+  }
+};
+
+exports.adicionarVideo = async (req, res) => {
+  try {
+    const cursoId = req.params.id;
+    
+    const { titulo, url_video } = req.body;
+
+    if (!titulo || !url_video) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'Título e URL do vídeo são obrigatórios.'
+      });
+    }
+
+    const [[maxOrdem]] = await db.query(
+      `SELECT COALESCE(MAX(ordem), 0) + 1 AS proxima FROM videos_curso WHERE curso_id = ?`,
+      [cursoId]
+    );
+    const proximaOrdem = maxOrdem.proxima;
+
+    await db.query(
+      `
+      INSERT INTO videos_curso (curso_id, titulo, url_video, ordem)
+      VALUES (?, ?, ?, ?)
+      `,
+      [cursoId, titulo, url_video, proximaOrdem]
+    );
+
+    res.json({
+      sucesso: true,
+      mensagem: 'Aula adicionada com sucesso!'
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro interno ao salvar a aula no banco de dados'
+    });
+  }
+};
+
+exports.atualizarVideo = async (req, res) => {
+  try {
+    const cursoId = req.params.id;
+    const videoId = req.params.videoId;
+    const { url_video } = req.body;
+
+    if (!url_video) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: 'A nova URL do vídeo é obrigatória.'
+      });
+    }
+    await db.query(
+      `
+      UPDATE videos_curso 
+      SET url_video = ? 
+      WHERE id = ? AND curso_id = ?
+      `,
+      [url_video, videoId, cursoId]
+    );
+
+    res.json({
+      sucesso: true,
+      mensagem: 'URL do vídeo atualizada com sucesso!'
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      sucesso: false,
+      mensagem: 'Erro interno ao atualizar o vídeo.'
     });
   }
 };

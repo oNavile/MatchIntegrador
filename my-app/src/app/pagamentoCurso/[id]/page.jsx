@@ -41,7 +41,7 @@ export default function PagamentoCurso() {
         setCurso(data.dados);
       } else {
         alert("Curso não encontrado.");
-        router.push("/painel-candidato");
+        router.push("/cursos");
       }
     } catch (error) {
       console.error("Erro ao buscar detalhes do curso:", error);
@@ -310,7 +310,7 @@ export default function PagamentoCurso() {
                       <button
                         type="button"
                         className="btn btn-dark px-4"
-                        onClick={() => router.push("/painel-candidato")}
+                        onClick={() => router.push("/cursos")}
                         disabled={processando}
                       >
                         Voltar

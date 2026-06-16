@@ -143,6 +143,7 @@ export default function GerenciarUsuarios() {
         <main
             id="main-content"
             className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4"
+            
         >
             <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
                 <div

@@ -82,24 +82,24 @@ export default function dashboardAdmin() {
 
                             <div className="d-flex flex-wrap gap-3">
                                 <a
-                                    href="/Empresas"
+                                    href="../Admin/Usuarios"
                                     className="btn btn-segundo btn-lg px-4 fw-semibold"
                                 >
-                                    Empresas
+                                    Usuarios
                                 </a>
 
                                 <a
-                                    href="/Candidatos"
-                                    className="btn btn-segundo btn-lg px-4 fw-semibold"
-                                >
-                                    Candidatos
-                                </a>
-
-                                <a
-                                    href="/Vagas"
+                                    href="../Admin/Vagas"
                                     className="btn btn-segundo btn-lg px-4 fw-semibold"
                                 >
                                     Vagas
+                                </a>
+
+                                <a
+                                    href="../cursosAdmin"
+                                    className="btn btn-segundo btn-lg px-4 fw-semibold"
+                                >
+                                    Cursos
                                 </a>
                             </div>
                         </div>

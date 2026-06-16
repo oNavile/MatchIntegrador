@@ -47,6 +47,18 @@ router.get(
 );
 
 router.post(
+  '/:id/videos',
+  autenticar,
+  cursoController.adicionarVideo
+);
+
+router.put(
+  '/:id/videos/:videoId',
+  autenticar,
+  cursoController.atualizarVideo
+);
+
+router.post(
   '/:id/videos/:videoId/concluir',
   autenticar,
   verificarAcessoCurso,

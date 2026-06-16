@@ -41,8 +41,9 @@ export default function aside() {
         { label: "Vagas", href: "../vagas", icon: "bi-person-badge" },
         { label: "Match", href: "../matchCandidato", icon: "bi-chat-square-heart-fill" },
         { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
-        { label: "Seu Perfil", href: "../editarPerfil", icon: "bi-person-fill" },
         { label: "Cursos", href: "../cursos", icon: "bi bi-mortarboard-fill" },
+        { label: "Seu Perfil", href: "../editarPerfil", icon: "bi-person-fill" },
+
       ]
     },
     // EMPRESA
@@ -54,8 +55,9 @@ export default function aside() {
         { label: "Minhas Vagas", href: "../vagasEmpresa", icon: "bi-briefcase-fill" },
         { label: "Funcionários", href: "../empresaCandidatos", icon: "bi-people-fill" },
         { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
-        { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
         { label: "Cursos", href: "../cursos", icon: "bi bi-mortarboard-fill" },
+        { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
+
       ]
     },
     // ADMIN / ADMINISTRADOR
@@ -65,6 +67,7 @@ export default function aside() {
         { label: "Painel Geral", href: "../dashboard/admin", icon: "bi-shield-lock-fill" },
         { label: "Gerenciar Usuários", href: "../Admin/Usuarios", icon: "bi-people" },
         { label: "Gerenciar Vagas", href: "../Admin/Vagas", icon: "bi-check2-square" },
+        { label: "Gerenciar cursos", href: "../cursosAdmin", icon: "bi bi-mortarboard-fill" },
         { label: "Relatórios", href: "../Admin/Relatorios", icon: "bi-bar-chart-line-fill" },
       ]
     }

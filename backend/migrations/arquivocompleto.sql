@@ -288,8 +288,6 @@ CREATE TABLE candidatos_rejeitados (
     UNIQUE KEY unico_rejeitado (vaga_id, candidato_id)
 );
 
---Mudanças--
-
 CREATE TABLE cursos (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
@@ -514,3 +512,42 @@ VALUES
 (6, 'Vídeo 2', 'https://youtu.be/63o70UWJthM?si=DEEotYAM62kfYZ2Y', 2),
 (6, 'Vídeo 3', 'https://youtu.be/OsF3VYZw3ik?si=_tbcYdOkasU9s3dU', 3),
 (6, 'Vídeo 4', 'https://youtu.be/_dRQroLSmZQ?si=7KBjbATu5Xab4AkX', 4);
+
+ALTER TABLE compras_cursos
+ADD empresa_id INT UNSIGNED NULL;
+
+ALTER TABLE compras_cursos
+ADD CONSTRAINT fk_compras_empresa
+FOREIGN KEY (empresa_id)
+REFERENCES empresas(id)
+ON DELETE CASCADE;
+
+ALTER TABLE progresso_cursos
+ADD comprador_id INT UNSIGNED NOT NULL,
+ADD tipo_comprador ENUM('candidato','empresa') NOT NULL;
+
+ALTER TABLE progresso_cursos
+DROP FOREIGN KEY progresso_cursos_ibfk_1;
+
+ALTER TABLE progresso_cursos
+DROP INDEX uq_video_concluido;
+
+ALTER TABLE progresso_cursos
+ADD UNIQUE KEY uq_video_concluido
+(
+    comprador_id,
+    tipo_comprador,
+    video_id
+);
+
+-- Remove a trava específica que causou o primeiro erro (compras_cursos_ibfk_1)
+ALTER TABLE compras_cursos DROP FOREIGN KEY compras_cursos_ibfk_1;
+
+-- 1. Desliga temporariamente a trava das chaves estrangeiras do banco inteiro
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 2. Agora o MySQL deixa alterar as colunas para aceitarem NULL sem reclamar
+ALTER TABLE compras_cursos MODIFY candidato_id INT NULL;
+
+-- 3. Liga a trava de segurança novamente
+SET FOREIGN_KEY_CHECKS = 1;

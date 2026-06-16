@@ -84,19 +84,19 @@ export default function DashboardCandidato() {
             </p>
             <div className="d-flex flex-wrap gap-3">
               <a
-                href="VagasCandidato.html"
+                href="../vagas"
                 className="btn btn-segundo btn-lg px-4 fw-semibold"
               >
                 Ver Vagas
               </a>
               <a
-                href="MatchCandidato.html"
+                href="../matchCandidato"
                 className="btn btn-segundo btn-lg px-4 fw-semibold"
               >
                 Ver Matchs
               </a>
               <a
-                href="PerfilCandidato.html"
+                href="../editarPerfil"
                 className="btn btn-segundo btn-lg px-4 fw-semibold"
               >
                 Ver o seu Peril

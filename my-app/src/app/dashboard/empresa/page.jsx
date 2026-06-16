@@ -48,6 +48,7 @@ export default function DashboardEmpresa() {
     }
 
     return (
+
         <main
             id="main-content"
             className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4"
@@ -222,60 +223,70 @@ export default function DashboardEmpresa() {
                     </section>
 
                     {/* RECURSOS */}
-                    <div className="row g-4 mt-4">
 
+
+                    {/* GRADE DE CARDS (SEU BLOCO NESTE ESTILO) */}
+                    <div className="row g-4">
+
+                        {/* CARD: MATCH INTELIGENTE */}
                         <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-lightning-charge-fill fs-1 text-success"></i>
+                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
+                                <div className="card-body p-4 text-white">
+                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
+                                        <i className="bi bi-lightning-charge-fill fs-4 text-success" />
+                                    </div>
 
-                                    <h4 className="mt-3">
+                                    <h4 className="fw-bold font-georgia text-white mb-2">
                                         Match Inteligente
                                     </h4>
 
-                                    <p>
-                                        Encontre automaticamente os candidatos
-                                        mais compatíveis para cada vaga.
+                                    <p className="text-white-50 small mb-0">
+                                        Encontre automaticamente os candidatos mais compatíveis para cada vaga publicada no sistema.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
+                        {/* CARD: ADMISSÃO RÁPIDA */}
                         <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-person-check-fill fs-1 text-primary"></i>
+                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
+                                <div className="card-body p-4 text-white">
+                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
+                                        <i className="bi bi-person-check-fill fs-4 text-success" />
+                                    </div>
 
-                                    <h4 className="mt-3">
+                                    <h4 className="fw-bold font-georgia text-white mb-2">
                                         Admissão Rápida
                                     </h4>
 
-                                    <p>
-                                        Contrate colaboradores diretamente
-                                        pelo painel corporativo.
+                                    <p className="text-white-50 small mb-0">
+                                        Contrate e formalize a chegada de novos colaboradores diretamente através do seu painel operacional.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
+                        {/* CARD: GESTÃO COMPLETA */}
                         <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-graph-up-arrow fs-1 text-warning"></i>
+                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
+                                <div className="card-body p-4 text-white">
+                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
+                                        <i className="bi bi-graph-up-arrow fs-4 text-success" />
+                                    </div>
 
-                                    <h4 className="mt-3">
+                                    <h4 className="fw-bold font-georgia text-white mb-2">
                                         Gestão Completa
                                     </h4>
 
-                                    <p>
-                                        Controle vagas, funcionários e
-                                        processos seletivos em tempo real.
+                                    <p className="text-white-50 small mb-0">
+                                        Controle anúncios de emprego, acompanhe equipes e monitore os processos seletivos corporativos em tempo real.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    {/* FIM DA GRADE */}
                 </div>
             </div>
         </main>

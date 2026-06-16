@@ -72,103 +72,88 @@ export default function CandidatosEmpresa() {
 };
 
     return (
-        <main
-            id="main-content"
-            className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4"
+<main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4 mb-0 pb-0">
+    <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1 mb-0">
+        <div
+            className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1 mb-0"
+            style={{
+                backgroundImage: "linear-gradient(45deg, #162417 0%, #2a402c 100%)",
+                borderRadius: 0,
+                borderTopLeftRadius: 30
+            }}
         >
-            <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
+            <div className="col-lg-12 w-100 mb-5 px-0 px-md-3">
                 <div
-                    className="p-4 p-md-5 shadow-lg text-white cor-main d-flex flex-column flex-grow-1"
-                    style={{
-                        borderRadius: 0,
-                        borderTopLeftRadius: 30
-                    }}
+                    className="p-4 p-md-5 text-dark shadow-lg w-100"
+                    style={{ backgroundColor: "#9DC5BB", borderRadius: 24 }}
                 >
-                    {/* Cabeçalho */}
-                    <div className="mb-5">
-                        <span className="badge rounded-pill bg-success-subtle text-success-emphasis px-3 py-2 mb-3">
-                            Gestão de Talentos
-                        </span>
-
-                        <h1 className="display-4 fw-bold">
-                            Candidatos e
-                            <span className="text-success">
-                                {" "}Funcionários
+                    {/* TOPO DO PAINEL */}
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom border-dark border-opacity-10 pb-4">
+                        <div>
+                            <h2 className="fw-bold font-georgia mb-2 text-dark">
+                                <i className="bi bi-people me-2 text-success" />
+                                Gestão de Talentos
+                            </h2>
+                            <p className="text-muted mb-0">
+                                Visualize todos os profissionais vinculados à sua empresa, monitore status e gerencie processos corporativos.
+                            </p>
+                        </div>
+                        <div className="mt-3 mt-md-0">
+                            <span className="badge bg-dark rounded-pill px-4 py-2 shadow-sm text-white fw-bold">
+                                {candidatos.length} Profissional(is)
                             </span>
-                        </h1>
-
-                        <p className="fs-5 text-white-50">
-                            Visualize todos os profissionais vinculados à sua empresa.
-                        </p>
+                        </div>
                     </div>
 
+                    {/* LOADING STATE */}
                     {loading && (
                         <div className="text-center py-5">
-                            <div
-                                className="spinner-border text-success"
-                                role="status"
-                            />
+                            <div className="spinner-border text-success" role="status" />
+                            <p className="text-muted mt-2 fw-medium">Carregando dados operacionais dos profissionais...</p>
                         </div>
                     )}
 
+                    {/* PAINEL SEM REGISTROS */}
                     {!loading && candidatos.length === 0 && (
-                        <div className="alert alert-light text-center">
-                            Nenhum candidato encontrado.
+                        <div className="text-center py-5 border border-dashed rounded-4 bg-white bg-opacity-50">
+                            <i className="bi bi-people display-3 text-muted"></i>
+                            <h5 className="fw-bold mt-3 text-dark">Nenhum profissional encontrado</h5>
+                            <p className="text-muted px-3">Sua empresa ainda não possui candidatos ou funcionários registrados no sistema.</p>
                         </div>
                     )}
 
+                    {/* GRADE DE PROFISSIONAIS (LISTA CORPORATIVA) */}
                     <div className="row g-4">
-                        {candidatos.map((cand) => (
-                            <div
-                                key={cand.id}
-                                className="col-lg-6"
-                            >
-                                <div className="card border-0 shadow-lg h-100">
-                                    <div className="card-body p-4">
+                        {!loading && candidatos.map((cand) => (
+                            <div key={cand.id} className="col-12">
+                                <div className="card border-0 rounded-4 shadow-sm w-100" style={{ backgroundColor: "#EAF2F0" }}>
+                                    <div className="card-body p-4 d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-4">
 
-                                        <div className="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h4 className="fw-bold">
-                                                    {cand.nome}
-                                                </h4>
-
-                                                <p className="text-muted mb-0">
-                                                    {cand.email}
-                                                </p>
+                                        {/* Bloco de Informações */}
+                                        <div className="flex-grow-1">
+                                            <div className="d-flex align-items-center gap-2 mb-2">
+                                                <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 text-capitalize fw-bold border border-success border-opacity-25">
+                                                    {cand.status}
+                                                </span>
+                                                <span className="text-muted small fw-medium">
+                                                    <i className="bi bi-calendar3 me-1" /> Admissão: {cand.data_admissao ? new Date(cand.data_admissao).toLocaleDateString('pt-BR') : "-"}
+                                                </span>
                                             </div>
 
-                                            <span className="badge bg-success">
-                                                {cand.status}
-                                            </span>
-                                        </div>
+                                            <h4 className="fw-bold mb-2 text-dark font-georgia">{cand.nome}</h4>
 
-                                        <hr />
-
-                                        <div className="row g-3">
-
-                                            <div className="col-12">
-                                                <small className="text-muted">
-                                                    Admissão
-                                                </small>
-
-                                                <div className="fw-semibold">
-                                                    {cand.data_admissao
-                                                        ? new Date(
-                                                            cand.data_admissao
-                                                        ).toLocaleDateString(
-                                                            "pt-BR"
-                                                        )
-                                                        : "-"}
-                                                </div>
+                                            <div className="d-flex flex-wrap gap-3 text-secondary small">
+                                                <span><i className="bi bi-envelope me-1 text-success" />{cand.email || "E-mail não informado"}</span>
                                             </div>
                                         </div>
-                                        <div className="mt-3">
+
+                                        {/* Bloco de Ações Corporativas */}
+                                        <div className="d-flex flex-wrap gap-2 align-self-start align-self-xl-center" style={{ minWidth: 'fit-content' }}>
                                             <button
-                                                className="btn btn-danger"
+                                                className="btn btn-danger d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm fw-bold"
                                                 onClick={() => demitirFuncionario(cand.id)}
                                             >
-                                                <i className="bi bi-person-dash-fill me-2"></i>
-                                                Desligar
+                                                <i className="bi bi-person-dash-fill" /> Desligar
                                             </button>
                                         </div>
 
@@ -177,8 +162,15 @@ export default function CandidatosEmpresa() {
                             </div>
                         ))}
                     </div>
+
                 </div>
             </div>
-        </main>
+        </div>
+    </div>
+</main>
+
+
+
+
     );
 }
