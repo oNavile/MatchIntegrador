@@ -104,10 +104,7 @@ export default function DashboardCandidato() {
             </div>
           </div>
           <article>
-            {/* INFO CARD */}
             <div className="row g-4">
-            
-              {/*CARROSSEL*/}
               <div
                 style={{
                   width: "100%",
@@ -224,11 +221,8 @@ export default function DashboardCandidato() {
                   </button>
                 </div>
               </div>
-              {/*CARROSSEL*/}
             </div>
           </article>
-          {/* CARDS */}
-          {/* CARD */}
         </div>
         <section className="py-5">
           <div className="container">

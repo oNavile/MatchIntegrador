@@ -87,7 +87,6 @@ export default function CandidatosEmpresa() {
                     className="p-4 p-md-5 text-dark shadow-lg w-100"
                     style={{ backgroundColor: "#9DC5BB", borderRadius: 24 }}
                 >
-                    {/* TOPO DO PAINEL */}
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom border-dark border-opacity-10 pb-4">
                         <div>
                             <h2 className="fw-bold font-georgia mb-2 text-dark">
@@ -104,16 +103,12 @@ export default function CandidatosEmpresa() {
                             </span>
                         </div>
                     </div>
-
-                    {/* LOADING STATE */}
                     {loading && (
                         <div className="text-center py-5">
                             <div className="spinner-border text-success" role="status" />
                             <p className="text-muted mt-2 fw-medium">Carregando dados operacionais dos profissionais...</p>
                         </div>
                     )}
-
-                    {/* PAINEL SEM REGISTROS */}
                     {!loading && candidatos.length === 0 && (
                         <div className="text-center py-5 border border-dashed rounded-4 bg-white bg-opacity-50">
                             <i className="bi bi-people display-3 text-muted"></i>
@@ -121,15 +116,11 @@ export default function CandidatosEmpresa() {
                             <p className="text-muted px-3">Sua empresa ainda não possui candidatos ou funcionários registrados no sistema.</p>
                         </div>
                     )}
-
-                    {/* GRADE DE PROFISSIONAIS (LISTA CORPORATIVA) */}
                     <div className="row g-4">
                         {!loading && candidatos.map((cand) => (
                             <div key={cand.id} className="col-12">
                                 <div className="card border-0 rounded-4 shadow-sm w-100" style={{ backgroundColor: "#EAF2F0" }}>
                                     <div className="card-body p-4 d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-4">
-
-                                        {/* Bloco de Informações */}
                                         <div className="flex-grow-1">
                                             <div className="d-flex align-items-center gap-2 mb-2">
                                                 <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 text-capitalize fw-bold border border-success border-opacity-25">
@@ -146,8 +137,6 @@ export default function CandidatosEmpresa() {
                                                 <span><i className="bi bi-envelope me-1 text-success" />{cand.email || "E-mail não informado"}</span>
                                             </div>
                                         </div>
-
-                                        {/* Bloco de Ações Corporativas */}
                                         <div className="d-flex flex-wrap gap-2 align-self-start align-self-xl-center" style={{ minWidth: 'fit-content' }}>
                                             <button
                                                 className="btn btn-danger d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm fw-bold"

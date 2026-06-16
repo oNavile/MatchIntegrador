@@ -61,10 +61,9 @@ export default function DashboardEmpresa() {
                         borderTopLeftRadius: 30
                     }}
                 >
-                    {/* HERO */}
                     <div className="row align-items-center g-5 mb-5">
                         <div className="col-xl-7">
-                            <span className="badge rounded-pill bg-success-subtle text-success-emphasis px-3 py-2 mb-4 fw-semibold">
+                            <span className="badge rounded-pill bg-success bg-opacity-25 text-success px-3 py-2 mb-4 fw-semibold border border-success border-opacity-10">
                                 Painel Corporativo MatchHire
                             </span>
 
@@ -104,12 +103,8 @@ export default function DashboardEmpresa() {
                                 </a>
                             </div>
                         </div>
-
-                        {/* Cards Estatísticos */}
 <div className="col-xl-5">
-    <div className="row g-4"> {/* Aumentei o gap de g-3 para g-4 para mais respiro */}
-        
-        {/* Card: Nome da Empresa */}
+    <div className="row g-4">
         <div className="col-12">
             <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
                 <div className="card-body p-4 d-flex align-items-center gap-3">
@@ -127,8 +122,6 @@ export default function DashboardEmpresa() {
                 </div>
             </div>
         </div>
-
-        {/* Card: Vagas */}
         <div className="col-6">
             <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
                 <div className="card-body p-4 d-flex flex-column justify-content-between">
@@ -144,8 +137,6 @@ export default function DashboardEmpresa() {
                 </div>
             </div>
         </div>
-
-        {/* Card: Candidatos */}
         <div className="col-6">
             <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
                 <div className="card-body p-4 d-flex flex-column justify-content-between">
@@ -161,8 +152,6 @@ export default function DashboardEmpresa() {
                 </div>
             </div>
         </div>
-
-        {/* Card: Funcionários */}
         <div className="col-12">
             <div className="card border-0 bg-white bg-opacity-10 text-white rounded-4 shadow">
                 <div className="card-body p-4 d-flex justify-content-between align-items-center">
@@ -182,8 +171,6 @@ export default function DashboardEmpresa() {
     </div>
 </div>
 </div>
-
-                    {/* SOBRE */}
                     <section className="py-5">
                         <div className="container">
                             <div className="row">
@@ -222,71 +209,39 @@ export default function DashboardEmpresa() {
                         </div>
                     </section>
 
-                    {/* RECURSOS */}
+                                      <div className="lista mb-2">
+          <div className="item">
+            <img src="../1.png" alt="MAt" />
+            <p>
+              A MatchHire conecta empresas e candidatos de forma rápida, moderna
+              e eficiente. Nossa plataforma facilita o recrutamento, tornando a
+              busca por talentos muito mais simples e prática.
+            </p>
+          </div>
+          <div className="lista">
+            <div className="item">
+              <img src="../2.png" alt="chH" />
+              <p>
+                Na MatchHire, empresas encontram profissionais qualificados e
+                candidatos descobrem novas oportunidades de carreira. Tudo em um
+                ambiente intuitivo e acessível.
+              </p>
+            </div>
+          </div>
+          <div className="lista">
+            <div className="item">
+              <img src="../3.png" alt="ire" />
+              <p>
+                A MatchHire foi criada para transformar o processo de
+                contratação, aproximando talentos e empresas através de
+                tecnologia, agilidade e inovação.
+              </p>
+            </div>
+          </div>
+        </div>
 
 
-                    {/* GRADE DE CARDS (SEU BLOCO NESTE ESTILO) */}
-                    <div className="row g-4">
 
-                        {/* CARD: MATCH INTELIGENTE */}
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
-                                <div className="card-body p-4 text-white">
-                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
-                                        <i className="bi bi-lightning-charge-fill fs-4 text-success" />
-                                    </div>
-
-                                    <h4 className="fw-bold font-georgia text-white mb-2">
-                                        Match Inteligente
-                                    </h4>
-
-                                    <p className="text-white-50 small mb-0">
-                                        Encontre automaticamente os candidatos mais compatíveis para cada vaga publicada no sistema.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* CARD: ADMISSÃO RÁPIDA */}
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
-                                <div className="card-body p-4 text-white">
-                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
-                                        <i className="bi bi-person-check-fill fs-4 text-success" />
-                                    </div>
-
-                                    <h4 className="fw-bold font-georgia text-white mb-2">
-                                        Admissão Rápida
-                                    </h4>
-
-                                    <p className="text-white-50 small mb-0">
-                                        Contrate e formalize a chegada de novos colaboradores diretamente através do seu painel operacional.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* CARD: GESTÃO COMPLETA */}
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 rounded-4 shadow-sm" style={{ backgroundColor: "rgba(16, 28, 17, 0.75)" }}>
-                                <div className="card-body p-4 text-white">
-                                    <div className="d-flex align-items-center justify-content-center bg-white bg-opacity-10 text-white rounded-3 mb-3" style={{ width: '48px', height: '48px' }}>
-                                        <i className="bi bi-graph-up-arrow fs-4 text-success" />
-                                    </div>
-
-                                    <h4 className="fw-bold font-georgia text-white mb-2">
-                                        Gestão Completa
-                                    </h4>
-
-                                    <p className="text-white-50 small mb-0">
-                                        Controle anúncios de emprego, acompanhe equipes e monitore os processos seletivos corporativos em tempo real.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    {/* FIM DA GRADE */}
                 </div>
             </div>
         </main>

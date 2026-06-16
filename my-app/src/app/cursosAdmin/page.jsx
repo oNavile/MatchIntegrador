@@ -8,21 +8,17 @@ export default function GerenciarCursos() {
     const [urlEditada, setUrlEditada] = useState("");
     const [salvandoEdicao, setSalvandoEdicao] = useState(false);
 
-    // Estados de Dados
     const [cursos, setCursos] = useState([]);
     const [videosCurso, setVideosCurso] = useState([]);
     const [cursoSelecionado, setCursoSelecionado] = useState(null);
 
-    // Estados do Formulário
     const [tituloAula, setTituloAula] = useState("");
     const [urlVideo, setUrlVideo] = useState("");
 
-    // Estados de Carregamento e Interface
     const [loadingCursos, setLoadingCursos] = useState(true);
     const [loadingVideos, setLoadingVideos] = useState(false);
     const [enviandoForm, setEnviandoForm] = useState(false);
 
-    // Estado para alertas
     const [notificacao, setNotificacao] = useState({ exibir: false, tipo: "", mensagem: "" });
 
     const mostrarNotificacao = (mensagem, tipo = "danger") => {
@@ -36,7 +32,6 @@ export default function GerenciarCursos() {
         carregarCursos();
     }, []);
 
-    // Busca todos os cursos
     async function carregarCursos() {
         try {
             const resposta = await fetch("http://localhost:3001/api/cursos");
@@ -57,7 +52,6 @@ export default function GerenciarCursos() {
         }
     }
 
-    // Seleciona um curso e busca seus vídeos
     async function abrirCurso(curso) {
         setCursoSelecionado(curso);
         setLoadingVideos(true);
@@ -211,8 +205,6 @@ export default function GerenciarCursos() {
                 )}
 
                 <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1 mb-0">
-                    
-                    {/* FUNDO GRADIENTE INSTITUCIONAL VERDE ESCURO */}
                     <div
                         className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1 mb-0"
                         style={{
@@ -222,13 +214,10 @@ export default function GerenciarCursos() {
                         }}
                     >
                         <div className="col-lg-12 w-100 mb-5 px-0 px-md-3">
-                            {/* CONTAINER INTERNO VERDE SÁLVIA MÁRMORE */}
                             <div
                                 className="p-4 p-md-5 text-dark shadow-lg w-100"
                                 style={{ backgroundColor: "#9DC5BB", borderRadius: 24 }}
                             >
-                                
-                                {/* CABEÇALHO DO GERENCIADOR */}
                                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom border-dark border-opacity-10 pb-4 gap-4">
                                     <div>
                                         <span className="badge bg-dark rounded-pill px-3 py-1.5 shadow-sm text-white fw-bold mb-3" style={{ fontSize: '0.75rem' }}>
@@ -238,11 +227,7 @@ export default function GerenciarCursos() {
                                         <p className="text-muted mb-0">Selecione um curso na lista para gerenciar sua grade, atualizar URLs ou anexar novos conteúdos de vídeo.</p>
                                     </div>
                                 </div>
-
-                                {/* CONTEÚDO PRINCIPAL: LISTA LATERAL + GRADE DE AULAS/FORMULÁRIO */}
                                 <div className="row g-4">
-                                    
-                                    {/* COLUNA ESQUERDA: LISTA DE CURSOS */}
                                     <div className="col-xl-4">
                                         <div className="card border-0 rounded-4 shadow-sm h-100" style={{ backgroundColor: "#EAF2F0" }}>
                                             <div className="card-body p-4 d-flex flex-column">
@@ -280,13 +265,9 @@ export default function GerenciarCursos() {
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* COLUNA DIREITA: CONTEÚDO DO CURSO SELECIONADO */}
                                     <div className="col-xl-8">
                                         {cursoSelecionado ? (
                                             <div className="d-flex flex-column gap-4">
-                                                
-                                                {/* CARD DA GRADE DE AULAS ATUAIS */}
                                                 <div className="card border-0 rounded-4 shadow-sm" style={{ backgroundColor: "#EAF2F0" }}>
                                                     <div className="card-body p-4">
                                                         <h5 className="fw-bold text-dark font-georgia mb-3 pb-2 border-bottom border-dark border-opacity-10">
@@ -383,8 +364,6 @@ export default function GerenciarCursos() {
                                                         )}
                                                     </div>
                                                 </div>
-
-                                                {/* CARD DE FORMULÁRIO: ADICIONAR NOVA AULA */}
                                                 <div className="card border-0 rounded-4 shadow-sm" style={{ backgroundColor: "#EAF2F0" }}>
                                                     <div className="card-body p-4">
                                                         <h5 className="fw-bold text-dark font-georgia mb-3 pb-2 border-bottom border-dark border-opacity-10">
@@ -441,7 +420,6 @@ export default function GerenciarCursos() {
 
                                             </div>
                                         ) : (
-                                            /* FEEDBACK PLACEHOLDER QUANDO NENHUM CURSO ESTÁ ATIVO */
                                             <div className="card border-0 rounded-4 shadow-sm h-100 d-flex align-items-center justify-content-center p-5" style={{ backgroundColor: "#EAF2F0" }}>
                                                 <div className="text-center p-4">
                                                     <i className="bi bi-collection-play text-muted opacity-50" style={{ fontSize: "4.5rem" }} />
@@ -452,7 +430,7 @@ export default function GerenciarCursos() {
                                         )}
                                     </div>
 
-                                </div> {/* Fim da Row */}
+                                </div>
 
                             </div>
                         </div>

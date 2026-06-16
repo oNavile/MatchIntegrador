@@ -50,8 +50,6 @@ export default function Header() {
         style={{ zIndex: 1050 }}
       >
         <div className="container-fluid d-flex align-items-center justify-content-between px-3 px-md-4">
-
-          {/* SEÇÃO DA ESQUERDA: LOGO */}
           <div className="d-flex align-items-center gap-2 flex-fill">
             <button
               className="btn btn-outline-dark border-0 fs-4 d-md-none"
@@ -74,18 +72,7 @@ export default function Header() {
               />
             </a>
           </div>
-
-          {/* SEÇÃO DO MEIO: HOME */}
-          <div className="text-center d-none d-md-block flex-fill">
-            <a href="./" className="fs-2 fw-bold text-decoration-none texto-escuro">
-              HOME
-            </a>
-          </div>
-
-          {/* SEÇÃO DA DIREITA: BOTÕES OU FOTO DE PERFIL */}
           <div className="d-flex align-items-center justify-content-end flex-fill gap-3">
-
-            {/* SE NÃO ESTIVER LOGADO -> MOSTRA OS BOTÕES PADRÃO */}
             {!usuario ? (
               <>
                 <a
@@ -100,55 +87,30 @@ export default function Header() {
                 >
                   Cadastre-se
                 </a>
-              </>
-            ) : (
-              <div className="d-none d-sm-flex align-items-center gap-2">
-                <span className="texto-escuro small fw-medium">
-                  Olá, <strong className="text-white">{usuario.nome?.split(" ")[0]}</strong>!
-                </span>
                 <button
-                  className="border-0 bg-transparent p-0 shadow-none"
+                  className="border-0 bg-transparent p-0 shadow-none d-sm-none texto-escuro fs-1"
                   type="button"
                   data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasProfile"
-                  style={{ width: "42px", height: "42px" }}
+                  data-bs-target="#sidebarConta"
                 >
-                  {/* 🔥 MODIFICADO: Se tiver foto, monta a URL do backend. Se não, usa o padrão. */}
-                  <img
-                    src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
-                    className="rounded-circle border border-2 border-dark"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    alt="Perfil"
-                  />
+                  <i className="bi bi-person-circle" />
                 </button>
-              </div>
+              </>
+            ) : (
+              <button
+                className="btn btn-outline-dark d-flex align-items-center gap-2 rounded-5 px-3 py-2 fw-semibold shadow-none"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasProfile"
+              >
+                <i className="bi bi-person-circle fs-5" />
+                <span>Olá, {usuario.nome?.split(" ")[0]}</span>
+              </button>
             )}
-
-            {/* BOTÃO MOBILE */}
-            <button
-              className="border-0 bg-transparent p-0 shadow-none d-sm-none texto-escuro fs-1"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target={usuario ? "#offcanvasProfile" : "#sidebarConta"}
-            >
-              {usuario ? (
-                /* 🔥 MODIFICADO: URL Dinâmica da Foto Mobile */
-                <img
-                  src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
-                  className="rounded-circle border border-2 border-dark"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  alt="Perfil"
-                />
-              ) : (
-                <i className="bi bi-person-circle" />
-              )}
-            </button>
 
           </div>
         </div>
       </nav>
-
-      {/* 🛠️ SIDEBAR / OFF CANVAS DE PERFIL DINÂMICO */}
       <div
         className="offcanvas offcanvas-end cor-fundo border-0 shadow"
         tabIndex={-1}
@@ -164,14 +126,8 @@ export default function Header() {
           {usuario ? (
             <>
               <div className="text-center mb-4">
-                {/* 🔥 MODIFICADO: URL Dinâmica da Foto na Sidebar Grande */}
-                <img
-                  src={usuario.foto && !usuario.foto.endsWith('.pdf') ? usuario.foto : "/personagem.png"}
-                  className="rounded-circle border border-2 border-dark"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  alt="Perfil"
-                />
-                <h4 className="mt-3 mb-0 fw-bold">{usuario.nome}</h4>
+                <i className="bi bi-person-circle text-dark" style={{ fontSize: "4.5rem" }} />
+                <h4 className="mt-2 mb-0 fw-bold">{usuario.nome}</h4>
               </div>
 
               <div className="d-flex flex-column gap-3 mt-4">
@@ -188,8 +144,6 @@ export default function Header() {
                   <br />
                   <span className="text-capitalize fw-semibold">{usuario.tipo}</span>
                 </div>
-
-                {/* Exibe o botão de currículo apenas se for candidato */}
                 {usuario.tipo === "candidato" && usuario.curriculo && (
                   <a
                     href={usuario.curriculo}
@@ -200,8 +154,6 @@ export default function Header() {
                     <i className="bi bi-file-earmark-pdf-fill me-2" /> Abrir Meu Currículo
                   </a>
                 )}
-
-                {/* BOTÃO QUE VALIDA O LOGOUT ACIMA */}
                 <button
                   onClick={fazerLogout}
                   className="btn btn-danger w-100 py-2 mt-auto shadow-sm fw-medium"

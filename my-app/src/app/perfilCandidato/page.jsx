@@ -27,8 +27,6 @@ export default function MeuPerfil() {
                     <div className="row justify-content-center">
 
                         <div className="col-lg-10">
-
-                            {/* CARD PERFIL */}
                             <div className="card border-0 rounded-4 shadow-lg mb-4" style={{ backgroundColor: 'var(--cor-fundo)' }}>
 
                                 <div className="card-body p-4 p-md-5">
@@ -93,11 +91,8 @@ export default function MeuPerfil() {
                                 </div>
 
                             </div>
-
-                            {/* ESTATISTICAS */}
                             
 
-                            {/* SOBRE */}
                             <div className="card border-0 rounded-4 shadow mb-4">
                                 <div className="card-body p-4">
 
@@ -115,8 +110,6 @@ export default function MeuPerfil() {
 
                                 </div>
                             </div>
-
-                            {/* HABILIDADES */}
                             <div className="card border-0 rounded-4 shadow mb-4">
                                 <div className="card-body p-4">
 
@@ -134,8 +127,6 @@ export default function MeuPerfil() {
 
                                 </div>
                             </div>
-
-                            {/* CURRICULO */}
 
                         </div>
 

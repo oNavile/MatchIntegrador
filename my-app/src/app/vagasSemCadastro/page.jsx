@@ -3,28 +3,21 @@
 import { useState, useEffect } from 'react';
 
 export default function VagasSemCadastro() {
-  // ── ESTADOS PARA PUXAR AS INFORMAÇÕES DA API ────────────────
   const [vagas, setVagas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
-
-  // ── ESTADOS DE FILTRAGEM E BUSCA ────────────────────────────
   const [busca, setBusca] = useState("");
   const [localidadeSelect, setLocalidadeSelect] = useState("todos");
   const [modalidadeFiltro, setModalidadeFiltro] = useState("todos");
   const [senioridadeFiltro, setSenioridadeFiltro] = useState("todos");
-
-  // ── ESTADO DO MODAL DE DETALHES ─────────────────────────────
   const [vagaSelecionada, setVagaSelecionada] = useState(null);
 
-  // ── PUXANDO AS INFORMAÇÕES IGUAL O COMPONENTE "VAGAS" ───────
   useEffect(() => {
     async function carregarVagas() {
       try {
         setLoading(true);
         setErro(null);
 
-        // Fetch direto para a API, sem precisar de Token pois é a página Sem Cadastro
         const response = await fetch('http://localhost:3001/api/vagas', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -53,7 +46,6 @@ export default function VagasSemCadastro() {
     carregarVagas();
   }, []);
 
-  // ── LÓGICA DE FILTRAGEM (Igual ao componente Vagas) ─────────
   const vagasFiltradas = vagas.filter((vaga) => {
     const matchesBusca =
       vaga.titulo?.toLowerCase().includes(busca.toLowerCase()) ||
@@ -101,8 +93,7 @@ export default function VagasSemCadastro() {
                     Milhares de vagas integradas e atualizadas em tempo real.
                   </p>
                 </div>
-                
-                {/* BARRA DE PESQUISA */}
+              
                 <div className="barra-de-pesquisa-vagas d-flex flex-column flex-md-row align-items-md-center mb-4">
                   <div className="d-flex align-items-center flex-fill px-3 py-2 py-md-0">
                     <i className="bi bi-search text-muted fs-5" />
@@ -132,8 +123,6 @@ export default function VagasSemCadastro() {
                     <button className="btn w-100 rounded-pill text-white fw-bold py-2" style={{ backgroundColor: "var(--cor-main)" }}>Buscar</button>
                   </div>
                 </div>
-
-                {/* FILTROS */}
                 <div className="d-flex gap-2 flex-wrap mb-3 align-items-center">
                   <span className="text-white-50 me-2 small fw-medium">Modalidade de trabalho:</span>
                   {["todos", "remoto", "hibrido", "presencial"].map((mod) => (
@@ -147,8 +136,6 @@ export default function VagasSemCadastro() {
                   <h4 className="fw-bold text-white mb-0">Vagas Disponíveis</h4>
                   <span className="badge bg-white text-dark rounded-pill px-3 py-2">Mostrando {vagasFiltradas.length} vaga(s)</span>
                 </div>
-
-                {/* RENDERIZAÇÃO DOS CARDS COM OS DADOS DA API */}
                 <div className="row g-4 mb-5" id="jobs-container">
                   {loading && <p className="text-center py-3 text-white-50">Buscando vagas...</p>}
                   {erro && <div className="alert alert-danger text-center w-100">{erro}</div>}
@@ -213,8 +200,6 @@ export default function VagasSemCadastro() {
           </div>
         </div>
       </main>
-
-      {/* MODAL DETALHES DA VAGA (ADAPTADO DO SEU ORIGINAL) */}
       {vagaSelecionada && (
         <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1100 }}>
           <div className="modal-dialog modal-dialog-centered">
@@ -237,7 +222,6 @@ export default function VagasSemCadastro() {
                 <button type="button" className="btn btn-secondary" onClick={() => setVagaSelecionada(null)}>
                   Fechar
                 </button>
-                {/* COMO É SEM CADASTRO, O BOTÃO DEVE REDIRECIONAR PARA O LOGIN */}
                 <a href="/login" id="submit-apply-btn" className="btn btn-primeiro">
                   Faça login para se candidatar
                 </a>

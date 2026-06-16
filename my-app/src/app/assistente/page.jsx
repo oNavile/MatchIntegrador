@@ -12,14 +12,34 @@ const KnowledgeBase = {
         ],
         reply: "Olá! 😊 Sou o assistente da MatchHire. Posso ajudar com vagas, currículo, entrevistas, perfil, empresas, salários e carreira."
     },
-    agradecimento: {
-        keywords: [
-            "obrigado", "obrigada", "valeu", "vlw",
-            "tmj", "tamo junto", "brigado",
-            "agradeço", "agradecido"
-        ],
-        reply: "Fico feliz em ajudar! 😊 Sempre que precisar, estarei por aqui."
-    },
+    maldades: {
+    keywords: [
+        "ruim",
+        "não ajudou",
+        "nao ajudou",
+        "péssimo",
+        "pessimo",
+        "horrível",
+        "horrivel",
+        "não gostei",
+        "nao gostei",
+        "inútil",
+        "inutil",
+        "lixo"
+    ],
+    reply: "Sinto muito por não ter atendido sua expectativa. 😔 Tente reformular sua pergunta ou fornecer mais informações para que eu possa ajudar melhor."
+},
+cursos: {
+    keywords: [
+        "curso",
+        "cursos",
+        "aprender",
+        "capacitação",
+        "capacitacao",
+        "treinamento"
+    ],
+    reply: "📚 Nossa plataforma oferece diversos cursos para candidatos e empresas. Você pode aprender sobre entrevistas de emprego, elaboração de currículo, comunicação profissional, liderança, inclusão no ambiente de trabalho e muito mais!"
+},
     despedida: {
         keywords: [
             "tchau", "adeus", "falou",
@@ -230,110 +250,138 @@ export default function MatchHireBot() {
     };
 
     return (
-        <main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4">
-            <style>
-                {`
-                @keyframes blink { 
-                    0%, 80%, 100% { opacity: 0.2; } 
-                    40% { opacity: 1; } 
-                }
-                `}
-            </style>
+<main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4 mb-0 pb-0">
+  <style>
+    {`
+      @keyframes blink { 
+        0%, 80%, 100% { opacity: 0.2; } 
+        40% { opacity: 1; } 
+      }
+    `}
+  </style>
 
-            <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
-                <div className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1"
-                    style={{ background: 'linear-gradient(45deg, #162417, #2a402c)', borderTopLeftRadius: '30px' }}>
-
-                    <div className="text-center mb-4">
-                        <div className="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                            style={{ width: '90px', height: '90px', background: 'rgba(255,255,255,0.15)' }}>
-                            <i className="bi bi-robot fs-1 text-white"></i>
-                        </div>
-                        <h2 className="fw-bold">Assistente MatchHire</h2>
-                        <p className="text-white-50">Tire dúvidas sobre a plataforma e carreira</p>
-                    </div>
-
-                    <div className="d-flex flex-wrap justify-content-center gap-2 mb-3">
-                        <button className="btn btn-light rounded-pill sugestao-btn" onClick={() => handleSend("Como funciona o Match?")}>Como funciona o Match?</button>
-                        <button className="btn btn-light rounded-pill sugestao-btn" onClick={() => handleSend("Dicas para currículo")}>Dicas para currículo</button>
-                        <button className="btn btn-light rounded-pill sugestao-btn" onClick={() => handleSend("Preparação para entrevista")}>Preparação para entrevista</button>
-                    </div>
-
-                    <div className="row justify-content-center flex-grow-1">
-                        <div className="col-lg-10">
-                            <div className="card border-0 rounded-4 shadow-lg h-100" style={{ background: '#f8f9fa' }}>
-                                
-                                {/* Área do Chat */}
-                                <div id="chat-messages" className="card-body p-4" style={{ height: '450px', overflowY: 'auto' }} ref={chatRef} aria-live="polite" role="log">
-                                    {messages.map((msg) => (
-                                        <div key={msg.id} className={`d-flex ${msg.isBot ? "justify-content-start" : "justify-content-end"} mb-3 w-100`}>
-                                            <div className={`p-3 rounded-4 position-relative ${msg.isBot ? "bg-white text-dark border shadow-sm" : "text-white shadow-sm"}`}
-                                                style={{ 
-                                                    maxWidth: '85%', 
-                                                    wordBreak: 'break-word', 
-                                                    fontSize: '0.95rem', 
-                                                    lineHeight: '1.5', 
-                                                    background: msg.isBot ? '' : 'linear-gradient(45deg, #162417, #2a402c)' 
-                                                }}>
-                                                
-                                                <span>
-                                                    {msg.isBot ? "🤖 " : ""}
-                                                    {msg.isHTML ? <span dangerouslySetInnerHTML={{ __html: msg.text }} /> : msg.text}
-                                                </span>
-
-                                                <div className="text-end mt-1" style={{ fontSize: '0.7rem', opacity: 0.7, color: msg.isBot ? '#888' : '#d1dfd2' }}>
-                                                    {msg.time}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Indicador de "Digitando" */}
-                                    {isTyping && (
-                                        <div id="typing-indicator-container" className="d-flex justify-content-start mb-3 w-100">
-                                            <div className="p-3 rounded-4 bg-white border shadow-sm d-flex align-items-center gap-1" style={{ maxWidth: '85%', height: '50px' }}>
-                                                <div style={{ width: '6px', height: '6px', background: '#888', borderRadius: '50%', animation: 'blink 1.4s infinite both' }}></div>
-                                                <div style={{ width: '6px', height: '6px', background: '#888', borderRadius: '50%', animation: 'blink 1.4s infinite both', animationDelay: '0.2s' }}></div>
-                                                <div style={{ width: '6px', height: '6px', background: '#888', borderRadius: '50%', animation: 'blink 1.4s infinite both', animationDelay: '0.4s' }}></div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Rodapé com Input */}
-                                <div className="card-footer bg-white border-0 p-3">
-                                    <div className="input-group">
-                                        <input 
-                                            id="mensagemInput" 
-                                            type="text" 
-                                            className="form-control rounded-pill"
-                                            placeholder="Digite sua dúvida..." 
-                                            value={inputValue}
-                                            onChange={(e) => setInputValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter" && !e.shiftKey) {
-                                                    e.preventDefault();
-                                                    handleSend();
-                                                }
-                                            }}
-                                            disabled={isTyping}
-                                        />
-                                        <button 
-                                            id="btnEnviar" 
-                                            className="btn btn-success rounded-pill ms-2 px-4" 
-                                            onClick={() => handleSend()}
-                                            disabled={isTyping}
-                                        >
-                                            <i className="bi bi-send-fill"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+  <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1 mb-0">
+    <div
+      className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1 mb-0"
+      style={{
+        backgroundImage: "linear-gradient(45deg, #162417 0%, #2a402c 100%)",
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 0,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
+      }}
+    >
+      <div className="col-lg-12 w-100 mb-5 px-0 px-md-3">
+        <div
+          className="p-4 p-md-5 text-dark shadow-lg w-100"
+          style={{ backgroundColor: "#9DC5BB", borderRadius: 24 }}
+        >
+          <div className="text-center mb-4 border-bottom border-dark border-opacity-10 pb-4">
+            <div
+              className="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow-sm"
+              style={{ width: "80px", height: "80px", background: "linear-gradient(45deg, #162417 0%, #2a402c 100%)" }}
+            >
+              <i className="bi bi-robot fs-2 text-success"></i>
             </div>
-        </main>
+            <h2 className="fw-bold font-georgia text-dark mb-1">Assistente MatchHire</h2>
+            <p className="text-muted small mb-0">Tire suas dúvidas sobre a plataforma, processos seletivos e carreira em tempo real</p>
+          </div>
+          <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
+            <button className="btn btn-sm btn-dark bg-opacity-75 rounded-pill px-3 py-2 fw-medium shadow-sm transition-card" onClick={() => handleSend("Como funciona o Match?")}>
+              <i className="bi bi-lightning-charge me-1 text-success" /> Como funciona o Match?
+            </button>
+            <button className="btn btn-sm btn-dark bg-opacity-75 rounded-pill px-3 py-2 fw-medium shadow-sm transition-card" onClick={() => handleSend("Dicas para currículo")}>
+              <i className="bi bi-file-earmark-person me-1 text-success" /> Dicas para currículo
+            </button>
+            <button className="btn btn-sm btn-dark bg-opacity-75 rounded-pill px-3 py-2 fw-medium shadow-sm transition-card" onClick={() => handleSend("Preparação para entrevista")}>
+              <i className="bi bi-chat-square-quote me-1 text-success" /> Preparação para entrevista
+            </button>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-xl-10 col-12">
+              <div className="card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+                <div 
+                  id="chat-messages" 
+                  className="card-body p-4 bg-light bg-opacity-50" 
+                  style={{ height: "420px", overflowY: "auto" }} 
+                  ref={chatRef} 
+                  aria-live="polite" 
+                  role="log"
+                >
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`d-flex ${msg.isBot ? "justify-content-start" : "justify-content-end"} mb-3 w-100`}>
+                      <div 
+                        className={`p-3 rounded-4 shadow-sm ${msg.isBot ? "text-dark border-0" : "text-white"}`}
+                        style={{ 
+                          maxWidth: "80%", 
+                          wordBreak: "break-word", 
+                          fontSize: "0.95rem", 
+                          lineHeight: "1.5", 
+                          backgroundImage: msg.isBot ? "none" : "linear-gradient(45deg, #162417 0%, #2a402c 100%)",
+                          backgroundColor: msg.isBot ? "#EAF2F0" : "transparent"
+                        }}
+                      >
+                        <div className="d-flex align-items-start gap-1">
+                          {msg.isBot && <span className="me-1">🤖</span>}
+                          <div>
+                            {msg.isHTML ? <span dangerouslySetInnerHTML={{ __html: msg.text }} /> : msg.text}
+                          </div>
+                        </div>
+
+                        <div className="text-end mt-2" style={{ fontSize: "0.7rem", opacity: 0.6, color: msg.isBot ? "#555" : "#d1dfd2" }}>
+                          {msg.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {isTyping && (
+                    <div id="typing-indicator-container" className="d-flex justify-content-start mb-3 w-100">
+                      <div className="p-3 rounded-4 d-flex align-items-center gap-1 border-0 shadow-sm" style={{ backgroundColor: "#EAF2F0", height: "45px" }}>
+                        <div style={{ width: "6px", height: "6px", background: "#2a402c", borderRadius: "50%", animation: "blink 1.4s infinite both" }}></div>
+                        <div style={{ width: "6px", height: "6px", background: "#2a402c", borderRadius: "50%", animation: "blink 1.4s infinite both", animationDelay: "0.2s" }}></div>
+                        <div style={{ width: "6px", height: "6px", background: "#2a402c", borderRadius: "50%", animation: "blink 1.4s infinite both", animationDelay: "0.4s" }}></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="card-footer bg-white border-top border-light p-3">
+                  <div className="input-group align-items-center">
+                    <input 
+                      id="mensagemInput" 
+                      type="text" 
+                      className="form-control border-1 border-light-subtle rounded-pill px-4 py-2"
+                      placeholder="Digite sua dúvida aqui..." 
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSend();
+                        }
+                      }}
+                      disabled={isTyping}
+                      style={{ fontSize: "0.95rem" }}
+                    />
+                    <button 
+                      id="btnEnviar" 
+                      className="btn btn-success rounded-circle ms-2 d-flex align-items-center justify-content-center shadow-sm" 
+                      onClick={() => handleSend()}
+                      disabled={isTyping}
+                      style={{ width: "42px", height: "42px" }}
+                    >
+                      <i className="bi bi-send-fill fs-6" />
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
     );
 }

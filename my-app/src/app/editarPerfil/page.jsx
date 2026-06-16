@@ -36,7 +36,6 @@ export default function EditarPerfil() {
         const data = await res.json();
 
         if (res.ok) {
-          // O backend retorna cidade e estado separados, mas o front exibe junto (Ex: São Paulo - SP)
           const cidadeFormatada = data.cidade && data.estado 
             ? `${data.cidade} - ${data.estado}` 
             : (data.cidade || "");
@@ -45,7 +44,7 @@ export default function EditarPerfil() {
 
           setFormData({
             nome: data.nome || "",
-            cargo: data.cargo || "", // Caso passe a existir no banco no futuro
+            cargo: data.cargo || "", 
             email: data.email || "",
             telefone: data.telefone || "",
             cidade: cidadeFormatada,
@@ -58,7 +57,6 @@ export default function EditarPerfil() {
           }
 
           if (data.arquivo) {
-            // Supondo que a sua rota estática de uploads seja essa
             setImagePreview(`http://localhost:3001/uploads/${data.arquivo}`);
           }
         }
@@ -76,31 +74,16 @@ export default function EditarPerfil() {
   const phoneMask = (value) => {
     if (!value) return "";
     return value
-      .replace(/\D/g, '') // Remove tudo o que não é número
-      .replace(/(\d{2})(\d)/, '($1) $2') // Coloca parênteses no DDD
-      .replace(/(\d{5})(\d{4})\d+?$/, '$1-$2'); // Coloca o hífen no meio
+      .replace(/\D/g, '') 
+      .replace(/(\d{2})(\d)/, '($1) $2') 
+      .replace(/(\d{5})(\d{4})\d+?$/, '$1-$2'); 
   };
 
   // Handler para atualizar os campos de texto conforme o usuário digita
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Aplica a máscara se o campo for o de telefone
     const newValue = name === "telefone" ? phoneMask(value) : value;
-
     setFormData(prev => ({ ...prev, [name]: newValue }));
-  };
-
-  // Handler para Upload da Imagem (Apenas Preview)
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImagePreview(event.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   // Handler para Adicionar Tag (Enter ou Vírgula)
@@ -133,7 +116,6 @@ export default function EditarPerfil() {
     e.preventDefault();
 
     try {
-      // Montamos o FormData manualmente a partir do estado controlado pelo React
       const fd = new FormData();
       
       fd.append("nome", formData.nome);
@@ -144,7 +126,6 @@ export default function EditarPerfil() {
       fd.append("descricao", formData.descricao);
       fd.append("palavras_chave", JSON.stringify(tags));
 
-      // Tratamento mais seguro para Cidade/Estado
       const inputCidade = formData.cidade || "";
       if (inputCidade.includes("-")) {
         const parts = inputCidade.split("-");
@@ -152,10 +133,9 @@ export default function EditarPerfil() {
         fd.append("estado", parts[1] ? parts[1].trim() : "");
       } else {
         fd.append("cidade", inputCidade.trim());
-        fd.append("estado", ""); // Garante que o estado não vá como undefined
+        fd.append("estado", ""); 
       }
 
-      // Adiciona a imagem APENAS se o usuário tiver selecionado um novo arquivo
       const fileInput = document.getElementById("imageUpload");
       if (fileInput && fileInput.files.length > 0) {
         fd.append("arquivo", fileInput.files[0]);
@@ -178,16 +158,13 @@ export default function EditarPerfil() {
         return;
       }
 
-      alert("Perfil atualizado com sucesso!");
+      alert("Perfil updated com sucesso!");
     } catch (err) {
       console.error(err);
       alert("Erro ao conectar com servidor");
     }
   };
 
-  const isLimitReached = tags.length >= 8;
-
-  // Evita renderizar o form vazio enquanto carrega os dados
   if (loading) {
     return (
       <main className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4 align-items-center justify-content-center">
@@ -212,7 +189,6 @@ export default function EditarPerfil() {
             borderTopLeftRadius: 30
           }}
         >
-          {/* CABEÇALHO DA TELA */}
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 gap-3 border-bottom border-white-10 pb-4">
             <div>
               <h1 className="font-georgia fw-bold mb-1">Editar Meu Perfil</h1>
@@ -245,67 +221,8 @@ export default function EditarPerfil() {
             onSubmit={handleSubmit}
             encType="multipart/form-data"
           >
-            <div className="row g-4">
-              {/* COLUNA ESQUERDA: FOTO (30%) */}
-              <div className="col-xl-3 col-lg-4">
-                <div
-                  className="card border-0 rounded-4 shadow mb-4 text-center py-4 px-3"
-                  style={{ backgroundColor: "var(--cor-fundo)" }}
-                >
-                  <div className="card-body p-2">
-                    <div className="avatar-upload mb-3">
-                      <div className="avatar-edit">
-                        <label
-                          htmlFor="imageUpload"
-                          className="btn btn-primeiro rounded-circle shadow p-0 d-flex align-items-center justify-content-center"
-                          style={{ width: 38, height: 38, cursor: "pointer" }}
-                        >
-                          <i className="bi bi-camera-fill text-white" />
-                        </label>
-                        <input
-                          type="file"
-                          name="arquivo"
-                          id="imageUpload"
-                          accept=".png, .jpg, .jpeg"
-                          className="d-none"
-                          onChange={handleImageChange}
-                        />
-                      </div>
-                      <div className="avatar-preview">
-                        <div 
-                          id="imagePreview"
-                          style={{
-                            backgroundImage: imagePreview ? `url(${imagePreview})` : 'none',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}
-                        >
-                          {!imagePreview && (
-                            <i
-                              id="avatar-icon-placeholder"
-                              className="bi bi-person-fill fs-1 text-secondary"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <h5 className="fw-bold text-dark mb-1">{nomeOriginal}</h5>
-                    <p className="text-muted small mb-4">
-                      Formatos aceitos: JPG, PNG
-                    </p>
-                    <hr className="text-muted my-3" />
-                  </div>
-                </div>
-              </div>
-
-              {/* COLUNA DIREITA: FORMULÁRIOS PRINCIPAIS (70%) */}
-              <div className="col-xl-9 col-lg-8">
-                {/* CARD 1: DADOS PESSOAIS */}
+            <div className="row g-4 justify-content-center">
+              <div className="col-12 col-md-10 col-lg-8 col-xl-7 mx-auto">
                 <div
                   className="card border-0 rounded-4 shadow mb-4"
                   style={{ backgroundColor: "var(--cor-fundo)" }}
@@ -402,8 +319,6 @@ export default function EditarPerfil() {
                     </div>
                   </div>
                 </div>
-
-                {/* CARD 2: SOBRE MIM */}
                 <div
                   className="card border-0 rounded-4 shadow mb-4"
                   style={{ backgroundColor: "var(--cor-fundo)" }}
@@ -429,73 +344,6 @@ export default function EditarPerfil() {
                   </div>
                 </div>
 
-                {/* CARD 3: COMPETÊNCIAS DINÂMICAS */}
-                <div
-                  className="card border-0 rounded-4 shadow mb-5"
-                  style={{ backgroundColor: "var(--cor-fundo)" }}
-                >
-                  <div className="card-header bg-transparent border-0 pt-4 px-4 pb-0">
-                    <h4 className="fw-bold text-dark m-0">
-                      <i className="bi bi-stars me-2 text-success" />
-                      Competências Técnicas (Hard Skills)
-                    </h4>
-                  </div>
-                  <div className="card-body p-4">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <label className="form-label text-muted small mb-0">
-                        Pressione <kbd>Enter</kbd> ou adicione uma vírgula para inserir uma competência:
-                      </label>
-                      <span
-                        id="skills-counter"
-                        className={isLimitReached ? "badge bg-danger text-white fw-bold fs-6" : "badge text-dark bg-light border fw-bold fs-6"}
-                      >
-                        {tags.length} / 8
-                      </span>
-                    </div>
-                    <div className="input-group mb-2">
-                      <span className="input-group-text bg-light text-muted">
-                        <i className="bi bi-plus-lg" />
-                      </span>
-                      <input
-                        type="text"
-                        id="skill-input"
-                        className="form-control rounded-end-3"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        disabled={isLimitReached}
-                        placeholder={isLimitReached ? "Limite de 8 atingido!" : "Ex: TypeScript, Vue, Tailwind..."}
-                      />
-                    </div>
-                    
-                    <div
-                      id="skills-feedback"
-                      className={`text-danger small fw-semibold mb-3 ${isLimitReached ? '' : 'd-none'}`}
-                    >
-                      <i className="bi bi-exclamation-circle-fill me-1" /> Você atingiu o limite máximo de 8 competências. Remova alguma para adicionar novas.
-                    </div>
-
-                    <div
-                      id="skills-wrapper"
-                      className="d-flex flex-wrap gap-2 pt-2"
-                    >
-                      {tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="badge bg-success d-flex align-items-center gap-2 p-2 fs-6 rounded-3 shadow-sm"
-                          style={{ backgroundColor: '#2a402c', border: '1px solid rgba(255,255,255,0.1)' }}
-                        >
-                          {tag} 
-                          <i 
-                            className="bi bi-x-circle-fill tag-remove" 
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => removeTag(index)}
-                          />
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </form>

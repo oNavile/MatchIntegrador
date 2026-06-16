@@ -114,7 +114,6 @@ export default function CadastroVagaEmpresa() {
                 </div>
 
                 <form onSubmit={handleSubmit} id="form-cadastro-vaga">
-                  {/* --- SEÇÃO 1: INFORMAÇÕES PRINCIPAIS --- */}
                   <h5 className="section-title mt-0 mb-3 border-bottom pb-2 text-dark fw-bold">
                     <i className="bi bi-info-circle me-2 text-success" />
                     1. Informações Principais
@@ -152,8 +151,6 @@ export default function CadastroVagaEmpresa() {
                       />
                     </div>
                   </div>
-
-                  {/* --- SEÇÃO 2: CONDIÇÕES E REMUNERAÇÃO --- */}
                   <h5 className="section-title mb-3 border-bottom pb-2 text-dark fw-bold">
                     <i className="bi bi-geo-alt me-2 text-success" />
                     2. Condições de Trabalho
@@ -191,8 +188,6 @@ export default function CadastroVagaEmpresa() {
                       <div className="form-text text-dark opacity-75">Deixe em branco para "A combinar".</div>
                     </div>
                   </div>
-
-                  {/* --- SEÇÃO 3: DESCRIÇÃO E REQUISITOS --- */}
                   <h5 className="section-title mb-3 border-bottom pb-2 text-dark fw-bold">
                     <i className="bi bi-card-text me-2 text-success" />
                     3. Descrição e Requisitos
@@ -218,8 +213,6 @@ export default function CadastroVagaEmpresa() {
                       />
                     </div>
                   </div>
-
-                  {/* --- SEÇÃO 4: PALAVRAS CHAVE --- */}
                   <h5 className="section-title mb-3 border-bottom pb-2 text-dark fw-bold">
                     <i className="bi bi-geo-alt me-2 text-success" />
                     4. Selecione Palavras chave para um Match automático.
@@ -228,8 +221,6 @@ export default function CadastroVagaEmpresa() {
                     <p className="text-dark mb-0">Selecione no máximo 8 opções.</p>
                     <span className="badge bg-secondary">{palavrasChave.length} / 8 selecionadas</span>
                   </div>
-
-                  {/* 💻 TECNOLOGIA E PROGRAMAÇÃO */}
                   <div className="mb-4">
                     <h6 className="fw-bold text-secondary mb-2">
                       <i className="bi bi-code-slash me-1" /> Tecnologia e Programação
@@ -265,8 +256,6 @@ export default function CadastroVagaEmpresa() {
                       })}
                     </div>
                   </div>
-
-                  {/* 📊 FERRAMENTAS E PRODUTIVIDADE */}
                   <div className="mb-4">
                     <h6 className="fw-bold text-secondary mb-2">
                       <i className="bi bi-pc-display me-1" /> Ferramentas e Produtividade
@@ -299,8 +288,6 @@ export default function CadastroVagaEmpresa() {
                       })}
                     </div>
                   </div>
-
-                  {/* 🗣️ IDIOMAS */}
                   <div className="mb-4">
                     <h6 className="fw-bold text-secondary mb-2">
                       <i className="bi bi-translate me-1" /> Idiomas
@@ -331,8 +318,6 @@ export default function CadastroVagaEmpresa() {
                       })}
                     </div>
                   </div>
-
-                  {/* Botão Concluir Cadastro */}
                   <div className="text-end border-top pt-4">
                     <button type="submit" className="btn btn-primeiro w-100 rounded-pill py-3 fw-bold shadow transition-all d-flex align-items-center justify-content-center gap-2">
                                      Criar vaga

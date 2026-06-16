@@ -280,7 +280,7 @@ export default function AreaDoCurso() {
                         {/* Botão de Retorno */}
                         <button
                           className="btn btn-outline-dark mt-4 w-100 rounded-3 fw-medium bg-white bg-opacity-50"
-                          onClick={() => router.push("/painel-candidato")}
+                          onClick={() => router.push("../")}
                         >
                           <i className="bi bi-arrow-left me-2" /> Voltar ao Painel Principal
                         </button>

@@ -193,7 +193,6 @@ export default function CadastroEmpresa() {
 
   return (
     <>
-      {/* BLOCO DE CONTEÚDO 🚥 */}
       <main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4">
         <div className="container-fluid pt-3 pb-5 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
           <div
@@ -208,10 +207,9 @@ export default function CadastroEmpresa() {
               <div className="tab-content" id="pills-tabContent">
                 <div className="d-flex justify-content-center mb-5">
                   <ul className="nav nav-pills gap-3 custom-tabs" id="pills-tab" role="tablist">
-                    {/* --- BOTÃO: SOU EMPRESA --- */}
                     <li className="nav-item" role="presentation">
                       <a
-                        className="nav-link active rounded-pill px-4 py-2 fs-5 btn-primeiro text-decoration-none"
+                        className="nav-link active rounded-pill px-4 py-2 fs-5 btn-terceiro text-decoration-none"
                         href="/cadastro"
                       >
                         <i className="bi bi-building me-2" />
@@ -322,7 +320,7 @@ export default function CadastroEmpresa() {
                               />
                             </div>
                             <div className="col-12">
-                              <label className="form-label fw-medium text-dark">Logotipo ou Documento de Identificação:</label>
+                              <label className="form-label fw-medium text-dark">Documento de Identificação:</label>
                               <input
                                 type="file"
                                 name="arquivo"
@@ -416,7 +414,6 @@ export default function CadastroEmpresa() {
                           </h5>
 
                           <div className="row g-3 mb-5">
-                            {/* RENDERIZAÇÃO DINÂMICA DOS PLANOS VINDOS DO BANCO */}
                             {planos.length === 0 ? (
                               <div className="col-12 text-center text-muted">
                                 <div className="spinner-border spinner-border-sm me-2" role="status"></div>

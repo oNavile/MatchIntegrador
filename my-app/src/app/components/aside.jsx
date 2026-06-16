@@ -31,6 +31,7 @@ export default function aside() {
       links: [
         { label: "Home", href: "./", icon: "bi-house-fill" },
         { label: "Vagas", href: "./vagasSemCadastro", icon: "bi-person-badge" },
+        { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
       ]
     },
     // CANDIDATO
@@ -64,9 +65,8 @@ export default function aside() {
     admin: {
       title: "Administração",
       links: [
-        { label: "Painel Geral", href: "../dashboard/admin", icon: "bi-shield-lock-fill" },
+        { label: "Home", href: "../dashboard/admin", icon: "bi bi-house-fill" },
         { label: "Gerenciar Usuários", href: "../Admin/Usuarios", icon: "bi-people" },
-        { label: "Gerenciar Vagas", href: "../Admin/Vagas", icon: "bi-check2-square" },
         { label: "Gerenciar cursos", href: "../cursosAdmin", icon: "bi bi-mortarboard-fill" },
         { label: "Relatórios", href: "../Admin/Relatorios", icon: "bi-bar-chart-line-fill" },
       ]
@@ -82,7 +82,6 @@ export default function aside() {
       className="offcanvas-md offcanvas-start bg-menu shadow position-fixed top-0 start-0 h-100 border-0"
       tabIndex={-1}
     >
-      {/* HEADER DO ASIDE (MOBILE) */}
       <div className="offcanvas-header d-md-none border-bottom border-dark border-opacity-10 mt-2">
         <h5 className="offcanvas-title texto-escuro fw-bold fs-3">Menu</h5>
         <button
@@ -92,11 +91,7 @@ export default function aside() {
           data-bs-target="#sidebar"
         ></button>
       </div>
-
-      {/* CORPO DO ASIDE */}
       <div className="offcanvas-body d-flex flex-column p-0 h-100 overflow-x-hidden">
-
-        {/* BARRA DE BUSCA */}
         <div className="px-3 mt-4 mb-2 hide-on-collapse">
           <div className="input-group input-group-sm">
             <span
@@ -113,13 +108,9 @@ export default function aside() {
             />
           </div>
         </div>
-
-        {/* TÍTULO DA SEÇÃO (ALTERA CONFORME O PERFIL) */}
         <div className="px-4 mt-3 mb-2 text-uppercase fw-bold text-muted small hide-on-collapse">
           {currentMenu.title}
         </div>
-
-        {/* LINKS DINÂMICOS AUTOMÁTICOS */}
         <nav className="nav flex-column gap-1 p-2 flex-grow-1">
           {currentMenu.links.map((link, index) => (
             <a

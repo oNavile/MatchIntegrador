@@ -11,17 +11,12 @@ export default function PagamentoCurso() {
   const [curso, setCurso] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [processando, setProcessando] = useState(false);
-
-  // Estado para controlar a forma de pagamento ativa ('cartao', 'pix', 'boleto')
   const [formaPagamento, setFormaPagamento] = useState("cartao");
 
-  // Estados do Cartão
   const [nomeCartao, setNomeCartao] = useState("");
   const [numeroCartao, setNumeroCartao] = useState("");
   const [validade, setValidade] = useState("");
   const [cvv, setCvv] = useState("");
-
-  // Estado para feedback visual do botão de copiar
   const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
@@ -64,7 +59,6 @@ export default function PagamentoCurso() {
     try {
       const token = localStorage.getItem("token");
 
-      // Monta o body dependendo da forma de pagamento escolhida
       const payload = {
         formaPagamento: formaPagamento,
       };
@@ -132,7 +126,6 @@ export default function PagamentoCurso() {
           </h1>
 
           <div className="row g-4 justify-content-center flex-grow-1">
-            {/* COLUNA DA ESQUERDA: Resumo do Curso */}
             <div className="col-12 col-lg-5">
               <div className="card h-100 shadow rounded-4" style={{ backgroundColor: "#9DC5BB" }}>
                 <div className="card-body p-4 d-flex flex-column text-dark">
@@ -151,13 +144,9 @@ export default function PagamentoCurso() {
                 </div>
               </div>
             </div>
-
-            {/* COLUNA DA DIREITA: Seletor de Formas de Pagamento e Formulários */}
             <div className="col-12 col-lg-7">
               <div className="card h-100 shadow rounded-4 bg-white text-dark">
                 <div className="card-body p-4 d-flex flex-column">
-                  
-                  {/* Abas de Seleção de Método */}
                   <h5 className="fw-bold mb-3 text-uppercase tracking-wide text-secondary" style={{ fontSize: "0.85rem" }}>
                     Escolha a forma de pagamento
                   </h5>
@@ -192,11 +181,7 @@ export default function PagamentoCurso() {
                   </div>
 
                   <hr className="mb-4 opacity-25" />
-
-                  {/* FORMULÁRIO DINÂMICO */}
                   <form onSubmit={finalizarPagamento} className="d-flex flex-column flex-grow-1">
-                    
-                    {/* Opção 1: CARTÃO DE CRÉDITO */}
                     {formaPagamento === "cartao" && (
                       <div className="animation-fade">
                         <div className="mb-3">
@@ -250,8 +235,6 @@ export default function PagamentoCurso() {
                         </div>
                       </div>
                     )}
-
-                    {/* Opção 2: PIX */}
                     {formaPagamento === "pix" && (
                       <div className="text-center py-2 animation-fade">
                         <div className="bg-light p-3 rounded-4 d-inline-block mb-3 shadow-sm">
@@ -279,8 +262,6 @@ export default function PagamentoCurso() {
                         </div>
                       </div>
                     )}
-
-                    {/* Opção 3: BOLETO */}
                     {formaPagamento === "boleto" && (
                       <div className="py-2 animation-fade">
                         <div className="alert alert-secondary rounded-3 text-dark small mb-3">
@@ -304,8 +285,6 @@ export default function PagamentoCurso() {
                         </div>
                       </div>
                     )}
-
-                    {/* BOTÕES DE AÇÃO INFERIORES */}
                     <div className="mt-auto d-flex gap-2">
                       <button
                         type="button"

@@ -4,14 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function editarPerfilEmpresa() {
-    // --- ESTADOS ---
     const [loading, setLoading] = useState(true);
     const [imagePreview, setImagePreview] = useState(null);
     const [tags, setTags] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [nomeOriginal, setNomeOriginal] = useState("Seu Nome");
 
-    // Estado para controlar os campos de texto do formulário
     const [formData, setFormData] = useState({
         nome: "",
         email: "",
@@ -25,8 +23,6 @@ export default function editarPerfilEmpresa() {
         estado: "",
         descricao: ""
     });
-
-    // --- 1. BUSCAR DADOS DO BANCO AO CARREGAR A PÁGINA ---
     useEffect(() => {
         const fetchPerfil = async () => {
             try {
@@ -41,7 +37,6 @@ export default function editarPerfilEmpresa() {
                 const data = await res.json();
 
                 if (res.ok) {
-                    // O backend retorna cidade e estado separados, mas o front exibe junto (Ex: São Paulo - SP)
                     const cidadeFormatada = data.cidade && data.estado
                         ? `${data.cidade} - ${data.estado}`
                         : (data.cidade || "");
@@ -67,7 +62,6 @@ export default function editarPerfilEmpresa() {
                     }
 
                     if (data.arquivo) {
-                        // Supondo que a sua rota estática de uploads seja essa
                         setImagePreview(`http://localhost:3001/uploads/${data.arquivo}`);
                     }
                 }
@@ -80,27 +74,22 @@ export default function editarPerfilEmpresa() {
 
         fetchPerfil();
     }, []);
-
-    // Função para aplicar máscara de telefone: (XX) XXXXX-XXXX
     const phoneMask = (value) => {
         if (!value) return "";
         return value
-            .replace(/\D/g, '') // Remove tudo o que não é número
-            .replace(/(\d{2})(\d)/, '($1) $2') // Coloca parênteses no DDD
-            .replace(/(\d{5})(\d{4})\d+?$/, '$1-$2'); // Coloca o hífen no meio
+            .replace(/\D/g, '')
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d{4})\d+?$/, '$1-$2');
     };
 
-    // Handler para atualizar os campos de texto conforme o usuário digita
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // Aplica a máscara se o campo for o de telefone
         const newValue = name === "telefone" ? phoneMask(value) : value;
 
         setFormData(prev => ({ ...prev, [name]: newValue }));
     };
 
-    // Handler para Upload da Imagem (Apenas Preview)
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -112,7 +101,6 @@ export default function editarPerfilEmpresa() {
         }
     };
 
-    // Handler para Adicionar Tag (Enter ou Vírgula)
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ',') {
             e.preventDefault();
@@ -127,7 +115,6 @@ export default function editarPerfilEmpresa() {
         }
     };
 
-    // Handler para Remover Tag
     const removeTag = (indexToRemove) => {
         setTags(tags.filter((_, index) => index !== indexToRemove));
     };
@@ -137,12 +124,10 @@ export default function editarPerfilEmpresa() {
         if (!confirmar) e.preventDefault();
     };
 
-    // --- 2. ENVIAR DADOS ATUALIZADOS PARA O BANCO ---
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            // Montamos o FormData manualmente a partir do estado controlado pelo React
             const fd = new FormData();
 
             fd.append("nome", formData.nome);
@@ -157,8 +142,6 @@ export default function editarPerfilEmpresa() {
             fd.append("estado", formData.estado);
             fd.append("descricao", formData.descricao);
             fd.append("palavras_chave", JSON.stringify(tags));
-
-            // Adiciona a imagem APENAS se o usuário tiver selecionado um novo arquivo
             const fileInput = document.getElementById("imageUpload");
             if (fileInput && fileInput.files.length > 0) {
                 fd.append("arquivo", fileInput.files[0]);
@@ -190,7 +173,6 @@ export default function editarPerfilEmpresa() {
 
     const isLimitReached = tags.length >= 8;
 
-    // Evita renderizar o form vazio enquanto carrega os dados
     if (loading) {
         return (
             <main className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4 align-items-center justify-content-center">
@@ -215,7 +197,6 @@ export default function editarPerfilEmpresa() {
                         borderTopLeftRadius: 30
                     }}
                 >
-                    {/* CABEÇALHO DA TELA */}
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 gap-3 border-bottom border-white-10 pb-4">
                         <div>
                             <h1 className="font-georgia fw-bold mb-1">Editar Meu Perfil</h1>
@@ -249,7 +230,6 @@ export default function editarPerfilEmpresa() {
                         encType="multipart/form-data"
                     >
                         <div className="row g-4">
-                            {/* COLUNA ESQUERDA: FOTO (30%) */}
                             <div className="col-xl-3 col-lg-4">
                                 <div
                                     className="card border-0 rounded-4 shadow mb-4"
@@ -274,10 +254,7 @@ export default function editarPerfilEmpresa() {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* COLUNA DIREITA: FORMULÁRIOS PRINCIPAIS (70%) */}
                             <div className="col-xl-9 col-lg-8">
-                                {/* CARD 1: DADOS PESSOAIS */}
                                 <div
                                     className="card border-0 rounded-4 shadow mb-4"
                                     style={{ backgroundColor: "var(--cor-fundo)" }}

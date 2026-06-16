@@ -3,24 +3,18 @@
 import { useState, useEffect } from 'react';
 
 export default function Vagas() {
-  // ── ESTADOS DOS DADOS DA API ─────────────────────────────────
   const [vagas, setVagas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
-
-  // ── ESTADOS DE FILTRAGEM E BUSCA ────────────────────────────
   const [busca, setBusca] = useState("");
   const [localidadeSelect, setLocalidadeSelect] = useState("todos");
   const [modalidadeFiltro, setModalidadeFiltro] = useState("todos");
   const [senioridadeFiltro, setSenioridadeFiltro] = useState("todos");
   const [mostrarFavoritos, setMostrarFavoritos] = useState(false);
   const [favoritos, setFavoritos] = useState([]);
-
-  // ── ESTADO DO MODAL SELECIONADO ─────────────────────────────
   const [vagaSelecionada, setVagaSelecionada] = useState(null);
   const [candidaturaStatus, setCandidaturaStatus] = useState({ loading: false, msg: "", erro: false, matchScore: null });
 
-  // ── REQUISIÇÃO PARA O SEU BACKEND (PORTA 3001) ───────────────
   useEffect(() => {
     async function carregarDadosIniciais() {
       try {
@@ -33,7 +27,6 @@ export default function Vagas() {
           headers['Authorization'] = `Bearer ${token}`;
         }
 
-        // 1. Carrega a lista de vagas
         const responseVagas = await fetch('http://localhost:3001/api/vagas', {
           method: 'GET',
           headers: headers,
@@ -47,7 +40,6 @@ export default function Vagas() {
         const dadosVagas = await responseVagas.json();
         setVagas(dadosVagas);
 
-        // 2. SE o usuário estiver logado, já busca os favoritos dele no banco
         if (token) {
           const responseFavs = await fetch('http://localhost:3001/api/favoritos', {
             method: 'GET',
@@ -56,7 +48,7 @@ export default function Vagas() {
           
           if (responseFavs.ok) {
             const dadosFavs = await responseFavs.json();
-            setFavoritos(dadosFavs); // Define o array de IDs vindos do banco
+            setFavoritos(dadosFavs);
           }
         }
 
@@ -69,8 +61,6 @@ export default function Vagas() {
     }
     carregarDadosIniciais();
   }, []);
-
-  // ── LÓGICA DE POST DE CANDIDATURA ────────────────────────────
   const handleCandidatar = async (vagaId) => {
     try {
       setCandidaturaStatus({ loading: true, msg: "", erro: false, matchScore: null });
@@ -106,7 +96,6 @@ export default function Vagas() {
     }
   };
 
-  // ── ALTERNAR FAVORITOS COM O BACKEND ─────────────────────────
   const alternarFavorito = async (id) => {
     try {
       const token = localStorage.getItem('token');
@@ -116,12 +105,11 @@ export default function Vagas() {
         return;
       }
 
-      // Envia a requisição para o banco de dados
       const response = await fetch('http://localhost:3001/api/favoritos/toggle', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Passa o token para o back saber quem você é
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ vaga_id: id })
       });
@@ -132,7 +120,6 @@ export default function Vagas() {
         throw new Error(dados.erro || 'Erro ao atualizar favorito.');
       }
 
-      // Se o back-end respondeu que deu certo, atualizamos a tela na hora:
       if (dados.acao === 'adicionado') {
         setFavoritos([...favoritos, id]);
       } else if (dados.acao === 'removido') {
@@ -143,7 +130,6 @@ export default function Vagas() {
     }
   };
 
-  // ── PROCESSAMENTO DE FILTROS NA LISTA ────────────────────────
   const vagasFiltradas = vagas.filter((vaga) => {
     const matchesBusca =
       vaga.titulo?.toLowerCase().includes(busca.toLowerCase()) ||
@@ -180,7 +166,6 @@ export default function Vagas() {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
       <link rel="stylesheet" href="style.css" />
 
-      {/* CONTEÚDO DA PÁGINA */}
       <main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4">
         <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
           <div className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1" style={{ backgroundImage: "linear-gradient(45deg, #162417 0%, #2a402c 100%)", borderRadius: 0, borderTopLeftRadius: 30 }}>
@@ -192,7 +177,6 @@ export default function Vagas() {
                   <p className="text-white-50 fs-5">Milhares de vagas integradas e atualizadas em tempo real.</p>
                 </div>
 
-                {/* BARRA DE PESQUISA INTEGRADA */}
                 <div className="barra-de-pesquisa-vagas d-flex flex-column flex-md-row align-items-md-center mb-4">
                   <div className="d-flex align-items-center flex-fill px-3 py-2 py-md-0">
                     <i className="bi bi-search text-muted fs-5" />
@@ -212,8 +196,6 @@ export default function Vagas() {
                     <button className="btn w-100 rounded-pill text-white fw-bold py-2" style={{ backgroundColor: "var(--cor-main)" }}>Buscar</button>
                   </div>
                 </div>
-
-                {/* ABA DE FILTROS MODALIDADE */}
                 <div className="d-flex gap-2 flex-wrap mb-3 align-items-center">
                   <span className="text-white-50 me-2 small fw-medium">Modalidade de trabalho:</span>
                   {["todos", "remoto", "hibrido", "presencial"].map((mod) => (
@@ -222,8 +204,6 @@ export default function Vagas() {
                     </button>
                   ))}
                 </div>
-
-                {/* CABEÇALHO DA LISTAGEM */}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <div className="d-flex align-items-center gap-3">
                     <h4 className="fw-bold text-white mb-0">Vagas Disponíveis</h4>
@@ -235,8 +215,6 @@ export default function Vagas() {
                     Mostrando {vagasFiltradas.length} vaga(s)
                   </span>
                 </div>
-
-                {/* SEÇÃO CARD RENDER REAIS */}
                 <div className="row g-4 mb-5" id="jobs-container">
                   {loading && <p className="text-center py-3 text-white-50">Buscando vagas...</p>}
                   {erro && <div className="alert alert-danger text-center w-100">{erro}</div>}
@@ -312,8 +290,6 @@ export default function Vagas() {
           </div>
         </div>
       </main>
-
-      {/* MODAL DETALHES */}
       {vagaSelecionada && (
         <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1100 }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">

@@ -54,32 +54,29 @@ export default function dashboardAdmin() {
         >
             <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1">
                 <div
-                    className="p-4 p-md-5 shadow-lg text-white cor-main d-flex flex-column flex-grow-1"
+                    className="p-4 p-md-5 shadow-lg text-white d-flex flex-column flex-grow-1"
                     style={{
+                        backgroundImage: "linear-gradient(45deg, #162417 0%, #2a402c 100%)",
                         borderRadius: 0,
                         borderTopLeftRadius: 30
                     }}
                 >
-                    {/* HERO */}
-                    <div className="row align-items-center g-5 mb-5">
+                    <div className="row align-items-center g-5 mb-5 border-bottom border-white-10 pb-5">
                         <div className="col-xl-7">
-                            <span className="badge rounded-pill bg-success-subtle text-success-emphasis px-3 py-2 mb-4 fw-semibold">
-                                Painel Corporativo MatchHire
+                            <span className="badge rounded-pill bg-success bg-opacity-25 text-success px-3 py-2 mb-4 fw-semibold border border-success border-opacity-10">
+                                Painel Administrativo MatchHire
                             </span>
 
-                            <h1 className="display-3 fw-bold lh-1 mb-4">
-                                Encontre os
+                            <h1 className="font-georgia display-3 fw-bold lh-1 mb-4">
+                                Gerencie empresas
                                 <span className="text-success">
-                                    {" "}melhores talentos
+                                    {" "}e candidatos
                                 </span>
                             </h1>
 
                             <p className="fs-5 text-white-50 lh-lg col-lg-10 mb-4">
-                                Gerencie vagas, acompanhe candidatos,
-                                visualize matchs e realize admissões
-                                diretamente pela plataforma.
+                                Gerencie vagas, candidatos, e empresas por esse site.
                             </p>
-
                             <div className="d-flex flex-wrap gap-3">
                                 <a
                                     href="../Admin/Usuarios"
@@ -103,21 +100,17 @@ export default function dashboardAdmin() {
                                 </a>
                             </div>
                         </div>
-
-                        {/* Cards Estatísticos */}
                         <div className="col-xl-5">
                             <div className="row g-3">
 
                                 <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-buildings fs-1 text-primary"></i>
-
-                                            <h2 className="fw-bold mt-2">
+                                    <div className="card border-0 rounded-4 shadow bg-white bg-opacity-10 text-white">
+                                        <div className="card-body text-center p-4">
+                                            <i className="bi bi-buildings fs-1 text-info opacity-75"></i>
+                                            <h2 className="fw-bold mt-2 font-georgia">
                                                 {data?.totalEmpresas || 0}
                                             </h2>
-
-                                            <p className="text-muted mb-0">
+                                            <p className="text-white-50 small mb-0">
                                                 Empresas
                                             </p>
                                         </div>
@@ -125,15 +118,13 @@ export default function dashboardAdmin() {
                                 </div>
 
                                 <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-people-fill fs-1 text-success"></i>
-
-                                            <h2 className="fw-bold mt-2">
+                                    <div className="card border-0 rounded-4 shadow bg-white bg-opacity-10 text-white">
+                                        <div className="card-body text-center p-4">
+                                            <i className="bi bi-people-fill fs-1 text-success opacity-75"></i>
+                                            <h2 className="fw-bold mt-2 font-georgia">
                                                 {data?.totalCandidatos || 0}
                                             </h2>
-
-                                            <p className="text-muted mb-0">
+                                            <p className="text-white-50 small mb-0">
                                                 Candidatos
                                             </p>
                                         </div>
@@ -141,15 +132,13 @@ export default function dashboardAdmin() {
                                 </div>
 
                                 <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-briefcase-fill fs-1 text-warning"></i>
-
-                                            <h2 className="fw-bold mt-2">
+                                    <div className="card border-0 rounded-4 shadow bg-white bg-opacity-10 text-white">
+                                        <div className="card-body text-center p-4">
+                                            <i className="bi bi-briefcase-fill fs-1 text-warning opacity-75"></i>
+                                            <h2 className="fw-bold mt-2 font-georgia">
                                                 {data?.totalVagas || 0}
                                             </h2>
-
-                                            <p className="text-muted mb-0">
+                                            <p className="text-white-50 small mb-0">
                                                 Vagas
                                             </p>
                                         </div>
@@ -157,15 +146,13 @@ export default function dashboardAdmin() {
                                 </div>
 
                                 <div className="col-6">
-                                    <div className="card border-0 shadow-lg">
-                                        <div className="card-body text-center">
-                                            <i className="bi bi-person-check-fill fs-1 text-danger"></i>
-
-                                            <h2 className="fw-bold mt-2">
+                                    <div className="card border-0 rounded-4 shadow bg-white bg-opacity-10 text-white">
+                                        <div className="card-body text-center p-4">
+                                            <i className="bi bi-person-check-fill fs-1 text-danger opacity-75"></i>
+                                            <h2 className="fw-bold mt-2 font-georgia">
                                                 {data?.totalFuncionarios || 0}
                                             </h2>
-
-                                            <p className="text-muted mb-0">
+                                            <p className="text-white-50 small mb-0">
                                                 Funcionários
                                             </p>
                                         </div>
@@ -176,100 +163,36 @@ export default function dashboardAdmin() {
                         </div>
                     </div>
 
-                    {/* SOBRE */}
-                    <section className="py-5">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-5">
-                                    <span className="text-muted">
-                                        Gestão inteligente
-                                    </span>
-
-                                    <h2 className="display-5 fw-bold">
-                                        Seu RH mais eficiente
-                                    </h2>
-
-                                    <p className="lead">
-                                        Utilize a inteligência da MatchHire
-                                        para encontrar candidatos compatíveis
-                                        com suas oportunidades.
-                                    </p>
-                                </div>
-
-                                <div className="col-md-6 offset-md-1">
-                                    <p className="lead">
-                                        Publique vagas, receba candidaturas,
-                                        acompanhe o ranking de compatibilidade
-                                        e contrate profissionais diretamente
-                                        pela plataforma.
-                                    </p>
-
-                                    <p className="lead">
-                                        Todo o processo de recrutamento e
-                                        seleção centralizado em um único lugar,
-                                        proporcionando mais produtividade
-                                        para sua equipe.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* RECURSOS */}
-                    <div className="row g-4 mt-4">
-
-                        <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-lightning-charge-fill fs-1 text-success"></i>
-
-                                    <h4 className="mt-3">
-                                        Match Inteligente
-                                    </h4>
-
-                                    <p>
-                                        Encontre automaticamente os candidatos
-                                        mais compatíveis para cada vaga.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-person-check-fill fs-1 text-primary"></i>
-
-                                    <h4 className="mt-3">
-                                        Admissão Rápida
-                                    </h4>
-
-                                    <p>
-                                        Contrate colaboradores diretamente
-                                        pelo painel corporativo.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 shadow border-0">
-                                <div className="card-body text-dark">
-                                    <i className="bi bi-graph-up-arrow fs-1 text-warning"></i>
-
-                                    <h4 className="mt-3">
-                                        Gestão Completa
-                                    </h4>
-
-                                    <p>
-                                        Controle vagas, funcionários e
-                                        processos seletivos em tempo real.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                                <div className="lista mb-2">
+          <div className="item">
+            <img src="../1.png" alt="MAt" />
+            <p>
+              A MatchHire conecta empresas e candidatos de forma rápida, moderna
+              e eficiente. Nossa plataforma facilita o recrutamento, tornando a
+              busca por talentos muito mais simples e prática.
+            </p>
+          </div>
+          <div className="lista">
+            <div className="item">
+              <img src="../2.png" alt="chH" />
+              <p>
+                Na MatchHire, empresas encontram profissionais qualificados e
+                candidatos descobrem novas oportunidades de carreira. Tudo em um
+                ambiente intuitivo e acessível.
+              </p>
+            </div>
+          </div>
+          <div className="lista">
+            <div className="item">
+              <img src="../3.png" alt="ire" />
+              <p>
+                A MatchHire foi criada para transformar o processo de
+                contratação, aproximando talentos e empresas através de
+                tecnologia, agilidade e inovação.
+              </p>
+            </div>
+          </div>
+        </div>
                 </div>
             </div>
         </main>

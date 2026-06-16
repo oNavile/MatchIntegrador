@@ -105,8 +105,6 @@ export default function Login() {
 
             <div className="row w-100 justify-content-center mx-0">
               <div className="col-12 px-0">
-                
-                {/* BOTÕES DE NAVEGAÇÃO ENTRE AS ABAS */}
                 <div className="d-flex justify-content-center mb-4">
                   <ul className="nav nav-pills gap-3" id="pills-tab-login" role="tablist">
                     <li className="nav-item" role="presentation">
@@ -133,8 +131,6 @@ export default function Login() {
                 </div>
 
                 <div className="tab-content" id="pills-tabContent-login">
-                  
-                  {/* FORMULÁRIO DE EMPRESA */}
                   {abaAtiva === "empresa" && (
                     <div className="p-4 p-md-5 text-dark shadow-lg login-card cor-fundo">
                       <div className="text-center mb-4">
@@ -208,8 +204,6 @@ export default function Login() {
                       </form>
                     </div>
                   )}
-
-                  {/* FORMULÁRIO DE CANDIDATO */}
                   {abaAtiva === "candidato" && (
                     <div className="p-4 p-md-5 text-dark shadow-lg login-card cor-fundo">
                       <div className="text-center mb-4">

@@ -330,7 +330,7 @@ export default function MatchCandidatoPage() {
 
                                             ) : (
                                                 <div className="text-center" style={{ paddingTop: '200px', paddingBottom: '200px' }}>
-                                                    <h3 className="text-white fw-bold mb-3"> {/* mb-3 afasta um pouco o título do texto de baixo */}
+                                                    <h3 className="text-white fw-bold mb-3">
                                                         <i className="bi bi-emoji-sunglasses me-2"></i>
                                                         Você zerou os Matches de hoje!
                                                     </h3>

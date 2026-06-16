@@ -540,14 +540,10 @@ ADD UNIQUE KEY uq_video_concluido
     video_id
 );
 
--- Remove a trava específica que causou o primeiro erro (compras_cursos_ibfk_1)
 ALTER TABLE compras_cursos DROP FOREIGN KEY compras_cursos_ibfk_1;
 
--- 1. Desliga temporariamente a trava das chaves estrangeiras do banco inteiro
 SET FOREIGN_KEY_CHECKS = 0;
 
--- 2. Agora o MySQL deixa alterar as colunas para aceitarem NULL sem reclamar
 ALTER TABLE compras_cursos MODIFY candidato_id INT NULL;
 
--- 3. Liga a trava de segurança novamente
 SET FOREIGN_KEY_CHECKS = 1;

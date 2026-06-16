@@ -3,13 +3,10 @@
 import { useState, useEffect } from 'react';
 
 export default function GerenciamentoVagasEmpresa() {
-    // ── ESTADOS DE DADOS ─────────────────────────────────────────
     const [vagas, setVagas] = useState([]);
     const [candidatos, setCandidatos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState(null);
-
-    // ── MODAIS E SELEÇÕES ────────────────────────────────────────
     const [vagaParaCandidatos, setVagaParaCandidatos] = useState(null);
     const [loadingCandidatos, setLoadingCandidatos] = useState(false);
     const [vagaParaEditar, setVagaParaEditar] = useState(null);
@@ -20,7 +17,6 @@ export default function GerenciamentoVagasEmpresa() {
         data_admissao: new Date().toISOString().split("T")[0]
     });
 
-    // ── REQUISITAR AS VAGAS DA EMPRESA ───────────────────────────
     const carregarVagasEmpresa = async () => {
         try {
             setLoading(true);
@@ -31,7 +27,6 @@ export default function GerenciamentoVagasEmpresa() {
                 throw new Error("Sua sessão expirou. Por favor, realize o login novamente.");
             }
 
-            // O backend filtra usando o token do usuário corporativo logado
             const response = await fetch('http://localhost:3001/api/vagas', {
                 method: 'GET',
                 headers: {
@@ -90,7 +85,6 @@ export default function GerenciamentoVagasEmpresa() {
         }
     };
 
-    // ── RANKING INTEGRADO POR INTELIGÊNCIA DE MATCH ──────────────
     const abrirCandidatos = async (vaga) => {
         setVagaParaCandidatos(vaga);
         setLoadingCandidatos(true);
@@ -119,7 +113,6 @@ export default function GerenciamentoVagasEmpresa() {
         }
     };
 
-    // ── REALIZAR ADMISSÃO CONFORME ESPECIFICAÇÃO DE ROUTE ────────
     const handleAdmitirFuncionario = async (candidatoId) => {
         try {
             const token = localStorage.getItem('token');
@@ -130,8 +123,6 @@ export default function GerenciamentoVagasEmpresa() {
                 setor_id: Number(admissaoForm.setor_id),
                 data_admissao: admissaoForm.data_admissao
             };
-
-            console.log("PAYLOAD:", payload);
 
             const response = await fetch(
                 'http://localhost:3001/api/funcionarios/admitir',
@@ -177,8 +168,6 @@ export default function GerenciamentoVagasEmpresa() {
             alert(err.message);
         }
     };
-
-    // ── SALVAR EDIÇÃO DA VAGA (PUT) ──────────────────────────────
     const handleSalvarEdicao = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -213,7 +202,6 @@ export default function GerenciamentoVagasEmpresa() {
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-            {/* RENDERIZAÇÃO PRINCIPAL COM O DESIGN INSTITUCIONAL DO MATCHHIRE */}
             <main id="main-content" className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4 mb-0 pb-0">
                 <div className="container-fluid pt-3 pb-0 pe-0 ps-3 ps-md-4 d-flex flex-column flex-grow-1 mb-0">
                     <div
@@ -229,7 +217,6 @@ export default function GerenciamentoVagasEmpresa() {
                                 className="p-4 p-md-5 text-dark shadow-lg w-100"
                                 style={{ backgroundColor: "#9DC5BB", borderRadius: 24 }}
                             >
-                                {/* TOPO DO PAINEL */}
                                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 border-bottom border-dark border-opacity-10 pb-4">
                                     <div>
                                         <h2 className="fw-bold font-georgia mb-2 text-dark">
@@ -256,7 +243,6 @@ export default function GerenciamentoVagasEmpresa() {
 
                                 {erro && <div className="alert alert-danger shadow-sm text-center border-0">{erro}</div>}
 
-                                {/* PAINEL SEM VAGAS */}
                                 {!loading && vagas.length === 0 && (
                                     <div className="text-center py-5 border border-dashed rounded-4 bg-white bg-opacity-50">
                                         <i className="bi bi-file-earmark-plus display-3 text-muted"></i>
@@ -264,8 +250,6 @@ export default function GerenciamentoVagasEmpresa() {
                                         <p className="text-muted px-3">Sua empresa ainda não possui vagas abertas no sistema neste momento.</p>
                                     </div>
                                 )}
-
-                                {/* GRADE DE VAGAS DA EMPRESA */}
                                 <div className="row g-4">
                                     {!loading && vagas.map((vaga) => {
                                         console.log(vaga);
@@ -275,8 +259,6 @@ export default function GerenciamentoVagasEmpresa() {
                                             <div key={vaga.id} className="col-12">
                                                 <div className="card border-0 rounded-4 shadow-sm w-100" style={{ backgroundColor: "#EAF2F0" }}>
                                                     <div className="card-body p-4 d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-4">
-
-                                                        {/* Bloco de Informações */}
                                                         <div className="flex-grow-1">
                                                             <div className="d-flex align-items-center gap-2 mb-2">
                                                                 <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 text-capitalize fw-bold border border-success border-opacity-25">
@@ -295,7 +277,6 @@ export default function GerenciamentoVagasEmpresa() {
                                                                 <span><i className="bi bi-briefcase me-1 text-success" />{vaga.cargo_nome || "Geral"}</span>
                                                             </div>
 
-                                                            {/* Chips de Tags */}
                                                             <div className="d-flex flex-wrap gap-1">
                                                                 {tags.length > 0 ? (
                                                                     tags.map((t, idx) => (
@@ -309,7 +290,6 @@ export default function GerenciamentoVagasEmpresa() {
                                                             </div>
                                                         </div>
 
-                                                        {/* Bloco de Ações Corporativas */}
                                                         <div className="d-flex flex-wrap gap-2 align-self-start align-self-xl-center" style={{ minWidth: 'fit-content' }}>
                                                             <button
                                                                 className="btn btn-dark d-flex align-items-center gap-2 px-4 py-2 rounded-3 shadow-sm fw-bold"
@@ -338,7 +318,6 @@ export default function GerenciamentoVagasEmpresa() {
                 </div>
             </main>
 
-            {/* ── MODAL: RANKING DE INTELIGÊNCIA E ADMISSÃO DE QUADRO ── */}
             {vagaParaCandidatos && (
                 <div className="modal show d-block animate-fade-in" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1100 }}>
                     <div className="modal-dialog modal-lg modal-dialog-centered">
@@ -366,16 +345,12 @@ export default function GerenciamentoVagasEmpresa() {
                                     </div>
                                 )}
 
-                                {/* FORMULÁRIO RÁPIDO PARA ALOCAR CARGO E SETOR NO CONTRATO */}
-
-                                {/* CARDS DOS CANDIDATOS FILTRADOS POR MATCH */}
                                 {!loadingCandidatos && candidatos.map((cand, idx) => {
 
                                     console.log(cand);
 
                                     const pct = Number(cand.score_match);
 
-                                    // Definição de cores conforme o nível do match
                                     let badgeCor = "bg-danger";
 
                                     if (pct >= 75) {
@@ -431,8 +406,6 @@ export default function GerenciamentoVagasEmpresa() {
                     </div>
                 </div>
             )}
-
-            {/* ── MODAL: ALTERAR DETALHES DA VAGA (FORM COMPLETO) ── */}
             {vagaParaEditar && (
                 <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1100 }}>
                     <div className="modal-dialog modal-lg modal-dialog-centered">

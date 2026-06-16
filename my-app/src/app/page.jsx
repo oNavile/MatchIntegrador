@@ -14,14 +14,9 @@ export default function Home() {
   <style
     dangerouslySetInnerHTML={{
       __html:
-        "\n        /* 1. VARIÁVEIS DE TEMA E FONTES */\n        :root {\n            --bg-main: #9DC5BB;\n            --bg-dark: #162417;\n        }\n\n        body {\n            background-color: var(--bg-main);\n            overflow-x: hidden;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n        }\n\n        .bg-main {\n            background-color: var(--bg-main) !important;\n        }\n\n        .bg-dark-custom {\n            background-color: var(--bg-dark) !important;\n        }\n\n        .text-dark-custom {\n            color: var(--bg-dark) !important;\n        }\n\n        .font-georgia {\n            font-family: Georgia, 'Times New Roman', serif;\n        }\n\n        .nav-link-hover:hover,\n        .nav-link-hover.active {\n            background-color: var(--bg-dark);\n            color: white !important;\n        }\n                .btn-login {\n            color: var(--bg-dark);\n            font-weight: 600;\n            transition: all 0.3s ease;\n        }\n        .btn-login:hover {\n            color: var(--accent-color);\n            transform: translateY(-2px);\n        }\n\n        .btn-register {\n            background-color: var(--bg-dark);\n            color: white;\n            font-weight: bold;\n            border-radius: 50px;\n            padding: 0.5rem 1.5rem;\n            transition: all 0.3s ease;\n            box-shadow: 0 4px 15px rgba(22, 36, 23, 0.2);\n        }\n        .btn-register:hover {\n            background-color: var(--accent-color);\n            color: white;\n            transform: translateY(-2px);\n            box-shadow: 0 6px 20px rgba(23, 184, 144, 0.4);\n        }\n\n        /* 2. LÓGICA DE HOVER NO DESKTOP (Efeito não nativo do Bootstrap) */\n        @media (min-width: 768px) {\n            #sidebar {\n                width: 80px;\n                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);\n                white-space: nowrap;\n                z-index: 1040;\n                padding-top: 85px;\n                /* Compensa a altura do Navbar */\n            }\n\n            #sidebar:hover {\n                width: 260px;\n            }\n\n            .hide-on-collapse {\n                opacity: 0;\n                transition: opacity 0.2s ease;\n                visibility: hidden;\n            }\n\n            #sidebar:hover .hide-on-collapse {\n                opacity: 1;\n                visibility: visible;\n                transition-delay: 0.1s;\n            }\n\n            /* Ajusta o conteúdo e rodapé respeitando a sidebar fechada */\n            #main-content,\n            #footer {\n                margin-left: 80px;\n                width: calc(100% - 80px);\n            }\n        }\n\n        .bg-aside {\n            background-color: #9DC5BB !important;\n            /* Troque pelo seu código hexadecimal */\n        }\n    "
+        "\n        \n        :root {\n            --bg-main: #9DC5BB;\n            --bg-dark: #162417;\n        }\n\n        body {\n            background-color: var(--bg-main);\n            overflow-x: hidden;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n        }\n\n        .bg-main {\n            background-color: var(--bg-main) !important;\n        }\n\n        .bg-dark-custom {\n            background-color: var(--bg-dark) !important;\n        }\n\n        .text-dark-custom {\n            color: var(--bg-dark) !important;\n        }\n\n        .font-georgia {\n            font-family: Georgia, 'Times New Roman', serif;\n        }\n\n        .nav-link-hover:hover,\n        .nav-link-hover.active {\n            background-color: var(--bg-dark);\n            color: white !important;\n        }\n                .btn-login {\n            color: var(--bg-dark);\n            font-weight: 600;\n            transition: all 0.3s ease;\n        }\n        .btn-login:hover {\n            color: var(--accent-color);\n            transform: translateY(-2px);\n        }\n\n        .btn-register {\n            background-color: var(--bg-dark);\n            color: white;\n            font-weight: bold;\n            border-radius: 50px;\n            padding: 0.5rem 1.5rem;\n            transition: all 0.3s ease;\n            box-shadow: 0 4px 15px rgba(22, 36, 23, 0.2);\n        }\n        .btn-register:hover {\n            background-color: var(--accent-color);\n            color: white;\n            transform: translateY(-2px);\n            box-shadow: 0 6px 20px rgba(23, 184, 144, 0.4);\n        }\n\n         \n        @media (min-width: 768px) {\n            #sidebar {\n                width: 80px;\n                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);\n                white-space: nowrap;\n                z-index: 1040;\n                padding-top: 85px;\n                \n            }\n\n            #sidebar:hover {\n                width: 260px;\n            }\n\n            .hide-on-collapse {\n                opacity: 0;\n                transition: opacity 0.2s ease;\n                visibility: hidden;\n            }\n\n            #sidebar:hover .hide-on-collapse {\n                opacity: 1;\n                visibility: visible;\n                transition-delay: 0.1s;\n            }\n\n            \n            #main-content,\n            #footer {\n                margin-left: 80px;\n                width: calc(100% - 80px);\n            }\n        }\n\n        .bg-aside {\n            background-color: #9DC5BB !important;\n            \n        }\n    "
     }}
   />
-  {/* MENU SUPERIOR */}
-  {/* MENU SUPERIOR */}
-  {/* MENU LATERAL🚀 */}
-  {/* MENU LATERAL🚀 */}
-  {/* BLOCO DE CONTEÚDO 🚥 */}
   <main
     id="main-content"
     className="flex-grow-1 d-flex flex-column pt-5 mt-5 mt-md-4"
@@ -50,11 +45,11 @@ export default function Home() {
               de perfil e decisões orientadas por dados.
             </p>
             <div className="d-flex flex-wrap gap-3">
-              <a href="#" className="btn btn-success btn-lg px-4 fw-semibold">
+              <a href="./cadastroCliente" className="btn btn-success btn-lg px-4 fw-semibold">
                 Começar Agora
               </a>
               <a
-                href="#"
+                href="vagas"
                 className="btn btn-outline-light btn-lg px-4 fw-semibold"
               >
                 Ver Plataforma
@@ -62,8 +57,6 @@ export default function Home() {
             </div>
           </div>
           <article>
-            {/* INFO CARD */}
-            {/*CARROSSEL*/}
             <div
               style={{
                 width: "100%",
@@ -180,11 +173,8 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            {/*CARROSSEL*/}
           </article>
-          {/* CARDS */}
           <div className="row g-4">
-            {/* CARD */}
             <div className="col-12 col-md-6 col-xl-4">
               <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-5 shadow-lg">
                 <div className="card-body p-4 p-xl-5 d-flex flex-column">
@@ -200,7 +190,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* CARD */}
             <div className="col-12 col-md-6 col-xl-4">
               <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-5 shadow-lg">
                 <div className="card-body p-4 p-xl-5 d-flex flex-column">
@@ -215,7 +204,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* CARD */}
             <div className="col-12 col-md-6 col-xl-4">
               <div className="card h-100 border-0 bg-white bg-opacity-10 text-white rounded-5 shadow-lg">
                 <div className="card-body p-4 p-xl-5 d-flex flex-column">
@@ -242,7 +230,6 @@ export default function Home() {
       </div>
     </div>
   </main>
-  {/* BLOCO DE CONTEÚDO 🚥 */}
 </>
 
   );
