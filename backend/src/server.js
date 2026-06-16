@@ -16,8 +16,9 @@ const favoritoRoutes = require('./routes/favoritoRoutes');
 const planosRoutes = require('./routes/planosRoutes');
 const assinaturasRoutes = require('./routes/assinaturasRoutes');
 const pagamentosRoutes = require('./routes/pagamentosRoutes');
-const adminRoutes = require("./routes/adminRoutes");
+const adminRoutes = require('./routes/adminRoutes');
 const matchRoutes = require('./routes/matchRoutes');
+const cursosRoutes = require('./routes/cursosRoutes');
 
 const { errorHandler, rotaNaoEncontrada } = require('./middlewares/errorHandler');
 
@@ -44,6 +45,7 @@ app.use('/api/planos', planosRoutes);
 app.use('/api/assinaturas', assinaturasRoutes);
 app.use('/api/pagamentos', pagamentosRoutes);
 app.use('/api', matchRoutes);
+app.use('/api/cursos', cursosRoutes);
 
 app.get('/teste', (_req, res) => {
   res.json({
@@ -54,10 +56,14 @@ app.get('/teste', (_req, res) => {
 });
 
 app.use(errorHandler);
-
 app.use(rotaNaoEncontrada);
 
 app.listen(PORT, () => {
-  console.log(`MatchHire API rodando em http://localhost:${PORT}`);
-  console.log(`Teste check: http://localhost:${PORT}/teste`);
+  console.log(
+    `MatchHire API rodando em http://localhost:${PORT}`
+  );
+
+  console.log(
+    `Teste check: http://localhost:${PORT}/teste`
+  );
 });

@@ -42,18 +42,20 @@ export default function aside() {
         { label: "Match", href: "../matchCandidato", icon: "bi-chat-square-heart-fill" },
         { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
         { label: "Seu Perfil", href: "../editarPerfil", icon: "bi-person-fill" },
+        { label: "Cursos", href: "../cursos", icon: "bi bi-mortarboard-fill" },
       ]
     },
     // EMPRESA
     empresa: {
       title: "Painel Empresa",
       links: [
-        { label: "Home", href: "../dashboard/empresa", icon: "bi-speedometer2" },
+        { label: "Home", href: "../dashboard/empresa", icon: "bi bi-house-fill" },
         { label: "Criar Vaga", href: "../cadastrarVaga", icon: "bi-plus-circle-fill" },
         { label: "Minhas Vagas", href: "../vagasEmpresa", icon: "bi-briefcase-fill" },
         { label: "Funcionários", href: "../empresaCandidatos", icon: "bi-people-fill" },
         { label: "Assistente", href: "../assistente", icon: "bi-phone-fill" },
         { label: "Perfil Empresa", href: "../editarPerfilEmpresa", icon: "bi-building" },
+        { label: "Cursos", href: "../cursos", icon: "bi bi-mortarboard-fill" },
       ]
     },
     // ADMIN / ADMINISTRADOR
@@ -72,17 +74,17 @@ export default function aside() {
   const currentMenu = menuConfig[tipoUsuario] || menuConfig.guest;
 
   return (
-    <aside 
-      id="sidebar" 
+    <aside
+      id="sidebar"
       className="offcanvas-md offcanvas-start bg-menu shadow position-fixed top-0 start-0 h-100 border-0"
       tabIndex={-1}
     >
       {/* HEADER DO ASIDE (MOBILE) */}
       <div className="offcanvas-header d-md-none border-bottom border-dark border-opacity-10 mt-2">
         <h5 className="offcanvas-title texto-escuro fw-bold fs-3">Menu</h5>
-        <button 
-          type="button" 
-          className="btn-close shadow-none" 
+        <button
+          type="button"
+          className="btn-close shadow-none"
           data-bs-dismiss="offcanvas"
           data-bs-target="#sidebar"
         ></button>
@@ -90,21 +92,21 @@ export default function aside() {
 
       {/* CORPO DO ASIDE */}
       <div className="offcanvas-body d-flex flex-column p-0 h-100 overflow-x-hidden">
-        
+
         {/* BARRA DE BUSCA */}
         <div className="px-3 mt-4 mb-2 hide-on-collapse">
           <div className="input-group input-group-sm">
-            <span 
+            <span
               className="input-group-text bg-transparent border-end-0 text-muted"
               style={{ borderColor: '#162417' }}
             >
               <i className="bi bi-search"></i>
             </span>
-            <input 
-              type="text" 
+            <input
+              type="text"
               className="form-control bg-transparent border-start-0 ps-0 shadow-none"
-              style={{ borderColor: '#162417' }} 
-              placeholder="Buscar..." 
+              style={{ borderColor: '#162417' }}
+              placeholder="Buscar..."
             />
           </div>
         </div>
@@ -117,9 +119,9 @@ export default function aside() {
         {/* LINKS DINÂMICOS AUTOMÁTICOS */}
         <nav className="nav flex-column gap-1 p-2 flex-grow-1">
           {currentMenu.links.map((link, index) => (
-            <a 
+            <a
               key={index}
-              href={link.href} 
+              href={link.href}
               className="nav-link d-flex align-items-center justify-content-between texto-escuro fw-medium rounded py-2 link-hover"
             >
               <div className="d-flex align-items-center">

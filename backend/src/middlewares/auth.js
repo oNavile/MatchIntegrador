@@ -2,26 +2,42 @@ const jwt = require('jsonwebtoken');
 
 const autenticar = (req, res, next) => {
   try {
+    console.log('AUTH HEADER:', req.headers.authorization);
+
     const authHeader = req.headers["authorization"];
 
-    const token = authHeader?.replace("Bearer ", "");
+    const token = authHeader?.replace(/Bearer\s/i, '');
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('TOKEN:', token);
+
+    const payload = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    console.log('PAYLOAD:', payload);
 
     req.usuario = payload;
-
     req.user = payload;
+
     next();
+
   } catch (err) {
     console.log("ERRO JWT:", err.message);
-    return res.status(401).json({ erro: "Token inválido" });
+
+    return res.status(401).json({
+      erro: "Token inválido"
+    });
   }
 };
 
 const autorizar = (...tipos) => (req, res, next) => {
   if (!tipos.includes(req.usuario.tipo)) {
-    return res.status(403).json({ erro: 'Acesso negado para este perfil.' });
+    return res.status(403).json({
+      erro: 'Acesso negado para este perfil.'
+    });
   }
+
   next();
 };
 
